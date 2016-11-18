@@ -1,4 +1,3 @@
-package br.imd.zmplayer.model;
 
 
 import javafx.application.Application;
@@ -12,9 +11,8 @@ public class ZMplayer extends Application {
 	public void start(Stage stage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));
 		Scene scene = new Scene(root);
-		
+
 		stage.setScene(scene);
-		stage.setResizable(false);
 		stage.show();
 	}
 
