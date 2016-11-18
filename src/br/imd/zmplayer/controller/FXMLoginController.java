@@ -37,12 +37,12 @@ public class FXMLoginController implements Initializable {
     	if (userTextField.getText().equals("admin") && passwordField.getText().equals("admin")){
     		stage=(Stage) btnLogar.getScene().getWindow();
     		root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
-    		/*
-    		FadeTransition ft = new FadeTransition(Duration.millis(2000), root);
+    		
+    		FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
     		ft.setFromValue(0.0);
     		ft.setToValue(1.0);
     		ft.play();
-    		*/
+    		
     		
     		
             Scene scene = new Scene(root);
