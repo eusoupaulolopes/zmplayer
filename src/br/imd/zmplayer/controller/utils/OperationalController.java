@@ -14,7 +14,8 @@ public class OperationalController {
 	 * Método usuário que está logado na sessão atual.
 	 * @return tipo representa o usuário que logou na sessao atual do player.
 	 */
-	public static Usuario iniciaSessao(Usuario tipo){
+	public static Usuario iniciarSessao(Usuario tipo){
 		return tipo;
 	}
+	
 }

@@ -2,6 +2,7 @@ package br.imd.zmplayer.controller;
 
 import br.imd.zmplayer.*;
 import br.imd.zmplayer.controller.utils.OperationalController;
+import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.Usuario;
 
 import java.io.IOException;
@@ -35,10 +36,19 @@ public class FXMLLoginController implements Initializable {
 
 	@FXML
 	private void handleLoginButtonAction(ActionEvent event) throws IOException {
+		//Ler arquivo dos usuarios cadastrados
+		String path = "usuarios.zmu";
+		try {
+			ManipuladorArquivo.lerZmu(path);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		String idDigitado = userTextField.getText();
 		String senhaDigitada = passwordField.getText();
-		
+
+		//procurar o id e senha digitados no sistema
 		Usuario user = UserController.verificarLogin(idDigitado, senhaDigitada);
 		
 		if (idDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
@@ -58,7 +68,7 @@ public class FXMLLoginController implements Initializable {
 	
 	private void abrirTelaPlayer(Usuario tipoUsuario) throws IOException{
 		
-		OperationalController.iniciaSessao(tipoUsuario);
+		OperationalController.iniciarSessao(tipoUsuario);
 		
 		Stage stage = (Stage) btnLogar.getScene().getWindow();
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
