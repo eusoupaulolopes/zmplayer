@@ -16,7 +16,11 @@ public class Usuario {
 		this.senha = senha;
 		VIP = vIP;
 	}
-
+	
+	public static Usuario getAdmin(){
+		return admin;
+	}
+	
 	public String getId() {
 		return id;
 	}

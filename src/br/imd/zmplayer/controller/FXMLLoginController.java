@@ -2,6 +2,7 @@ package br.imd.zmplayer.controller;
 
 import br.imd.zmplayer.*;
 import br.imd.zmplayer.controller.utils.OperationalController;
+import br.imd.zmplayer.model.Usuario;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,7 +37,12 @@ public class FXMLLoginController implements Initializable {
 	private void handleLoginButtonAction(ActionEvent event) throws IOException {
 		Stage stage;
 		Parent root;
-		if (userTextField.getText().equals("admin") && passwordField.getText().equals("admin")) {
+		
+		String nomeDigitado = userTextField.getText();
+		String senhaDigitada = passwordField.getText();
+		
+		
+		if (nomeDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
 			stage = (Stage) btnLogar.getScene().getWindow();
 			root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
 
