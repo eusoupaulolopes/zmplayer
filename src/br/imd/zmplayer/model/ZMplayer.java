@@ -13,7 +13,7 @@ public class ZMplayer extends Application {
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));
 		
 		Scene scene = new Scene(root);
-		
+		stage.setTitle("ZMPlayer");
 		stage.setScene(scene);
 		stage.setResizable(false);
 		stage.show();
