@@ -39,21 +39,27 @@ public class FXMLLoginController implements Initializable {
 		String idDigitado = userTextField.getText();
 		String senhaDigitada = passwordField.getText();
 		
+		Usuario user = UserController.verificarLogin(idDigitado, senhaDigitada);
+		
 		if (idDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
 			System.out.println("logou como admin");
 			this.abrirTelaPlayer(Usuario.getAdmin());
 		
-		} else if(UserController.verificarLogin(idDigitado, senhaDigitada) != null){
-			System.out.println("logou como "+idDigitado);
-			this.abrirTelaPlayer(Usuario.getAdmin());
+		} else if(user != null){
+			System.out.println("Bem-vindo, "+user.getNome());
+			this.abrirTelaPlayer(user);
+			
 		}else{
 			lbLoginInfo.setText("Usuário/Senha Inválidos");
 			System.out.println("Login invalido");
+			
 		}
 	}
 	
 	private void abrirTelaPlayer(Usuario tipoUsuario) throws IOException{
-	
+		
+		OperationalController.iniciaSessao(tipoUsuario);
+		
 		Stage stage = (Stage) btnLogar.getScene().getWindow();
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
 
