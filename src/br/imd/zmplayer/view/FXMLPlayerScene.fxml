@@ -45,7 +45,7 @@
                   </Text>
                </children></AnchorPane>
             <Slider layoutX="10.0" layoutY="154.0" prefHeight="14.0" prefWidth="289.0" />
-            <Button alignment="CENTER" layoutX="7.0" layoutY="181.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="289.0" text="Button" textAlignment="CENTER" />
+            <Button fx:id="btnPlay" alignment="CENTER" layoutX="7.0" layoutY="181.0" mnemonicParsing="false" onAction="#btnPlayAction" prefHeight="39.0" prefWidth="289.0" text="Button" textAlignment="CENTER" />
             
          </children>
     </AnchorPane>

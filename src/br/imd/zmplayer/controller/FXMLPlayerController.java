@@ -3,11 +3,8 @@ package br.imd.zmplayer.controller;
 import br.imd.zmplayer.*;
 import br.imd.zmplayer.controller.utils.OperationalController;
 
-
 import java.net.URL;
 import java.util.ResourceBundle;
-
-
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 
@@ -33,6 +31,7 @@ public class FXMLPlayerController implements Initializable {
 	@FXML public MenuBar menuBar;
 	@FXML public MenuItem menuUsuario;
 	@FXML public MenuItem menuOpenFile;
+	@FXML public Button btnPlay;
 	
 	
 	private PlayerController pc;
@@ -57,17 +56,18 @@ public class FXMLPlayerController implements Initializable {
 		File selectedFile = fileChooser.showOpenDialog(null);
 		if (selectedFile != null) {
 			try{
-				pc = new PlayerController();
 				pc.tocar(selectedFile);
 			}catch (Exception e){
 				e.printStackTrace();
 			}
-			
-			
-			
-		}
-
-		
+		}		
+	}
+	
+	
+	@FXML
+	private void btnPlayAction(ActionEvent event) throws IOException {
+		File selectedFile = new File("C:\\Users\\Paulo Lopes\\Downloads\\Z-Maguinho do Piauí - Deus.mp3");
+		pc.tocar(selectedFile);
 	}
 
 	@FXML
@@ -78,6 +78,7 @@ public class FXMLPlayerController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO
+		pc = PlayerController.getInstance();
 	}
 
 }
