@@ -38,7 +38,7 @@
             <AnchorPane layoutX="10.0" layoutY="45.0" prefHeight="97.0" prefWidth="289.0" styleClass="background" stylesheets="@styles/FXMLPlayerSceneStyleSheet.css">
                <children>
                   <Label layoutX="7.0" layoutY="2.0" prefHeight="39.0" prefWidth="261.0" text="Tocando: Dosed - Red Hot Chili Peppers" />
-                  <Text fx:id="txText" fill="#00eeff" fontSmoothingType="LCD" layoutX="10.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txText" text="01:30" wrappingWidth="119.13671875">
+                  <Text fx:id="playerTime" fill="#00eeff" fontSmoothingType="LCD" layoutX="10.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txText" wrappingWidth="119.13671875">
                      <font>
                         <Font size="36.0" />
                      </font>

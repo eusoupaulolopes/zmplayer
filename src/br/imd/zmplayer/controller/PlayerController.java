@@ -7,6 +7,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -49,8 +50,15 @@ public class PlayerController {
 			this.mediaPlayer = mediaPlayer;		
 		}
 		this.mediaPlayer.play();
+		
 	}
 	
+	
+	
+	public MediaPlayer getMediaPlayer() {
+		return mediaPlayer;
+	}	
+
 	
 
 	/*
