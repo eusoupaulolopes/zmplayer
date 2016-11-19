@@ -10,6 +10,7 @@ public class UserController {
 		
 		
 		Usuario provisorio = new Usuario(id, "", senha, false);
+		
 		Usuario encontrado = RepositorioUsuario.buscar(provisorio);
 		
 		if( encontrado != null){

@@ -31,23 +31,24 @@ public class RepositorioUsuario {
 	public static void add(Usuario novo){
 		if(novo != null){
 			RepositorioUsuario.instance.inserir(new NoBinaria(novo));
-			String path = "usuarios.zmu";
+			/*String path = "usuarios.zmu";
 			try {
 				ManipuladorArquivo.gravarUsuario(path,novo);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 			
 		}
 	}
 	
 	public static Usuario buscar(Usuario user){
+		
+		
 		if(user != null){
-			NoBinaria usuarioBuscado = RepositorioUsuario.instance.buscar(new NoBinaria(user));
-			
-			if(usuarioBuscado != null){
-				return usuarioBuscado.getUsuario();
+			NoBinaria resultado = RepositorioUsuario.instance.buscar(new NoBinaria(user));			
+			if(resultado != null){
+				return resultado.getUsuario();
 			}else{
 				return null;
 			}
