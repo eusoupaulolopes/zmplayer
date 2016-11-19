@@ -1,24 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-	minWidth="-Infinity" prefHeight="500.0" prefWidth="306.0"
-	xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="br.imd.zmplayer.controller.FXMLUserSettingsController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLUserSettingsController">
 	<children>
-		<AnchorPane maxHeight="-1.0" maxWidth="300.0" minWidth="300.0"
-			prefHeight="-1.0" prefWidth="300.0" styleClass="background"
-			VBox.vgrow="ALWAYS">
-		</AnchorPane>
+		<AnchorPane maxHeight="-1.0" maxWidth="617.0" minWidth="300.0" prefHeight="578.0" prefWidth="600.0" styleClass="background" VBox.vgrow="ALWAYS">
+         <children>
+            <Pane layoutX="80.0" layoutY="306.0" prefHeight="139.0" prefWidth="443.0" styleClass="background" stylesheets="@styles/FXMLPlayerSceneStyleSheet2.css">
+               <children>
+                  <TextField layoutX="13.0" layoutY="70.0" prefHeight="25.0" prefWidth="203.0" promptText="Usuário" />
+                  <TextField layoutX="228.0" layoutY="70.0" prefHeight="25.0" prefWidth="203.0" promptText="Senha" />
+                  <CheckBox layoutX="392.0" layoutY="105.0" mnemonicParsing="false" text="Vip" />
+                  <TextField layoutX="11.0" layoutY="27.0" prefHeight="25.0" prefWidth="421.0" promptText="Nome" />
+               </children>
+            </Pane>
+            <TableView layoutX="14.0" layoutY="39.0" prefHeight="200.0" prefWidth="574.0">
+              <columns>
+                <TableColumn prefWidth="118.0" text="Name" />
+                <TableColumn prefWidth="221.0" text="Login" />
+                  <TableColumn prefWidth="179.0" text="Senha" />
+                  <TableColumn minWidth="6.0" prefWidth="55.0" text="Vip" />
+              </columns>
+            </TableView>
+            <Separator layoutX="8.0" layoutY="293.0" prefHeight="4.0" prefWidth="584.0" />
+            <Button layoutX="71.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Cadastrar" />
+            <Button layoutX="229.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Alterar" />
+            <Button layoutX="384.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Remover" />
+            <Button layoutX="402.0" layoutY="461.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Salvar" />
+         </children></AnchorPane>
 	</children>
 </VBox>
