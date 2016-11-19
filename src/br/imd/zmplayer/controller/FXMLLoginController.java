@@ -35,30 +35,36 @@ public class FXMLLoginController implements Initializable {
 
 	@FXML
 	private void handleLoginButtonAction(ActionEvent event) throws IOException {
-		Stage stage;
-		Parent root;
-		
-		String nomeDigitado = userTextField.getText();
+	
+		String idDigitado = userTextField.getText();
 		String senhaDigitada = passwordField.getText();
 		
-		
-		if (nomeDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
-			stage = (Stage) btnLogar.getScene().getWindow();
-			root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
-
-			FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
-			ft.setFromValue(0.0);
-			ft.setToValue(1.0);
-			ft.play();
-
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
+		if (idDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
 			System.out.println("logou como admin");
-		} else {
+			this.abrirTelaPlayer(Usuario.getAdmin());
+		
+		} else if(UserController.verificarLogin(idDigitado, senhaDigitada) != null){
+			System.out.println("logou como "+idDigitado);
+			this.abrirTelaPlayer(Usuario.getAdmin());
+		}else{
 			lbLoginInfo.setText("Usuário/Senha Inválidos");
 			System.out.println("Login invalido");
 		}
+	}
+	
+	private void abrirTelaPlayer(Usuario tipoUsuario) throws IOException{
+	
+		Stage stage = (Stage) btnLogar.getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
+
+		FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
+		ft.setFromValue(0.0);
+		ft.setToValue(1.0);
+		ft.play();
+
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	@Override

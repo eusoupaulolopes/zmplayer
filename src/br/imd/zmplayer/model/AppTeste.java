@@ -10,7 +10,10 @@ public class AppTeste {
 		Usuario user2 = new Usuario("joana", "Joana Bezerra", "3214", false);
 		Usuario user3 = new Usuario("felipe", "Felipe Costa", "5678", false);
 		
-		RepositorioUsuario.getInstance().add(user1);
+		RepositorioUsuario.add(user1);
+		RepositorioUsuario.add(user2);
+		RepositorioUsuario.add(user3);
+		
 		
 
 	}
