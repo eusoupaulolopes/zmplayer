@@ -14,7 +14,6 @@ public class ZMplayer extends Application {
 		Usuario user1 = new Usuario("maria", "Maria Cecilia", "1234", false);
 		Usuario user2 = new Usuario("joana", "Joana Bezerra", "3214", false);
 		Usuario user3 = new Usuario("felipe", "Felipe Costa", "5678", true);
-		
 		/* simuladorAddUser(){}*/		
 		RepositorioUsuario.add(user1);
 		RepositorioUsuario.add(user2);
