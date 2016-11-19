@@ -31,7 +31,7 @@
               </columns>
             </TableView>
             <Separator layoutX="8.0" layoutY="293.0" prefHeight="4.0" prefWidth="584.0" />
-            <Button layoutX="71.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Cadastrar" />
+            <Button fx:id="btnCadastrar" layoutX="71.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Cadastrar" />
             <Button layoutX="229.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Alterar" />
             <Button layoutX="384.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Remover" />
             <Button layoutX="402.0" layoutY="461.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Salvar" />
