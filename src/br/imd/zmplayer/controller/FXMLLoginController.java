@@ -2,6 +2,8 @@ package br.imd.zmplayer.controller;
 
 import br.imd.zmplayer.*;
 import br.imd.zmplayer.controller.utils.OperationalController;
+import br.imd.zmplayer.model.ManipuladorArquivo;
+import br.imd.zmplayer.model.Usuario;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,25 +36,51 @@ public class FXMLLoginController implements Initializable {
 
 	@FXML
 	private void handleLoginButtonAction(ActionEvent event) throws IOException {
-		Stage stage;
-		Parent root;
-		if (userTextField.getText().equals("admin") && passwordField.getText().equals("admin")) {
-			stage = (Stage) btnLogar.getScene().getWindow();
-			root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
+		//Ler arquivo dos usuarios cadastrados
+		String path = "usuarios.zmu";
+		try {
+			ManipuladorArquivo.lerZmu(path);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		String idDigitado = userTextField.getText();
+		String senhaDigitada = passwordField.getText();
 
-			FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
-			ft.setFromValue(0.0);
-			ft.setToValue(1.0);
-			ft.play();
-
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
+		//procurar o id e senha digitados no sistema
+		Usuario user = UserController.verificarLogin(idDigitado, senhaDigitada);
+		
+		if (idDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
 			System.out.println("logou como admin");
-		} else {
+			this.abrirTelaPlayer(Usuario.getAdmin());
+		
+		} else if(user != null){
+			System.out.println("Bem-vindo, "+user.getNome());
+			this.abrirTelaPlayer(user);
+			
+		}else{
 			lbLoginInfo.setText("Usuário/Senha Inválidos");
 			System.out.println("Login invalido");
+			
 		}
+	}
+	
+	private void abrirTelaPlayer(Usuario tipoUsuario) throws IOException{
+		
+		OperationalController.iniciarSessao(tipoUsuario);
+		
+		Stage stage = (Stage) btnLogar.getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
+
+		FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
+		ft.setFromValue(0.0);
+		ft.setToValue(1.0);
+		ft.play();
+
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	@Override

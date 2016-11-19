@@ -36,7 +36,7 @@ public class ArvoreBinaria {
 	 * 
 	 * @param raiz
 	 */
-	public void setRaiz(NoBinaria raiz) {
+	private void setRaiz(NoBinaria raiz) {
 		this.raiz = raiz;
 	}
 
@@ -160,21 +160,6 @@ public class ArvoreBinaria {
 		}
 	}
 
-	/**
-	 * Metodo para gerar uma subárvore
-	 * @param no
-	 * @return arvRetorno
-	 */
-	public ArvoreBinaria getSubArvore(NoBinaria no) {
-		if (this.buscar(no) != null) {
-			ArvoreBinaria arvRetorno = new ArvoreBinaria();
-			arvRetorno.raiz = this.buscar(no);
-			return arvRetorno;
-		} else {
-			
-			return null;
-		}
-	}
 
 	/**
 	 * Retorna a altura da árvore
@@ -248,7 +233,7 @@ public class ArvoreBinaria {
 	 * 
 	 * @param arvoreEmArray
 	 */
-	public void inserirNoArray(ArrayList<NoBinaria> arvoreEmArray) {
+	private void inserirNoArray(ArrayList<NoBinaria> arvoreEmArray) {
 		if (this.raiz == null) {
 
 		}
