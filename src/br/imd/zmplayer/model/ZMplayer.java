@@ -15,6 +15,10 @@ import de.jensd.fx.glyphs.fontawesome.*;
 public class ZMplayer extends Application {
 
 	public void start(Stage stage) throws Exception {
+<<<<<<< HEAD
+		
+=======
+>>>>>>> 95caaacdfbb84a79b62b5defd1b2ee47270c601f
 		
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));
 		

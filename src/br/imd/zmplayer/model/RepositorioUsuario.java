@@ -28,23 +28,14 @@ public class RepositorioUsuario {
 		
 	}
 	
-	public static void add(Usuario novo){
+	public static void add(Usuario novo){		
 		if(novo != null){
-			RepositorioUsuario.instance.inserir(new NoBinaria(novo));
-			/*String path = "usuarios.zmu";
-			try {
-				ManipuladorArquivo.gravarUsuario(path,novo);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-			
+			RepositorioUsuario.instance.inserir(new NoBinaria(novo));		
 		}
 	}
 	
 	public static Usuario buscar(Usuario user){
-		
-		
+				
 		if(user != null){
 			NoBinaria resultado = RepositorioUsuario.instance.buscar(new NoBinaria(user));			
 			if(resultado != null){
