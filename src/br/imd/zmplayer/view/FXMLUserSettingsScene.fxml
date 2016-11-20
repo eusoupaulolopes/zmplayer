@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLUserSettingsController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLUserSettingsController">
 	<children>
 		<AnchorPane maxHeight="-1.0" maxWidth="617.0" minWidth="300.0" prefHeight="578.0" prefWidth="600.0" styleClass="background" VBox.vgrow="ALWAYS">
          <children>
-            <Pane layoutX="80.0" layoutY="306.0" prefHeight="139.0" prefWidth="443.0" styleClass="background" stylesheets="@styles/FXMLPlayerSceneStyleSheet2.css">
+            <Pane layoutX="80.0" layoutY="306.0" prefHeight="139.0" prefWidth="443.0" styleClass="background" stylesheets="@styles/FXMLPlayerSceneStyleSheet.css">
                <children>
                   <TextField layoutX="13.0" layoutY="70.0" prefHeight="25.0" prefWidth="203.0" promptText="Usuário" />
                   <TextField layoutX="228.0" layoutY="70.0" prefHeight="25.0" prefWidth="203.0" promptText="Senha" />
@@ -22,18 +22,18 @@
                   <TextField layoutX="11.0" layoutY="27.0" prefHeight="25.0" prefWidth="421.0" promptText="Nome" />
                </children>
             </Pane>
-            <TableView layoutX="14.0" layoutY="39.0" prefHeight="200.0" prefWidth="574.0">
+            <TableView fx:id="tableUsuario" layoutX="14.0" layoutY="39.0" prefHeight="200.0" prefWidth="574.0">
               <columns>
-                <TableColumn prefWidth="118.0" text="Name" />
-                <TableColumn prefWidth="221.0" text="Login" />
-                  <TableColumn prefWidth="179.0" text="Senha" />
-                  <TableColumn minWidth="6.0" prefWidth="55.0" text="Vip" />
+                <TableColumn fx:id="columnNome" prefWidth="118.0" text="Nome" />
+                <TableColumn fx:id="columnId" prefWidth="221.0" text="ID" />
+                  <TableColumn fx:id="columnSenha" prefWidth="179.0" text="Senha" />
+                  <TableColumn fx:id="columnVip" minWidth="6.0" prefWidth="55.0" text="Vip" />
               </columns>
             </TableView>
             <Separator layoutX="8.0" layoutY="293.0" prefHeight="4.0" prefWidth="584.0" />
             <Button fx:id="btnCadastrar" layoutX="71.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Cadastrar" />
-            <Button layoutX="229.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Alterar" />
-            <Button layoutX="384.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Remover" />
+            <Button fx:id="btnAlterar" layoutX="229.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Alterar" />
+            <Button fx:id="btnRemover" layoutX="384.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Remover" />
             <Button layoutX="402.0" layoutY="461.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Salvar" />
          </children></AnchorPane>
 	</children>
