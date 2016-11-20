@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+
 public class PlayerController {
 	
 	private static PlayerController pl = new PlayerController();
@@ -31,11 +32,23 @@ public class PlayerController {
 	public MediaPlayer mediaPlayer;
 	public Status status;
 	
-	public void tocar(File file) {
+	
+	
+	public void tocar(File file){
 		media = new Media(file.toURI().toString());
 		MediaPlayer mPlayer = new MediaPlayer(media);
 		MediaControl(mPlayer);
 	}
+	
+	public void parar(){
+		if(this.mediaPlayer != null){
+			if(this.mediaPlayer.getStatus() == Status.PLAYING || this.mediaPlayer.getStatus() == Status.PAUSED){
+				this.mediaPlayer.stop();
+			}
+		}
+	}
+	
+	
 	
 	public void MediaControl(final MediaPlayer mediaPlayer){
 		Status status = null;
@@ -50,9 +63,22 @@ public class PlayerController {
 			this.mediaPlayer = mediaPlayer;		
 		}
 		this.mediaPlayer.play();
-		
 	}
 	
+	public Boolean MediaControl(){
+		Status status = null;
+		if(this.mediaPlayer != null){
+			status = this.mediaPlayer.getStatus();
+		}
+		
+		if(status == Status.PLAYING){
+			this.mediaPlayer.pause();
+			return false;
+		}else{
+			this.mediaPlayer.play();
+			return true;
+		}
+	}
 	
 	
 	public MediaPlayer getMediaPlayer() {

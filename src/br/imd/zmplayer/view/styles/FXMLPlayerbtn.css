@@ -1,0 +1,17 @@
+
+#btnPlay, #btnStop, #btnPause {
+	-fx-font-family: 'FontAwesome';
+	-fx-font-size: 32;
+}
+
+.button{
+	-fx-font-family: 'FontAwesome';
+	-fx-font-size: 16;
+}
+
+#txtFdSearch{
+	
+	-fx-font-family: 'FontAwesome';
+	-fx-font-size: 16;
+}
+

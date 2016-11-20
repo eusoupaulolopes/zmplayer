@@ -2,9 +2,12 @@ package br.imd.zmplayer.controller;
 
 import br.imd.zmplayer.*;
 import br.imd.zmplayer.controller.utils.OperationalController;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import com.sun.javafx.tk.FontLoader;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -18,7 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import java.io.File;
@@ -33,18 +36,17 @@ public class FXMLPlayerController implements Initializable {
 
 	@FXML
 	public MenuItem closeButton;
-	@FXML
 	public MenuBar menuBar;
-	@FXML
 	public MenuItem menuUsuario;
-	@FXML
 	public MenuItem menuOpenFile;
-	@FXML
 	public Button btnPlay;
-	@FXML
+	public Button btnStop;
+	public Button btnPause;
 	public Text playerTime;
+	public Text txtBtnText;
 
 	private PlayerController pc;
+	private Font fontAwesome;
 
 	@FXML
 	private void menuUsuarioAction(ActionEvent event) throws IOException {
@@ -62,23 +64,44 @@ public class FXMLPlayerController implements Initializable {
 	private void menuOpenFileAction(ActionEvent event) throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Abrir mp3");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp4"));
 		File selectedFile = fileChooser.showOpenDialog(null);
 		if (selectedFile != null) {
 			try {
 				pc.tocar(selectedFile);
-				//updateDisplay();
+
+				// updateDisplay();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-	}	
-
+	}
 
 	@FXML
 	private void btnPlayAction(ActionEvent event) throws IOException {
-		File selectedFile = new File("C:\\Users\\Paulo Lopes\\Downloads\\Z-Maguinho do Piauí - Deus.mp3");
+		/*File selectedFile = new File("C:\\Users\\Paulo Lopes\\Downloads\\Z-Maguinho do Piauí - Deus.mp3");
 		pc.tocar(selectedFile);
+		*/
+		
+		Boolean pause = pc.MediaControl();
+		
+		if(pause){
+			btnPause.setVisible(true);
+			btnPlay.setVisible(false);
+		}else{
+			btnPause.setVisible(false);
+			btnPlay.setVisible(true);
+		}
+		
+		
+	}
+	@FXML
+	private void btnStopAction(ActionEvent event) throws IOException {
+		
+		pc.parar();
+		btnPause.setVisible(false);
+		btnPlay.setVisible(true);
+		
 	}
 
 	@FXML
@@ -89,7 +112,10 @@ public class FXMLPlayerController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO
+		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(), 12);
 		pc = PlayerController.getInstance();
+		btnPause.setVisible(false);
+		
 	}
 
 	private static String formatTime(Duration elapsed, Duration duration) {
