@@ -36,33 +36,30 @@ public class FXMLLoginController implements Initializable {
 
 	@FXML
 	private void handleLoginButtonAction(ActionEvent event) throws IOException {
-		//Ler arquivo dos usuarios cadastrados
+		
+		//Ler arquivo dos usuarios cadastrados para add na arvore.
 		String path = "usuarios.zmu";
-		try {
-			ManipuladorArquivo.lerZmu(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
+		ManipuladorArquivo.lerZmu(path);
+		
 		String idDigitado = userTextField.getText();
 		String senhaDigitada = passwordField.getText();
-
-		//procurar o id e senha digitados no sistema
-		Usuario user = UserController.verificarLogin(idDigitado, senhaDigitada);
 		
 		if (idDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
 			System.out.println("logou como admin");
 			this.abrirTelaPlayer(Usuario.getAdmin());
 		
-		} else if(user != null){
-			System.out.println("Bem-vindo, "+user.getNome());
-			this.abrirTelaPlayer(user);
+		} else{		
+
+			//procurar o id e senha digitados no sistema
+			Usuario user = UserController.verificarLogin(idDigitado, senhaDigitada);
 			
-		}else{
-			lbLoginInfo.setText("Usuário/Senha Inválidos");
-			System.out.println("Login invalido");
-			
+			if(user != null){		
+				System.out.println("Bem-vindo, "+user.getNome());
+				this.abrirTelaPlayer(user);
+			}else{
+				lbLoginInfo.setText("Usuário/Senha Inválidos");
+				System.out.println("Login invalido");
+			}
 		}
 	}
 	

@@ -4,6 +4,7 @@ import br.imd.zmplayer.*;
 import br.imd.zmplayer.model.Usuario;
 
 import br.imd.zmplayer.controller.utils.OperationalController;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -21,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
@@ -40,21 +42,29 @@ public class FXMLUserSettingsController implements Initializable{
 	private TableColumn<Usuario, String> columnId;
 	private TableColumn<Usuario, String> columnSenha;
 	private TableColumn<Usuario, String> columnVip;
-
+	
+	@FXML
 	private Button btnCadastrar;
 	private Button btnRemover;
 	private Button btnAlterar;
+	@FXML
+	private Label resultadoLabel;
 	
-	public TextField userTextField;
-	public Label lbLoginInfo;
-	public MenuItem closeButton;
+	@FXML
+	public TextField nomeTextField;
+	public TextField idTextField;
+	public TextField senhaTextField;
+	public CheckBox vipCheckBox;
+	
 
 	@FXML
 	private void inicializarTabela(){
-		tableUsuario.setEditable(true);
+		
+/*		tableUsuario.setEditable(true);
 		
 		List usuarios = Arrays.asList(
-			new Usuario("maria", "Maria" , "5588", true)
+			new Usuario("maria", "Maria" , "5588", true),
+			new Usuario("felipe", "Felipe" , "1234", false)
 			);
 		
 		tableUsuario = new TableView<>();
@@ -62,25 +72,36 @@ public class FXMLUserSettingsController implements Initializable{
         columnId = new TableColumn<>("Id");
         columnSenha = new TableColumn<>("Senha");
         columnVip = new TableColumn<>("VIP");
-
+		
         columnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnSenha.setCellValueFactory(new PropertyValueFactory<>("senha"));
         columnVip.setCellValueFactory(new PropertyValueFactory<>("vip"));
 
         tableUsuario.setItems(FXCollections.observableArrayList(usuarios));
-        tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha,columnVip);
+        tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha,columnVip);*/
         
-        /*primaryStage.setScene(new Scene(tabela));
-        primaryStage.setWidth(250);
-        primaryStage.setHeight(300);
-        primaryStage.setTitle("Tabelas no JavaFX");
-        primaryStage.show();*/
+        
         
 	}
 	
+	
 	@FXML
-	private void handleLoginButtonAction(ActionEvent event) throws IOException {}
+	private void handleCadastrarBtn(ActionEvent event) throws IOException {
+		String nome = nomeTextField.getText();
+		String id = idTextField.getText();
+		String senha = senhaTextField.getText();
+		boolean vip = vipCheckBox.isSelected();
+				
+		if(UserController.cadastrarUsuario(new Usuario(id,nome,senha,vip))){
+			System.out.println("ok");
+			resultadoLabel.setText("Usuário cadastrado com sucesso!");
+		}else{
+			System.out.println("no");
+			//resultadoLabel.setText("Problema no cadastro. Tente Novamente!");
+		}
+		
+	}
 	
 	
 	@Override

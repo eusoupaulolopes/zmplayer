@@ -31,16 +31,19 @@ public class ManipuladorArquivo {
 	 * @param user Usuário a ser inserido
 	 * @throws IOException
 	 */
-	public static void gravarUsuario(String path, Usuario user) throws IOException {
+	public static void gravarUsuario(String path, Usuario user) {
 			
-	        BufferedWriter buffWrite = new BufferedWriter(new FileWriter(path,true));
+	        BufferedWriter buffWrite;
+			try {
+				buffWrite = new BufferedWriter(new FileWriter(path,true));
+				String linha = user.getId()+";"+user.getNome()+";"+user.getSenha()+";"+user.isVIP();		  
+		        buffWrite.write(linha + "\n");
+		        buffWrite.flush();
+		        buffWrite.close();
+			} catch (IOException e) {
+				e.getMessage();
+			}        	              
 			
-	        
-	        String linha = user.getId()+";"+user.getNome()+";"+user.getSenha()+";"+user.isVIP();
-	        
-	        buffWrite.write(linha + "\n");
-	        buffWrite.flush();
-	        buffWrite.close();
 	}
 	
 	/**
@@ -48,25 +51,30 @@ public class ManipuladorArquivo {
 	 * @param path Caminho do local do arquivo
 	 * @throws IOException
 	 */
-	public static void lerZmu(String path) throws IOException {
-        BufferedReader buffRead = new BufferedReader(new FileReader(path));
+	public static void lerZmu(String path) {
+        BufferedReader buffRead;
+		try {
+			buffRead = new BufferedReader(new FileReader(path));
+			if(buffRead != null){
+				String linha;
+				while (true) {
+					linha = buffRead.readLine();
+					if (linha != null) {
+						String user[] = linha.split(";");
+						boolean vip = (user[3].equals("true"))?true:false; 	
+						RepositorioUsuario.add(new Usuario(user[0],user[1],user[2],vip));     
+						} else{
+							break;
+							}	     
+					}			
+				} 	
+			buffRead.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}
         
-        String linha;
-        while (true) {
-        	linha = buffRead.readLine();
-        	
-            if (linha != null) {     	
-            	
-            	String user[] = linha.split(";");
-            	boolean vip = (user[3].equals("true"))?true:false; 	
-            	RepositorioUsuario.add(new Usuario(user[0],user[1],user[2],vip));            	
- 
-            } else{
-                break;
-            }
-            
-        }
-        buffRead.close();
+       
+        
     }
  
 }

@@ -6,6 +6,9 @@ import br.imd.zmplayer.controller.utils.OperationalController;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-
+import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,17 +27,23 @@ import java.io.IOException;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 
 public class FXMLPlayerController implements Initializable {
 
-	@FXML public MenuItem closeButton;
-	@FXML public MenuBar menuBar;
-	@FXML public MenuItem menuUsuario;
-	@FXML public MenuItem menuOpenFile;
-	@FXML public Button btnPlay;
-	
-	
+	@FXML
+	public MenuItem closeButton;
+	@FXML
+	public MenuBar menuBar;
+	@FXML
+	public MenuItem menuUsuario;
+	@FXML
+	public MenuItem menuOpenFile;
+	@FXML
+	public Button btnPlay;
+	@FXML
+	public Text playerTime;
+
 	private PlayerController pc;
 
 	@FXML
@@ -55,15 +65,16 @@ public class FXMLPlayerController implements Initializable {
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		File selectedFile = fileChooser.showOpenDialog(null);
 		if (selectedFile != null) {
-			try{
+			try {
 				pc.tocar(selectedFile);
-			}catch (Exception e){
+				//updateDisplay();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}		
-	}
-	
-	
+		}
+	}	
+
+
 	@FXML
 	private void btnPlayAction(ActionEvent event) throws IOException {
 		File selectedFile = new File("C:\\Users\\Paulo Lopes\\Downloads\\Z-Maguinho do Piauí - Deus.mp3");
@@ -81,4 +92,36 @@ public class FXMLPlayerController implements Initializable {
 		pc = PlayerController.getInstance();
 	}
 
+	private static String formatTime(Duration elapsed, Duration duration) {
+		int intElapsed = (int) Math.floor(elapsed.toSeconds());
+		int elapsedHours = intElapsed / (60 * 60);
+		if (elapsedHours > 0) {
+			intElapsed -= elapsedHours * 60 * 60;
+		}
+		int elapsedMinutes = intElapsed / 60;
+		int elapsedSeconds = intElapsed - elapsedHours * 60 * 60 - elapsedMinutes * 60;
+
+		if (duration.greaterThan(Duration.ZERO)) {
+			int intDuration = (int) Math.floor(duration.toSeconds());
+			int durationHours = intDuration / (60 * 60);
+			if (durationHours > 0) {
+				intDuration -= durationHours * 60 * 60;
+			}
+			int durationMinutes = intDuration / 60;
+			int durationSeconds = intDuration - durationHours * 60 * 60 - durationMinutes * 60;
+			if (durationHours > 0) {
+				return String.format("%d:%02d:%02d/%d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds,
+						durationHours, durationMinutes, durationSeconds);
+			} else {
+				return String.format("%02d:%02d/%02d:%02d", elapsedMinutes, elapsedSeconds, durationMinutes,
+						durationSeconds);
+			}
+		} else {
+			if (elapsedHours > 0) {
+				return String.format("%d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
+			} else {
+				return String.format("%02d:%02d", elapsedMinutes, elapsedSeconds);
+			}
+		}
+	}
 }

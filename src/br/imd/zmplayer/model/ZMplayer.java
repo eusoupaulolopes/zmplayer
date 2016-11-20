@@ -13,13 +13,6 @@ public class ZMplayer extends Application {
 
 	public void start(Stage stage) throws Exception {
 		
-		String path = "usuarios.zmu";
-		try {
-			ManipuladorArquivo.lerZmu(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));
 		
