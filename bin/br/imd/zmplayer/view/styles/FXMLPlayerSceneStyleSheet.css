@@ -2,6 +2,12 @@
     -fx-background-color: #1d1d1d;
 }
 
+#btnPlay{
+	-fx-font-family: FontAwesome;
+	-fx-text-fill: azure ;   
+	
+}
+
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
