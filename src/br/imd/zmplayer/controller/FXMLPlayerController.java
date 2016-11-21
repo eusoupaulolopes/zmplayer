@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import com.sun.javafx.tk.FontLoader;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -103,7 +104,25 @@ public class FXMLPlayerController implements Initializable {
 		btnPlay.setVisible(true);
 		
 	}
+	
+	@FXML
+	private void menuLogoutAction(ActionEvent event) throws IOException {
+		Stage stage = (Stage) btnPlay.getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));
 
+		FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
+		ft.setFromValue(0.0);
+		ft.setToValue(1.0);
+		ft.play();
+		OperationalController.iniciarSessao(null);
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+		
+		
+		
+	}
+	
 	@FXML
 	private void closeButtonAction(ActionEvent event) throws IOException {
 		OperationalController.closeProgram();
