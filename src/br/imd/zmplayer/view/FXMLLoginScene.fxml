@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="306.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLLoginController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="306.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLLoginController">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="300.0" minWidth="300.0" prefHeight="-1.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button fx:id="btnLogar" defaultButton="true" layoutX="76.0" layoutY="225.0" mnemonicParsing="false" onAction="#handleLoginButtonAction" prefHeight="25.0" prefWidth="149.0" text="Logar" />
+            <Button fx:id="btnLogar" layoutX="76.0" layoutY="225.0" mnemonicParsing="false" onAction="#handleLoginButtonAction" prefHeight="25.0" prefWidth="149.0" text="Logar" />
             <TextField fx:id="userTextField" layoutX="76.0" layoutY="151.0" promptText="User" />
             <PasswordField fx:id="passwordField" accessibleRole="PASSWORD_FIELD" layoutX="76.0" layoutY="187.0" promptText="Pass" />
             <Label layoutX="123.0" layoutY="109.0" text="ZMPlayer" />

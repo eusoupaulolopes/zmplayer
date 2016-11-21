@@ -17,10 +17,10 @@
          <children>
             <TableView fx:id="tableUsuario" layoutX="14.0" layoutY="39.0" prefHeight="200.0" prefWidth="574.0">
               <columns>
-                <TableColumn fx:id="columnNome" prefWidth="118.0" text="Nome" />
-                <TableColumn fx:id="columnId" prefWidth="221.0" text="ID" />
-                  <TableColumn fx:id="columnSenha" prefWidth="179.0" text="Senha" />
-                  <TableColumn fx:id="columnVip" minWidth="6.0" prefWidth="55.0" text="Vip" />
+                <TableColumn fx:id="columnNome" prefWidth="118.0"  />
+                <TableColumn fx:id="columnId" prefWidth="221.0"  />
+                  <TableColumn fx:id="columnSenha" prefWidth="179.0" />
+                  <TableColumn fx:id="columnVip" minWidth="6.0" prefWidth="55.0"  />
               </columns>
             </TableView>
             <Separator layoutX="8.0" layoutY="293.0" prefHeight="4.0" prefWidth="584.0" />
