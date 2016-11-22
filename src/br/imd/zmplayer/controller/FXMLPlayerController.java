@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import com.sun.javafx.tk.FontLoader;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -97,11 +98,20 @@ public class FXMLPlayerController implements Initializable {
 	}
 	@FXML
 	private void btnStopAction(ActionEvent event) throws IOException {
-		
 		pc.parar();
 		btnPause.setVisible(false);
 		btnPlay.setVisible(true);
 		
+	}
+	
+	@FXML
+	private void menuLogoutAction(ActionEvent event) throws IOException {
+		
+		Stage stage = (Stage) btnPlay.getScene().getWindow();
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		OperationalController.iniciarSessao(null);
+		stage.show();
 	}
 
 	@FXML
