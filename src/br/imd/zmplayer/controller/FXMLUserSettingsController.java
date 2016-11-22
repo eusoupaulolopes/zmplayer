@@ -60,18 +60,20 @@ public class FXMLUserSettingsController implements Initializable{
 	@FXML
 	private void inicializarTabela(){
 		
-/*		tableUsuario.setEditable(true);
+		tableUsuario.setEditable(true);
 		
 		List usuarios = Arrays.asList(
 			new Usuario("maria", "Maria" , "5588", true),
 			new Usuario("felipe", "Felipe" , "1234", false)
 			);
-		
-		tableUsuario = new TableView<>();
-        columnNome = new TableColumn<>("Nome");
-        columnId = new TableColumn<>("Id");
-        columnSenha = new TableColumn<>("Senha");
-        columnVip = new TableColumn<>("VIP");
+
+	
+        this.columnNome = new TableColumn<>("Nome");
+        this.columnId = new TableColumn<>("Id");
+        this.columnSenha = new TableColumn<>("Senha");
+        this.columnVip = new TableColumn<>("VIP");
+        
+
 		
         columnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -79,10 +81,10 @@ public class FXMLUserSettingsController implements Initializable{
         columnVip.setCellValueFactory(new PropertyValueFactory<>("vip"));
 
         tableUsuario.setItems(FXCollections.observableArrayList(usuarios));
-        tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha,columnVip);*/
-        
-        
-        
+        tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha,columnVip);
+  
+        tableUsuario.refresh();
+        System.out.println("olar");
 	}
 	
 	
@@ -107,6 +109,7 @@ public class FXMLUserSettingsController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+		inicializarTabela();
 		
 		
 	}
