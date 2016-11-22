@@ -1,6 +1,9 @@
 package br.imd.zmplayer.controller;
 
 import br.imd.zmplayer.*;
+
+
+
 import br.imd.zmplayer.controller.utils.OperationalController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 
@@ -20,11 +23,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,6 +52,8 @@ public class FXMLPlayerController implements Initializable {
 	public Text txtBtnText;
 	private PlayerController pc;
 	private Font fontAwesome;
+	public Label lbUserSession;
+	
 
 	@FXML
 	private void menuUsuarioAction(ActionEvent event) throws IOException {
@@ -126,6 +133,9 @@ public class FXMLPlayerController implements Initializable {
 		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(), 12);
 		pc = PlayerController.getInstance();
 		btnPause.setVisible(false);
+		lbUserSession.setText(OperationalController.getSessao().getLt() + " - "+ OperationalController.getSessao().getUser().getNome());
+		
+		
 		
 	}
 

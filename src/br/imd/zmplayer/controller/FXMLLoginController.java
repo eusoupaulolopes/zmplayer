@@ -46,6 +46,7 @@ public class FXMLLoginController implements Initializable {
 		
 		if (idDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
 			System.out.println("logou como admin");
+			
 			this.abrirTelaPlayer(Usuario.getAdmin());
 		
 		} else{		
