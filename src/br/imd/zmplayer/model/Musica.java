@@ -6,5 +6,4 @@ public class Musica {
 	private String duracao;
 	private String local;
 	
-	
 }
