@@ -2,27 +2,27 @@ package br.imd.zmplayer.model;
 
 public class Musica {
 	
-	private int posicao;
+	private int numero;
 	private String nome;
 	private String local;
 	
-	public Musica(int posicao, String nome, String local) {
+	public Musica(int numero, String nome, String local) {
 		super();
-		this.posicao = posicao;
+		this.numero = numero;
 		this.nome = nome;
 		this.local = local;
 	}
 
 
 
-	public int getPosicao() {
-		return posicao;
+	public int getNumero() {
+		return numero;
 	}
 
 
 
-	public void setPosicao(int posicao) {
-		this.posicao = posicao;
+	public void setNumero(int numero) {
+		this.numero = numero;
 	}
 
 

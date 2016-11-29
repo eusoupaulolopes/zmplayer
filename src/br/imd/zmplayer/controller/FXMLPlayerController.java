@@ -1,28 +1,14 @@
 package br.imd.zmplayer.controller;
 
-import br.imd.zmplayer.*;
-
-
-
-import br.imd.zmplayer.controller.utils.OperationalController;
-import br.imd.zmplayer.model.Musica;
-import br.imd.zmplayer.model.Usuario;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
-import com.sun.javafx.tk.FontLoader;
-import com.sun.prism.impl.BufferUtil;
-
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
+import br.imd.zmplayer.controller.musictable.MusicaTable;
+import br.imd.zmplayer.controller.utils.OperationalController;
+import br.imd.zmplayer.model.Musica;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,14 +27,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class FXMLPlayerController implements Initializable {
 
@@ -69,12 +49,13 @@ public class FXMLPlayerController implements Initializable {
 	private Font fontAwesome;
 	public Label lbUserSession;
 	
-	private ListaControler lc;
 	
-	public TableView<Musica> tableMusics;
-	public TableColumn<Musica, Integer> columnNumber;
-	public TableColumn<Musica, String> columnMusic;
-	public TableColumn<Musica, String> columnPath;
+	
+	public TableView<MusicaTable> tableMusics;
+	public TableColumn<MusicaTable, Integer> columnNumber;
+	public TableColumn<MusicaTable, String> columnMusic;
+	public TableColumn<MusicaTable, String> columnPath;
+	private ObservableList<MusicaTable> listMusicaTable = FXCollections.observableArrayList();
 	
 
 	@FXML
@@ -158,65 +139,26 @@ public class FXMLPlayerController implements Initializable {
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		List<File> selectedFiles = fileChooser.showOpenMultipleDialog(btnOpenFolderList.getScene().getWindow());
 		if (selectedFiles != null) {
+			if(!listMusicaTable.isEmpty()){
+				listMusicaTable.clear();
+			}
 			try {
-				ObservableList<Musica> musicaData = FXCollections.observableArrayList();
-				//testando a tabela
-				musicaData.add(e);
-				
-		        getColumnNumber().setCellValueFactory(new PropertyValueFactory<>("posicao"));
-		        getColumnMusic().setCellValueFactory(new PropertyValueFactory<>("nome"));
-		        getColumnPath().setCellValueFactory(new PropertyValueFactory<>("local"));		        
-				
-				getTableMusics().setItems(FXCollections.observableArrayList(musicas));
-				//getTableMusics().getColumns().addAll(columnNumber, columnMusic, columnPath);
-				getTableMusics().refresh();
-				
 				for(File file: selectedFiles){
-					System.out.println(file.getName());
+					System.out.println("Inserindo");
+					MusicaTable mt = new MusicaTable(1, file.getName(), file.getPath());
+					listMusicaTable.add(mt);
 				}
 			} catch (Exception e) {
 				
-			}
+			}		
+			columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("Nº"));
+			columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("Musica"));
+			columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("Path"));
+			tableMusics.setItems(listMusicaTable);
+			tableMusics.refresh();
 		}
 		
 	}
-	
-	
-	
-	
-	
-	public TableView<Musica> getTableMusics() {
-		return tableMusics;
-	}
-
-	public void setTableMusics(TableView<Musica> tableMusics) {
-		this.tableMusics = tableMusics;
-	}
-
-	public TableColumn<Musica, Integer> getColumnNumber() {
-		return columnNumber;
-	}
-
-	public void setColumnNumber(TableColumn<Musica, Integer> columnNumber) {
-		this.columnNumber = columnNumber;
-	}
-
-	public TableColumn<Musica, String> getColumnMusic() {
-		return columnMusic;
-	}
-
-	public void setColumnMusic(TableColumn<Musica, String> columnMusic) {
-		this.columnMusic = columnMusic;
-	}
-
-	public TableColumn<Musica, String> getColumnPath() {
-		return columnPath;
-	}
-
-	public void setColumnPath(TableColumn<Musica, String> columnPath) {
-		this.columnPath = columnPath;
-	}
-
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO
@@ -224,7 +166,7 @@ public class FXMLPlayerController implements Initializable {
 		pc = PlayerController.getInstance();
 		btnPause.setVisible(false);
 		lbUserSession.setText(OperationalController.getSessao().getLt() + " - "+ OperationalController.getSessao().getUser().getNome());
-		lc = new ListaControler();
+		
 		
 	}
 	
