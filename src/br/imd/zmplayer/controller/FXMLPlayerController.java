@@ -168,7 +168,7 @@ public class FXMLPlayerController implements Initializable {
 		        getColumnPath().setCellValueFactory(new PropertyValueFactory<>("local"));		        
 				
 				getTableMusics().setItems(FXCollections.observableArrayList(musicas));
-				getTableMusics().getColumns().addAll(columnNumber, columnMusic, columnPath);
+				//getTableMusics().getColumns().addAll(columnNumber, columnMusic, columnPath);
 				getTableMusics().refresh();
 				
 				for(File file: selectedFiles){
