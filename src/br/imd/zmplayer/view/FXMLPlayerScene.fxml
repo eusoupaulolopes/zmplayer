@@ -67,17 +67,18 @@
            
             <ButtonBar buttonMinWidth="25.0" layoutX="40.0" prefHeight="40.0" prefWidth="210.0">
               <buttons>
-                  <Button id="btnOpenFolder" minWidth="33.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
+                  <Button id="btnOpenFolderList" fx:id="btnOpenFolderList" minWidth="33.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" onAction="#btnOpenFolderListAction" />
                 <Button id="btnSaveList" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
                   <Button id="btnSearchList" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
                   <Button id="btnidontknow" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="" textAlignment="JUSTIFY" />
               </buttons>
             </ButtonBar>
-            <TableView layoutX="13.0" layoutY="42.0" prefHeight="166.0" prefWidth="280.0">
+            <TableView fx:id="tableMusics" layoutX="13.0" layoutY="42.0" prefHeight="166.0" prefWidth="280.0">
               <columns>
-                <TableColumn editable="false" prefWidth="31.0" text="Nº" />
-                <TableColumn editable="false" prefWidth="250.0" text="Musica" />
-                  <TableColumn editable="false" minWidth="0.0" prefWidth="68.0" text="Path" visible="false" />
+              
+                <TableColumn fx:id="columnNumber" editable="false" prefWidth="31.0" text="Nº" />
+                <TableColumn fx:id="columnMusic" editable="false" prefWidth="250.0" text="Musica" />
+                 <TableColumn fx:id="columnPath" editable="false" minWidth="0.0" prefWidth="68.0" text="Path" visible="false" />
               </columns>
             </TableView>
             <Label id="lbUserSession" fx:id="lbUserSession" layoutX="13.0" layoutY="259.0" stylesheets="@styles/FXMLPlayerSceneStyleSheet.css" />

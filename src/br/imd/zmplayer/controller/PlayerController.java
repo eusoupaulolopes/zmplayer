@@ -3,6 +3,7 @@ package br.imd.zmplayer.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.print.PageLayout;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
@@ -18,13 +19,20 @@ import java.io.IOException;
 
 public class PlayerController {
 	
-	private static PlayerController pl = new PlayerController();
+	private static PlayerController pl;
 	
 	private PlayerController(){
 		
 	}
 	
 	public static PlayerController getInstance(){
+		if(pl == null){
+			synchronized (PlayerController.class) {
+				if(pl == null){
+					pl = new PlayerController();
+				}
+			}
+		}
 		return pl;
 	}
 	
@@ -36,6 +44,7 @@ public class PlayerController {
 	
 	public void tocar(File file){
 		media = new Media(file.toURI().toString());
+		System.out.println(file.toURI());
 		MediaPlayer mPlayer = new MediaPlayer(media);
 		MediaControl(mPlayer);
 	}
@@ -87,19 +96,5 @@ public class PlayerController {
 
 	
 
-	/*
-	 * public void tocar(File file) throws FileNotFoundException {
-	 * 
-	 * FileInputStream music = new FileInputStream(file); BufferedInputStream
-	 * bis = new BufferedInputStream(music);
-	 * 
-	 * 
-	 * try { Player player = new Player(bis);
-	 * System.out.println("Seduzindo com " + file.getAbsolutePath()); new
-	 * Thread(){ run(){ player.play(); } }.start();
-	 * 
-	 * } catch (JavaLayerException e) {
-	 * System.out.println("Não pude abrir o arquivo"); } }
-	 */
 
 }
