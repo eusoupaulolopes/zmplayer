@@ -6,8 +6,6 @@ public class Musica {
 	private String nome;
 	private String local;
 	
-	
-	
 	public Musica(int posicao, String nome, String local) {
 		super();
 		this.posicao = posicao;
@@ -50,8 +48,5 @@ public class Musica {
 	public void setLocal(String local) {
 		this.local = local;
 	}
-	
-	
-	
-	
+
 }
