@@ -24,6 +24,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -40,24 +41,21 @@ public class FXMLPlayerController implements Initializable {
 	public Button btnPlay;
 	public Button btnStop;
 	public Button btnPause;
-	
-	
+
 	public Button btnOpenFolderList;
 	public Text playerTime;
 	public Text txtBtnText;
 	private PlayerController pc;
 	private Font fontAwesome;
 	public Label lbUserSession;
-	
+
 	private TabelaControler tc;
 	public Button btnLimparLista;
-	
+
 	public TableView<MusicaTable> tableMusics;
 	public TableColumn<MusicaTable, Integer> columnNumber;
 	public TableColumn<MusicaTable, String> columnMusic;
 	public TableColumn<MusicaTable, String> columnPath;
-	
-	
 
 	@FXML
 	private void menuUsuarioAction(ActionEvent event) throws IOException {
@@ -77,96 +75,104 @@ public class FXMLPlayerController implements Initializable {
 		fileChooser.setTitle("Abrir mp3");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		File selectedFile = fileChooser.showOpenDialog(null);
-		if (selectedFile != null) {
-			try {
-				pc.tocar(selectedFile);
-				btnPlayAction(event);
-				// updateDisplay();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		if(selectedFile != null){
+			tableMusics.setItems(tc.limparLista());
+			tc.atualizar(selectedFile);
+			tableMusics.setItems(tc.atualizar(selectedFile));
+			tableMusics.refresh();
+			tableMusics.getSelectionModel().selectFirst();
+			btnPlayAction(event);
 		}
+		
 	}
 
 	@FXML
 	private void btnPlayAction(ActionEvent event) throws IOException {
-		/*File selectedFile = new File("C:\\Users\\Paulo Lopes\\Downloads\\Z-Maguinho do Piauí - Deus.mp3");
-		pc.tocar(selectedFile);
-		*/
-		
-		Boolean pause = pc.MediaControl();
-		
-		if(pause){
-			btnPause.setVisible(true);
-			btnPlay.setVisible(false);
-		}else{
-			btnPause.setVisible(false);
-			btnPlay.setVisible(true);
+		if (tableMusics.getSelectionModel().getSelectedIndex() < 0){
+			System.out.println("Sem música a tocar");
+		}else {
+			List<MusicaTable> selected = tableMusics.getItems().subList(tableMusics.getSelectionModel().getSelectedIndex(), tableMusics.getItems().size());
+			for(MusicaTable musica : selected){
+				File file = new File(musica.getLocal());
+				System.out.println("Seduzindo: "+musica.getNome());
+				pc.tocar(file);
+			}
+			
+			Boolean pause = pc.MediaControl();
+			if (pause) {
+				btnPause.setVisible(true);
+				btnPlay.setVisible(false);
+			} else {
+				btnPause.setVisible(false);
+				btnPlay.setVisible(true);
+			}
 		}
-		
-		
+
 	}
+
 	@FXML
 	private void btnStopAction(ActionEvent event) throws IOException {
 		pc.parar();
 		btnPause.setVisible(false);
 		btnPlay.setVisible(true);
-		
+
 	}
-	
+
 	@FXML
 	private void menuLogoutAction(ActionEvent event) throws IOException {
 
-		
 		Stage stage = (Stage) btnPlay.getScene().getWindow();
-		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));		Scene scene = new Scene(root);
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));
+		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		OperationalController.iniciarSessao(null);
 		stage.show();
 	}
-
 
 	@FXML
 	private void closeButtonAction(ActionEvent event) throws IOException {
 		OperationalController.closeProgram();
 	}
 
-	@FXML 
-	private void btnOpenFolderListAction(ActionEvent event) throws IOException{
+	@FXML
+	private void btnOpenFolderListAction(ActionEvent event) throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Selecionar musicas");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		List<File> selectedFiles = fileChooser.showOpenMultipleDialog(btnOpenFolderList.getScene().getWindow());
-		
+
 		if (selectedFiles != null) {
-			columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
-			columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
-			columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
+
 			tableMusics.setItems(tc.atualizar(selectedFiles));
 			tableMusics.refresh();
 		}
 	}
-	
+
 	@FXML
-	private void btnLimparListaAction(ActionEvent event) throws IOException{
+	private void btnLimparListaAction(ActionEvent event) throws IOException {
 		tableMusics.setItems(tc.limparLista());
 		tableMusics.refresh();
-		
+
 	}
-	
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO
 		tc = TabelaControler.getInstance();
-		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(), 12);
+		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(),
+				12);
 		pc = PlayerController.getInstance();
 		btnPause.setVisible(false);
-		lbUserSession.setText(OperationalController.getSessao().getLt() + " - "+ OperationalController.getSessao().getUser().getNome());
+		lbUserSession.setText(OperationalController.getSessao().getLt() + " - "
+				+ OperationalController.getSessao().getUser().getNome());
+		columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
+		columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
+		columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
 		
-		
-	}
-	
-	
+		if(!OperationalController.getSessao().getUser().isVIP()){
+			menuUsuario.setDisable(true);
+		}
 
-	
+	}
+
 }

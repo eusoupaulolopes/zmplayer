@@ -59,6 +59,7 @@ public class FXMLUserSettingsController implements Initializable{
 	@FXML Button btnSalvar;
 	@FXML Button btnCancelar;
 	
+	
 	@FXML
 	private Label resultadoLabel;
 	
@@ -204,6 +205,10 @@ public class FXMLUserSettingsController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		this.listarUsuarios();
+		if(!OperationalController.getSessao().getUser().isVIP()){
+			vipCheckBox.setDisable(true); // Aqui deve ser apenas o admin com acesso
+			
+		}
 		
 		
 		

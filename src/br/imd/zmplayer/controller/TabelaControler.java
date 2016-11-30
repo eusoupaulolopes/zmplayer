@@ -44,10 +44,25 @@ public class TabelaControler {
 		return listMT;
 	}
 	
+	public ObservableList<MusicaTable> atualizar(File file){
+		listMT.clear();
+		
+		listMT.add(new MusicaTable(1, file.getName(), file.getPath()));
+		
+		return listMT;
+	}
+	
+	
 	
 	public ObservableList<MusicaTable> limparLista(){
 		listMT.clear();
 		return listMT;
 	}
+
+	public ObservableList<MusicaTable> getListMT() {
+		return listMT;
+	}
+	
+
 
 }
