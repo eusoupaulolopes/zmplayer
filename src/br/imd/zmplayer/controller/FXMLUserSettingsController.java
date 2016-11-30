@@ -177,11 +177,18 @@ public class FXMLUserSettingsController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		this.listarUsuarios();
-		if(!OperationalController.getSessao().getUser().isVIP()){
+		
+		
+		
+		
+		/**
+		 * Clarissa apenas o botao de VIP desabilita caso nao seja VIP
+		 * pros demais casos (usuário comum, la no controle principal já restringe o acesso total, ou não?
+		 * if(!OperationalController.getSessao().getUser().isVIP()){
 			vipCheckBox.setDisable(true); // Aqui deve ser apenas o admin com acesso
 			
 		}
-		
+		 */
 		if(!OperationalController.getSessao().getUser().isVIP()){
 			edicaoPane.setDisable(true);
 			/*btnAlterar.setDisable(true);
