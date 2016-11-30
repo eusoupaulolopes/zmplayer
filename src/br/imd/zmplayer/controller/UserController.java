@@ -2,8 +2,6 @@ package br.imd.zmplayer.controller;
 
 import java.io.IOException;
 
-import org.omg.CORBA.RepositoryIdHelper;
-
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.RepositorioUsuario;
 import br.imd.zmplayer.model.Usuario;
@@ -32,7 +30,7 @@ public class UserController {
 		
 		if( encontrado == null){
 			RepositorioUsuario.add(novo); //add na arvore
-			ManipuladorArquivo.gravarUsuario("usuarios.zmu",novo); //add no arquivo
+			ManipuladorArquivo.gravarUsuario(novo); //add no arquivo
 			return true;
 			
 		}else{
@@ -41,19 +39,30 @@ public class UserController {
 		
 	}
 
-	public static boolean removerUsuario(Usuario user) {
+	public static String removerUsuario(Usuario user) {
+		String msg = RepositorioUsuario.remove(user);
 		
-		RepositorioUsuario.remove(user);
-		return true;
+		RepositorioUsuario.getInstance().inOrder();
 		
-		/*if( encontrado == null){
-			RepositorioUsuario.add(novo); //add na arvore
-			ManipuladorArquivo.gravarUsuario("usuarios.zmu",novo); //add no arquivo
+		if(msg.equals("Usuário Removido com sucesso")){
+			ManipuladorArquivo.reescreverArquivo();
+		}
+		
+		return msg;
+	}
+	
+	public static boolean alterarUsuario(Usuario novo){
+		
+		Usuario alterado = RepositorioUsuario.alterar(novo);
+		
+		if( alterado != null){
+			ManipuladorArquivo.reescreverArquivo();//alterar arquivo
 			return true;
 			
 		}else{
 			return false;
-		}	*/
+		}	
+		
 	}
 
 }

@@ -5,12 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import br.imd.zmplayer.model.tad.ArvoreBinaria;
+import br.imd.zmplayer.model.tad.NoBinaria;
  
 public class ManipuladorArquivo {
- 
+	private static final String path = "usuarios.zmu"; 
 /*    public static void leitor(String path) throws IOException {
         BufferedReader buffRead = new BufferedReader(new FileReader(path));
         String linha = "";
@@ -31,7 +33,7 @@ public class ManipuladorArquivo {
 	 * @param user Usuário a ser inserido
 	 * @throws IOException
 	 */
-	public static void gravarUsuario(String path, Usuario user) {
+	public static void gravarUsuario(Usuario user) {
 			
 	        BufferedWriter buffWrite;
 			try {
@@ -76,6 +78,34 @@ public class ManipuladorArquivo {
        
         
     }
+	/**
+	 * Método 	que reescreve o arquivo .zmu a partir da árvore.
+	 * 
+	 * @param user
+	 */	
+	public static void reescreverArquivo() {
+		
+		ArrayList<NoBinaria> lista = new ArrayList<NoBinaria>();
+		
+		RepositorioUsuario.getInstance().arvoreToArrayList(lista);
+		
+        BufferedWriter buffWrite;
+		try {
+			buffWrite = new BufferedWriter(new FileWriter(path));
+			
+			for(NoBinaria no: lista){
+				Usuario user = no.getUsuario();
+				String linha = user.getId()+";"+user.getNome()+";"+user.getSenha()+";"+user.isVIP();		  
+		        buffWrite.write(linha + "\n");
+			}
+			
+	        buffWrite.flush();
+	        buffWrite.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}        	              
+		
+}
  
 }
 

@@ -114,7 +114,37 @@ public class ArvoreBinaria {
 
 		}
 	}
-
+	
+	/**
+	 * Altera os valores do usuário do nó.
+	 * @param no
+	 * @return
+	 */
+	public NoBinaria alterar(Usuario user) {
+		if (this.raiz == null) {
+			return null;
+		} else {
+			if (user.getId().equals(this.raiz.getUsuario().getId())) {
+				this.getRaiz().getUsuario().setNome(user.getNome());
+				this.getRaiz().getUsuario().setSenha(user.getSenha());
+				this.getRaiz().getUsuario().setVIP(user.isVIP());
+				
+				return this.getRaiz();
+			} else {
+				if (user.getId().compareTo(this.raiz.getUsuario().getId()) < 0) {
+					if (this.raiz.getArvEsquerda() == null) {
+						return null;
+					}
+					return this.raiz.getArvEsquerda().alterar(user);
+				} else {
+					if (this.raiz.getArvDireita() == null) {
+						return null;
+					}
+					return this.raiz.getArvDireita().alterar(user);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Metodo que imprime uma árvore em largura
@@ -256,7 +286,7 @@ public class ArvoreBinaria {
 	 */
 	public void inserirNaList(List<Usuario> listaUsuarios) {
 		if (this.raiz == null) {
-
+			return;
 		}
 		
 		if (this.raiz.getArvEsquerda() != null) {
@@ -303,11 +333,33 @@ public class ArvoreBinaria {
 			this.raiz.getArvEsquerda().inOrder();
 		}
 		
-		
 		System.out.println("Nome: " + this.raiz.getUsuario().getNome());
 		
 		if (this.raiz.getArvDireita() != null) {
 			this.raiz.getArvDireita().inOrder();
 		}
 	}
+	
+	/**
+	 * Método que transforma a árvore em Array List.
+	 * 
+	 * @param arvoreEmArrayUsuarios
+	 */
+	public void arvoreToArrayList(ArrayList<NoBinaria> arvoreEmArray) {	    
+		    
+		if (this.raiz == null) {
+			return;			
+		}
+		
+		if (this.raiz.getArvEsquerda() != null) {
+			this.raiz.getArvEsquerda().arvoreToArrayList(arvoreEmArray);
+		}
+		arvoreEmArray.add(this.getRaiz());
+		if (this.raiz.getArvDireita() != null) {
+			this.raiz.getArvDireita().arvoreToArrayList(arvoreEmArray);
+		}
+
+	}
+	
+	
 }
