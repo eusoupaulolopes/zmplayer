@@ -33,6 +33,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
 
 
@@ -47,7 +48,7 @@ public class FXMLUserSettingsController implements Initializable{
 	private TableColumn<UsuarioTabela, String> columnVip = new TableColumn<UsuarioTabela, String>("VIP");
 	
 	//Cria uma lista com todos usuários cadastrados
-	private List<Usuario> usuarios =  RepositorioUsuario.listUsuarios();
+	private List<Usuario> usuarios;
 	
 	private ObservableList<UsuarioTabela> listaUsuarioTabela = FXCollections.observableArrayList();
 	
@@ -69,40 +70,6 @@ public class FXMLUserSettingsController implements Initializable{
 	public CheckBox vipCheckBox;
 	
 	
-
-	
-
-	
-	private void inicializarTabela(){
-		
-		//tableUsuario.setEditable(true);
-		
-		/*List<Usuario> usuarios = Arrays.asList(
-			new Usuario("clahz", "Maria" , "5588", true),
-			new Usuario("felipe", "Felipe" , "1234", false)
-			);
-		
-		
-	
-        this.columnNome = new TableColumn<>("Nome");
-        this.columnId = new TableColumn<>("Id");
-        this.columnSenha = new TableColumn<>("Senha");
-        this.columnVip = new TableColumn<>("VIP");
-        
-        columnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        columnSenha.setCellValueFactory(new PropertyValueFactory<>("senha"));
-        columnVip.setCellValueFactory(new PropertyValueFactory<>("vip"));
-
-        tableUsuario.setItems(FXCollections.observableArrayList(this.usuarios));
-        tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha,columnVip);
-  
-        tableUsuario.refresh();*/
-        
-        
-	}
-	
-	
 	@FXML
 	private void handleCadastrarBtn(ActionEvent event) throws IOException {
 		String nome = nomeTextField.getText();
@@ -115,6 +82,7 @@ public class FXMLUserSettingsController implements Initializable{
 			
 			listaUsuarioTabela.add(new UsuarioTabela(id, nome, senha, vip));			
 			tableUsuario.refresh();
+			
 			resultadoLabel.setText("Usuário cadastrado com sucesso!");
 			
 		}else{
@@ -124,13 +92,14 @@ public class FXMLUserSettingsController implements Initializable{
 		
 	}
 	private int index;
+	@FXML Pane edicaoPane;
 	@FXML
 	private void handleRemoverBtn(ActionEvent event) throws IOException {
 		//Pega o item selecionado na tabela
 		UsuarioTabela temp = tableUsuario.getSelectionModel().getSelectedItem();
 		
 		if(temp != null){
-			index = listaUsuarioTabela.indexOf(temp);
+			
 			Usuario user = temp.toUsuario();
 			listaUsuarioTabela.remove(temp);
 			
@@ -139,6 +108,7 @@ public class FXMLUserSettingsController implements Initializable{
 			usuarios =  RepositorioUsuario.listUsuarios();
 			
 			tableUsuario.refresh();
+
 		}else{
 			resultadoLabel.setText("Selecione o usuário a ser removido.");
 		}
@@ -151,7 +121,7 @@ public class FXMLUserSettingsController implements Initializable{
 	public void handleAlterarBtn(ActionEvent event) throws IOException {
 		//Pega o item selecionado na tabela
 		UsuarioTabela temp = tableUsuario.getSelectionModel().getSelectedItem();
-		
+		index = listaUsuarioTabela.indexOf(temp);
 		if(temp != null){
 			btnCancelar.setVisible(true);
 			btnSalvar.setVisible(true);
@@ -183,12 +153,14 @@ public class FXMLUserSettingsController implements Initializable{
 		
 		if(UserController.alterarUsuario(user)){
 			
-			listaUsuarioTabela.set(index, temp);
+			
 			usuarios =  RepositorioUsuario.listUsuarios();
+			listaUsuarioTabela.set(index, temp);
+			
+			tableUsuario.refresh();
 			
 			resultadoLabel.setText("Usuário "+user.getId()+" alterado com sucesso!");
-			tableUsuario.refresh();
-
+		
 		}
 		else{
 			resultadoLabel.setText("Usuário "+user.getId()+" não pode ser alterado!");
@@ -205,6 +177,18 @@ public class FXMLUserSettingsController implements Initializable{
 		
 		this.listarUsuarios();
 		
+		if(!OperationalController.getSessao().getUser().isVIP()){
+			edicaoPane.setDisable(true);
+			/*btnAlterar.setDisable(true);
+			btnCadastrar.setDisable(true);
+			btnRemover.setDisable(true);*/
+		}else{
+			if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
+				vipCheckBox.setDisable(true);
+				vipCheckBox.setSelected(false);
+			}
+		}
+		
 		
 		
 		
@@ -216,14 +200,16 @@ public class FXMLUserSettingsController implements Initializable{
 			System.out.println("limpou observale table");
 		}
 		
+		usuarios =  RepositorioUsuario.listUsuarios();
+		
 		for(Usuario usuario: usuarios){
 			UsuarioTabela u = new UsuarioTabela(usuario.getId(),usuario.getNome(), usuario.getSenha(), usuario.isVIP());
 			listaUsuarioTabela.add(u);
 		}
 		
-		columnNome.setPrefWidth(100.0);
-		columnId.setPrefWidth(100.0);
-		columnSenha.setPrefWidth(100.0);
+		columnNome.setPrefWidth(120.0);
+		columnId.setPrefWidth(120.0);
+		columnSenha.setPrefWidth(120.0);
 		columnVip.setPrefWidth(100.0);
 		
 		columnNome.setCellValueFactory(new PropertyValueFactory<UsuarioTabela,String>("nome"));
