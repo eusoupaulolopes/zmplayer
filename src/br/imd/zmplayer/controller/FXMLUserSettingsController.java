@@ -73,10 +73,21 @@ public class FXMLUserSettingsController implements Initializable{
 	
 	@FXML
 	private void handleCadastrarBtn(ActionEvent event) throws IOException {
+		
+		this.desabilitarModoEdicao();
+		
+		boolean vip;
+		if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
+			vip = false;
+		}else{
+			vip = vipCheckBox.isSelected();
+		}
+		
+		
 		String nome = nomeTextField.getText();
 		String id = idTextField.getText();
 		String senha = senhaTextField.getText();
-		boolean vip = vipCheckBox.isSelected();
+		
 				
 		if(UserController.cadastrarUsuario(new Usuario(id,nome,senha,vip))){
 			System.out.println("ok");
@@ -85,6 +96,7 @@ public class FXMLUserSettingsController implements Initializable{
 			tableUsuario.refresh();
 			
 			resultadoLabel.setText("Usuário cadastrado com sucesso!");
+			this.limparTextField();
 			
 		}else{
 			System.out.println("no");
@@ -96,8 +108,14 @@ public class FXMLUserSettingsController implements Initializable{
 	@FXML Pane edicaoPane;
 	@FXML
 	private void handleRemoverBtn(ActionEvent event) throws IOException {
+		
+		
+		this.desabilitarModoEdicao();
+		
 		//Pega o item selecionado na tabela
 		UsuarioTabela temp = tableUsuario.getSelectionModel().getSelectedItem();
+		
+		
 		
 		if(temp != null){
 			
@@ -120,29 +138,25 @@ public class FXMLUserSettingsController implements Initializable{
 	
 	@FXML
 	public void handleAlterarBtn(ActionEvent event) throws IOException {
+		
 		//Pega o item selecionado na tabela
 		UsuarioTabela temp = tableUsuario.getSelectionModel().getSelectedItem();
+		
 		index = listaUsuarioTabela.indexOf(temp);
 		if(temp != null){
-			btnCancelar.setVisible(true);
-			btnSalvar.setVisible(true);
+			this.habilitarModoEdicao();
 			
 			nomeTextField.setText(temp.getNome());
-			idTextField.setText(temp.getId());
-			idTextField.setEditable(false);			
+			idTextField.setText(temp.getId());		
 			senhaTextField.setText(temp.getSenha());
-			vipCheckBox.setSelected(temp.getVipBoolean());		
+			boolean vipCheck = (temp.getVipBoolean())?true:false;
+			vipCheckBox.setSelected(vipCheck);		
 			
 		}else{
 			resultadoLabel.setText("Selecione o usuário a ser alterado.");
 		}		
 	}
 	
-	@FXML
-	public void handleCancelarBtn(ActionEvent event) throws IOException {
-		btnCancelar.setVisible(false);
-		btnSalvar.setVisible(false);
-	}
 	
 	@FXML
 	public void handleSalvarBtn(ActionEvent event) throws IOException {
@@ -160,16 +174,44 @@ public class FXMLUserSettingsController implements Initializable{
 			
 			tableUsuario.refresh();
 			
-			resultadoLabel.setText("Usuário "+user.getId()+" alterado com sucesso!");
-		
+			resultadoLabel.setText("Usuário "+user.getId()+" alterado com sucesso!");	
+			this.desabilitarModoEdicao();
 		}
 		else{
 			resultadoLabel.setText("Usuário "+user.getId()+" não pode ser alterado!");
 		}
-		btnCancelar.setVisible(false);
-		btnSalvar.setVisible(false);
+			
+		this.limparTextField();
+		
 	}
 	
+	@FXML
+	public void handleCancelarBtn(ActionEvent event) throws IOException {
+		this.desabilitarModoEdicao();	
+		this.limparTextField();
+	}
+	
+	private void habilitarModoEdicao() {
+		btnCancelar.setVisible(true);
+		btnSalvar.setVisible(true);
+		idTextField.setEditable(false);	
+		
+	}
+	
+	private void desabilitarModoEdicao(){
+		//garante que os botoes nao aprecem caso o alterar tenha sido acionado antes.
+		btnCancelar.setVisible(false);
+		btnSalvar.setVisible(false);
+		idTextField.setEditable(true);
+	}
+	
+	private void limparTextField(){
+		//garante que os botoes nao aprecem caso o alterar tenha sido acionado antes.
+		nomeTextField.setText("");
+		idTextField.setText("");		
+		senhaTextField.setText("");
+		vipCheckBox.setSelected(false);		
+	}
 	
 	
 	
@@ -178,33 +220,20 @@ public class FXMLUserSettingsController implements Initializable{
 		
 		this.listarUsuarios();
 		
-		
-		
-		
-		/**
-		 * Clarissa apenas o botao de VIP desabilita caso nao seja VIP
-		 * pros demais casos (usuário comum, la no controle principal já restringe o acesso total, ou não?
-		 * if(!OperationalController.getSessao().getUser().isVIP()){
-			vipCheckBox.setDisable(true); // Aqui deve ser apenas o admin com acesso
 			
+		//Verifica se o usuário da sessão é o admin, se não for, não pode cadastrar usuário VIP
+		if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
+			vipCheckBox.setDisable(true);
+						
 		}
-		 */
-		if(!OperationalController.getSessao().getUser().isVIP()){
-			edicaoPane.setDisable(true);
-			/*btnAlterar.setDisable(true);
-			btnCadastrar.setDisable(true);
-			btnRemover.setDisable(true);*/
-		}else{
-			if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
-				vipCheckBox.setDisable(true);
-				vipCheckBox.setSelected(false);
-			}
-		}
+		
 		
 		
 		
 		
 	}
+	
+	
 	
 	public void listarUsuarios(){
 		if(!listaUsuarioTabela.isEmpty()){
