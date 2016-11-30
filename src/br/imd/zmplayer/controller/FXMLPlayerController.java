@@ -49,13 +49,14 @@ public class FXMLPlayerController implements Initializable {
 	private Font fontAwesome;
 	public Label lbUserSession;
 	
-	
+	private TabelaControler tc;
+	public Button btnLimparLista;
 	
 	public TableView<MusicaTable> tableMusics;
 	public TableColumn<MusicaTable, Integer> columnNumber;
 	public TableColumn<MusicaTable, String> columnMusic;
 	public TableColumn<MusicaTable, String> columnPath;
-	private ObservableList<MusicaTable> listMusicaTable = FXCollections.observableArrayList();
+	
 	
 
 	@FXML
@@ -133,35 +134,30 @@ public class FXMLPlayerController implements Initializable {
 	@FXML 
 	private void btnOpenFolderListAction(ActionEvent event) throws IOException{
 		FileChooser fileChooser = new FileChooser();
-		
-		
 		fileChooser.setTitle("Selecionar musicas");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		List<File> selectedFiles = fileChooser.showOpenMultipleDialog(btnOpenFolderList.getScene().getWindow());
+		
 		if (selectedFiles != null) {
-			if(!listMusicaTable.isEmpty()){
-				listMusicaTable.clear();
-			}
-			try {
-				for(File file: selectedFiles){
-					System.out.println("Inserindo");
-					MusicaTable mt = new MusicaTable(1, file.getName(), file.getPath());
-					listMusicaTable.add(mt);
-				}
-			} catch (Exception e) {
-				
-			}		
-			columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("Nº"));
-			columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("Musica"));
-			columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("Path"));
-			tableMusics.setItems(listMusicaTable);
+			columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
+			columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
+			columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
+			tableMusics.setItems(tc.atualizar(selectedFiles));
 			tableMusics.refresh();
 		}
+	}
+	
+	@FXML
+	private void btnLimparListaAction(ActionEvent event) throws IOException{
+		tableMusics.setItems(tc.limparLista());
+		tableMusics.refresh();
 		
 	}
+	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO
+		tc = TabelaControler.getInstance();
 		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(), 12);
 		pc = PlayerController.getInstance();
 		btnPause.setVisible(false);

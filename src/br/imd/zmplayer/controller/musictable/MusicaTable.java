@@ -20,12 +20,12 @@ public class MusicaTable {
 		return numero.get();
 	}
 
-	public SimpleStringProperty getNome() {
-		return nome;
+	public String getNome() {
+		return nome.get();
 	}
 
-	public SimpleStringProperty getLocal() {
-		return local;
+	public String getLocal() {
+		return local.get();
 	}
 	
 	
