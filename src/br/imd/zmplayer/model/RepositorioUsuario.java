@@ -48,6 +48,11 @@ public class RepositorioUsuario {
 		return null;
 		
 	}
+
+	public static void remove(Usuario user) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 

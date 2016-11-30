@@ -1,6 +1,6 @@
 package br.imd.zmplayer.controller;
 import br.imd.zmplayer.*;
-
+import br.imd.zmplayer.model.RepositorioUsuario;
 import br.imd.zmplayer.model.Usuario;
 
 import br.imd.zmplayer.controller.utils.OperationalController;
@@ -8,7 +8,10 @@ import br.imd.zmplayer.controller.utils.OperationalController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
@@ -47,6 +50,7 @@ public class FXMLUserSettingsController implements Initializable{
 	private Button btnCadastrar;
 	private Button btnRemover;
 	private Button btnAlterar;
+	
 	@FXML
 	private Label resultadoLabel;
 	
@@ -60,21 +64,18 @@ public class FXMLUserSettingsController implements Initializable{
 	@FXML
 	private void inicializarTabela(){
 		
-		tableUsuario.setEditable(true);
+		//tableUsuario.setEditable(true);
 		
-		List usuarios = Arrays.asList(
+		List<Usuario> usuarios = Arrays.asList(
 			new Usuario("maria", "Maria" , "5588", true),
 			new Usuario("felipe", "Felipe" , "1234", false)
 			);
-
 	
         this.columnNome = new TableColumn<>("Nome");
         this.columnId = new TableColumn<>("Id");
         this.columnSenha = new TableColumn<>("Senha");
         this.columnVip = new TableColumn<>("VIP");
         
-
-		
         columnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnSenha.setCellValueFactory(new PropertyValueFactory<>("senha"));
@@ -84,7 +85,8 @@ public class FXMLUserSettingsController implements Initializable{
         tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha,columnVip);
   
         tableUsuario.refresh();
-        System.out.println("olar");
+        
+        
 	}
 	
 	
@@ -105,11 +107,32 @@ public class FXMLUserSettingsController implements Initializable{
 		
 	}
 	
+	@FXML
+	private void handleRemoverBtn(ActionEvent event) throws IOException {
+		
+		Usuario user = tableUsuario.getSelectionModel().getSelectedItem();
+		
+		nomeTextField.setText(user.getNome());
+		idTextField.setText(user.getId());
+		senhaTextField.setText(user.getSenha());
+		vipCheckBox.setSelected(user.isVIP());
+				
+		if( UserController.removerUsuario(user) ){
+			System.out.println("ok");
+			resultadoLabel.setText("Usuário removido com sucesso!");
+		}else{
+			System.out.println("no");
+			//resultadoLabel.setText("Problema no cadastro. Tente Novamente!");
+		}
+		
+	}
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		inicializarTabela();
+		
+		this.inicializarTabela();
+		
 		
 		
 	}

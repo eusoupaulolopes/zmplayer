@@ -16,12 +16,12 @@
 		<AnchorPane maxHeight="-1.0" maxWidth="617.0" minWidth="300.0" prefHeight="578.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
          <children>
             <TableView fx:id="tableUsuario" layoutX="14.0" layoutY="39.0" prefHeight="200.0" prefWidth="574.0">
-              <columns>
+              <!-- <columns>
                 <TableColumn fx:id="columnNome" prefWidth="118.0"  />
                 <TableColumn fx:id="columnId" prefWidth="221.0"  />
                   <TableColumn fx:id="columnSenha" prefWidth="179.0" />
                   <TableColumn fx:id="columnVip" minWidth="6.0" prefWidth="55.0"  />
-              </columns>
+              </columns> -->
             </TableView>
             <Separator layoutX="8.0" layoutY="293.0" prefHeight="4.0" prefWidth="584.0" />
             <Pane layoutX="80.0" layoutY="306.0" prefHeight="139.0" prefWidth="443.0">
