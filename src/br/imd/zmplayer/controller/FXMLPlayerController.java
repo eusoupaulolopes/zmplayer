@@ -79,6 +79,8 @@ public class FXMLPlayerController implements Initializable {
 		stage.setResizable(false);
 		stage.show();
 	}
+	
+	
 
 	
 	@FXML
