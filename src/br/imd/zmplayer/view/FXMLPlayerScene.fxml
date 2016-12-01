@@ -67,7 +67,7 @@
               <buttons>
                   <Button id="btnOpenFolderList" fx:id="btnOpenFolderList" minWidth="33.0" mnemonicParsing="false" onAction="#btnOpenFolderListAction" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
                 <Button id="btnSaveList" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
-                  <Button id="btnSearchList" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
+                  <Button id="btnPlaylist" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="&#xf03a;" textAlignment="JUSTIFY" />
                   <Button id="btnidontknow" fx:id="btnLimparLista" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnLimparListaAction" text="" textAlignment="JUSTIFY" />
               </buttons>
             </ButtonBar>
