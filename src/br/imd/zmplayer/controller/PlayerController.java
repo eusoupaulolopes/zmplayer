@@ -1,21 +1,12 @@
 package br.imd.zmplayer.controller;
 
-import java.net.URL;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-import javafx.print.PageLayout;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
-import javafx.scene.media.MediaView;
-import javafx.util.Duration;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class PlayerController {
 
@@ -44,16 +35,16 @@ public class PlayerController {
 		media = new Media(file.toURI().toString());
 		System.out.println(file.toURI());
 		MediaPlayer mPlayer = new MediaPlayer(media);
-		MediaControl(mPlayer);
+		mediaControl(mPlayer);
 	}
 
 	public void tocar(List<File> files) {
-		for (File file : files) {
-			media = new Media(file.toURI().toString());
-			System.out.println(file.toURI());
-			MediaPlayer mPlayer = new MediaPlayer(media);
-			MediaControl(mPlayer);
+		List<MediaPlayer> mp = new ArrayList<MediaPlayer>();
+		for (File fl : files) {
+			Media media = new Media(fl.toURI().toString());
+			mp.add(new MediaPlayer(media));
 		}
+		mediaControl(mp);
 
 	}
 
@@ -65,7 +56,7 @@ public class PlayerController {
 		}
 	}
 
-	public void MediaControl(final MediaPlayer mediaPlayer) {
+	public void mediaControl(final MediaPlayer mediaPlayer) {
 		Status status = null;
 		if (this.mediaPlayer != null) {
 			status = this.mediaPlayer.getStatus();
@@ -80,7 +71,35 @@ public class PlayerController {
 		this.mediaPlayer.play();
 	}
 
-	public Boolean MediaControl() {
+	/**
+	 * Método que recebe a sublista de MediaPlayers para serem tocadas
+	 * @param mpList  List<MediaPlayer>
+	 */
+	public void mediaControl(List<MediaPlayer> mpList) {
+		// Varrer toda a lista e a cada nó atribui o que fazer ao final de cada Media
+		for (int i = 0; i < mpList.size(); i++) {
+			MediaPlayer atualMP = mpList.get(i);
+			MediaPlayer nextMP = mpList.get((i + 1) % mpList.size());
+			mpList.get(i).setOnEndOfMedia(new Runnable() {
+				@Override
+				public void run() {
+					getMediaPlayer().stop();
+					setMediaPlayer(nextMP);
+					getMediaPlayer().play();
+
+				}
+			});
+		}
+		mediaControl(mpList.get(0)); // executa o Primeiro MediaPlayer
+		
+
+	}
+
+	public void setMediaPlayer(MediaPlayer mediaPlayer) {
+		this.mediaPlayer = mediaPlayer;
+	}
+
+	public Boolean mediaControl() {
 		Status status = null;
 		if (this.mediaPlayer != null) {
 			status = this.mediaPlayer.getStatus();
