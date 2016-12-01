@@ -3,14 +3,13 @@ package br.imd.zmplayer.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
-import br.imd.zmplayer.model.Musica;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +23,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -106,13 +104,15 @@ public class FXMLPlayerController implements Initializable {
 			System.out.println("Sem música a tocar");
 		}else {
 			List<MusicaTable> selected = tableMusics.getItems().subList(tableMusics.getSelectionModel().getSelectedIndex(), tableMusics.getItems().size());
+			List<File> files = new ArrayList<File>();
 			for(MusicaTable musica : selected){
 				File file = new File(musica.getLocal());
 				System.out.println("Seduzindo: "+musica.getNome());
-				pc.tocar(file);
+				files.add(file);
 			}
+			pc.tocar(files);
 			
-			Boolean pause = pc.MediaControl();
+			Boolean pause = pc.mediaControl();
 			if (pause) {
 				btnPause.setVisible(true);
 				btnPlay.setVisible(false);
