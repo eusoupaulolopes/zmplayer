@@ -1,15 +1,16 @@
 package br.imd.zmplayer.controller;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,14 +21,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class FXMLPlayerController implements Initializable {
 
@@ -36,16 +41,21 @@ public class FXMLPlayerController implements Initializable {
 	public MenuBar menuBar;
 	public MenuItem menuUsuario;
 	public MenuItem menuOpenFile;
+	public MenuItem menuAddFolder;
+	private ProgressBar pbMusic;
+	private ChangeListener<Duration> progressMusicChangeListener;
+	
 	public Button btnPlay;
 	public Button btnStop;
 	public Button btnPause;
 
-	public Button btnOpenFolderList;
+	
 	public Text playerTime;
 	public Text txtBtnText;
 	private PlayerController pc;
 	private Font fontAwesome;
 	public Label lbUserSession;
+	public Label lbCurrentPlaying;
 
 	private TabelaControler tc;
 	public Button btnLimparLista;
@@ -54,6 +64,18 @@ public class FXMLPlayerController implements Initializable {
 	public TableColumn<MusicaTable, Integer> columnNumber;
 	public TableColumn<MusicaTable, String> columnMusic;
 	public TableColumn<MusicaTable, String> columnPath;
+	
+	
+	 
+	public Label getLbCurrentPlaying() {
+		return lbCurrentPlaying;
+	}
+
+	public void setLbCurrentPlaying(Label lbCurrentPlaying) {
+		this.lbCurrentPlaying = lbCurrentPlaying;
+	}
+
+
 
 	@FXML
 	private void menuUsuarioAction(ActionEvent event) throws IOException {
@@ -68,20 +90,59 @@ public class FXMLPlayerController implements Initializable {
 	}
 
 	@FXML
-	private void menuOpenFileAction(ActionEvent event) throws IOException {
+	private void addFileAction(ActionEvent event) throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Abrir mp3");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		File selectedFile = fileChooser.showOpenDialog(null);
 		if(selectedFile != null){
-			tableMusics.setItems(tc.limparLista());
-			tc.atualizar(selectedFile);
 			tableMusics.setItems(tc.atualizar(selectedFile));
 			tableMusics.refresh();
-			tableMusics.getSelectionModel().selectFirst();
-			btnPlayAction(event);
+			//tableMusics.getSelectionModel().selectFirst();
+			OperationalController.gravarMusica(selectedFile.getPath());
 		}
+	}
+	
+	@FXML
+	private void addFolderListAction(ActionEvent event) throws IOException {
 		
+		DirectoryChooser chooser = new DirectoryChooser();
+		chooser.setTitle("Selecionar diretório");
+		
+		FilenameFilter mp3Filter = new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				String lowercaseName = name.toLowerCase();
+				if (lowercaseName.endsWith(".mp3")) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+		
+		File selectedDirectory = chooser.showDialog(btnPlay.getScene().getWindow());
+		if(selectedDirectory == null){
+			System.out.println("Nenhum diretório encontrado");
+		}else{
+			System.out.println("Achei");
+		}
+
+		/*
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Selecionar musicas");
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
+		*/
+		
+		List<File> selectedFiles = new ArrayList<File>();
+		for(File file: selectedDirectory.listFiles(mp3Filter)){
+			selectedFiles.add(file);
+		}
+ 
+		if (selectedFiles != null) {
+			OperationalController.gravarFolder(selectedDirectory.getPath());
+			tableMusics.setItems(tc.atualizar(selectedFiles));
+			tableMusics.refresh();	
+		}
 	}
 
 	@FXML
@@ -97,9 +158,8 @@ public class FXMLPlayerController implements Initializable {
 				files.add(file);
 			}
 			pc.tocar(files);
-			
-			Boolean pause = pc.mediaControl();
-			if (pause) {
+			Status pause = pc.getMediaControlStatus();
+			if (pause != Status.PLAYING) {
 				btnPause.setVisible(true);
 				btnPlay.setVisible(false);
 			} else {
@@ -109,6 +169,9 @@ public class FXMLPlayerController implements Initializable {
 		}
 
 	}
+	
+
+
 
 	@FXML
 	private void btnStopAction(ActionEvent event) throws IOException {
@@ -134,19 +197,7 @@ public class FXMLPlayerController implements Initializable {
 		OperationalController.closeProgram();
 	}
 
-	@FXML
-	private void btnOpenFolderListAction(ActionEvent event) throws IOException {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Selecionar musicas");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
-		List<File> selectedFiles = fileChooser.showOpenMultipleDialog(btnOpenFolderList.getScene().getWindow());
-
-		if (selectedFiles != null) {
-
-			tableMusics.setItems(tc.atualizar(selectedFiles));
-			tableMusics.refresh();
-		}
-	}
+	
 
 	@FXML
 	private void btnLimparListaAction(ActionEvent event) throws IOException {
@@ -154,6 +205,8 @@ public class FXMLPlayerController implements Initializable {
 		tableMusics.refresh();
 
 	}
+	
+
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -172,7 +225,14 @@ public class FXMLPlayerController implements Initializable {
 		if(!OperationalController.getSessao().getUser().isVIP()){
 			menuUsuario.setDisable(true);
 		}
-
+		
+		tc.limparLista();
+		tableMusics.setItems(tc.atualizar(OperationalController.carregarMusicas()));
+		tableMusics.setItems(tc.atualizar(OperationalController.carregarDiretorio()));
+		tableMusics.refresh();
+		
+		
+		
 	}
 
 }

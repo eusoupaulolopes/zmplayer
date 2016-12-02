@@ -57,8 +57,9 @@ public class FXMLUserSettingsController implements Initializable{
 	private Button btnCadastrar;
 	private Button btnRemover;
 	private Button btnAlterar;
-	@FXML Button btnSalvar;
-	@FXML Button btnCancelar;
+	private Button btnSalvar;
+	private Button btnCancelar;
+	
 	
 	
 	@FXML
