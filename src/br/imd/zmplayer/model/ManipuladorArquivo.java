@@ -17,7 +17,7 @@ import br.imd.zmplayer.model.tad.NoBinaria;
 
 public class ManipuladorArquivo {
 	private static final String path = "usuarios.zmu";
-	private static final String PATHMUSICAS = "musicas.zmm";
+	private static final String PATHMUSICAS = "musicas.zmf";
 	private static final String PATHFOLDERS = "folders.zmf";
 	/*
 	 * public static void leitor(String path) throws IOException {

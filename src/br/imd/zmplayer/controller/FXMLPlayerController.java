@@ -12,6 +12,7 @@ import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +26,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -44,11 +46,10 @@ public class FXMLPlayerController implements Initializable {
 	public MenuItem menuAddFolder;
 	private ProgressBar pbMusic;
 	private ChangeListener<Duration> progressMusicChangeListener;
-	
+
 	public Button btnPlay;
 	public Button btnStop;
 	public Button btnPause;
-
 
 	public Button btnPlaylist;
 
@@ -66,9 +67,7 @@ public class FXMLPlayerController implements Initializable {
 	public TableColumn<MusicaTable, Integer> columnNumber;
 	public TableColumn<MusicaTable, String> columnMusic;
 	public TableColumn<MusicaTable, String> columnPath;
-	
-	
-	 
+
 	public Label getLbCurrentPlaying() {
 		return lbCurrentPlaying;
 	}
@@ -76,8 +75,6 @@ public class FXMLPlayerController implements Initializable {
 	public void setLbCurrentPlaying(Label lbCurrentPlaying) {
 		this.lbCurrentPlaying = lbCurrentPlaying;
 	}
-
-
 
 	@FXML
 	private void menuUsuarioAction(ActionEvent event) throws IOException {
@@ -90,7 +87,7 @@ public class FXMLPlayerController implements Initializable {
 		stage.setResizable(false);
 		stage.show();
 	}
-	
+
 	@FXML
 	private void btnPlaylistAction(ActionEvent event) throws IOException {
 		Stage stage = new Stage();
@@ -102,30 +99,27 @@ public class FXMLPlayerController implements Initializable {
 		stage.setResizable(false);
 		stage.show();
 	}
-	
-	
 
-	
 	@FXML
 	private void addFileAction(ActionEvent event) throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Abrir mp3");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		File selectedFile = fileChooser.showOpenDialog(null);
-		if(selectedFile != null){
+		if (selectedFile != null) {
 			tableMusics.setItems(tc.atualizar(selectedFile));
 			tableMusics.refresh();
-			//tableMusics.getSelectionModel().selectFirst();
+			// tableMusics.getSelectionModel().selectFirst();
 			OperationalController.gravarMusica(selectedFile.getPath());
 		}
 	}
-	
+
 	@FXML
 	private void addFolderListAction(ActionEvent event) throws IOException {
-		
+
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("Selecionar diretório");
-		
+
 		FilenameFilter mp3Filter = new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				String lowercaseName = name.toLowerCase();
@@ -136,42 +130,44 @@ public class FXMLPlayerController implements Initializable {
 				}
 			}
 		};
-		
+
 		File selectedDirectory = chooser.showDialog(btnPlay.getScene().getWindow());
-		if(selectedDirectory == null){
+		if (selectedDirectory == null) {
 			System.out.println("Nenhum diretório encontrado");
-		}else{
+		} else {
 			System.out.println("Achei");
 		}
 
 		/*
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Selecionar musicas");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
-		*/
-		
+		 * FileChooser fileChooser = new FileChooser();
+		 * fileChooser.setTitle("Selecionar musicas");
+		 * fileChooser.getExtensionFilters().addAll(new
+		 * FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
+		 */
+
 		List<File> selectedFiles = new ArrayList<File>();
-		for(File file: selectedDirectory.listFiles(mp3Filter)){
+		for (File file : selectedDirectory.listFiles(mp3Filter)) {
 			selectedFiles.add(file);
 		}
- 
+
 		if (selectedFiles != null) {
 			OperationalController.gravarFolder(selectedDirectory.getPath());
 			tableMusics.setItems(tc.atualizar(selectedFiles));
-			tableMusics.refresh();	
+			tableMusics.refresh();
 		}
 	}
 
 	@FXML
 	private void btnPlayAction(ActionEvent event) throws IOException {
-		if (tableMusics.getSelectionModel().getSelectedIndex() < 0){
+		if (tableMusics.getSelectionModel().getSelectedIndex() < 0) {
 			System.out.println("Sem música a tocar");
-		}else {
-			List<MusicaTable> selected = tableMusics.getItems().subList(tableMusics.getSelectionModel().getSelectedIndex(), tableMusics.getItems().size());
+		} else {
+			List<MusicaTable> selected = tableMusics.getItems()
+					.subList(tableMusics.getSelectionModel().getSelectedIndex(), tableMusics.getItems().size());
 			List<File> files = new ArrayList<File>();
-			for(MusicaTable musica : selected){
+			for (MusicaTable musica : selected) {
 				File file = new File(musica.getLocal());
-				System.out.println("Seduzindo: "+musica.getNome());
+				System.out.println("Seduzindo: " + musica.getNome());
 				files.add(file);
 			}
 			pc.tocar(files);
@@ -186,9 +182,6 @@ public class FXMLPlayerController implements Initializable {
 		}
 
 	}
-	
-
-
 
 	@FXML
 	private void btnStopAction(ActionEvent event) throws IOException {
@@ -214,16 +207,11 @@ public class FXMLPlayerController implements Initializable {
 		OperationalController.closeProgram();
 	}
 
-	
-
 	@FXML
 	private void btnLimparListaAction(ActionEvent event) throws IOException {
 		tableMusics.setItems(tc.limparLista());
 		tableMusics.refresh();
-
 	}
-	
-
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -238,27 +226,36 @@ public class FXMLPlayerController implements Initializable {
 		columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
 		columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
 		columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
-		
-		if(!OperationalController.getSessao().getUser().isVIP()){
+
+		if (!OperationalController.getSessao().getUser().isVIP()) {
 			menuUsuario.setDisable(true);
 		}
-		
+
 		tc.limparLista();
-		if(OperationalController.carregarMusicas() != null){
+		if (OperationalController.carregarMusicas() != null) {
 			tableMusics.setItems(tc.atualizar(OperationalController.carregarMusicas()));
-			
-			
+
 		}
-		if ( OperationalController.carregarDiretorio() != null) {
+		if (OperationalController.carregarDiretorio() != null) {
 			tableMusics.setItems(tc.atualizar(OperationalController.carregarDiretorio()));
 		}
 		tableMusics.refresh();
-		
-		
-		
-		
-		
-		
-	}
+		tableMusics.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent click) {
+				if (click.getClickCount() == 2) {
+					// Use ListView's getSelected Item
+					try {
+						btnPlayAction(new ActionEvent());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					// use this to do whatever you want to. Open Link etc.
+				}
 
+			}
+		});
+
+	}
 }
