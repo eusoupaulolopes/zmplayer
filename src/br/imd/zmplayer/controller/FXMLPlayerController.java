@@ -49,7 +49,9 @@ public class FXMLPlayerController implements Initializable {
 	public Button btnStop;
 	public Button btnPause;
 
-	
+
+	public Button btnPlaylist;
+
 	public Text playerTime;
 	public Text txtBtnText;
 	private PlayerController pc;
@@ -88,7 +90,22 @@ public class FXMLPlayerController implements Initializable {
 		stage.setResizable(false);
 		stage.show();
 	}
+	
+	@FXML
+	private void btnPlaylistAction(ActionEvent event) throws IOException {
+		Stage stage = new Stage();
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlaylistScene.fxml"));
+		stage.setScene(new Scene(root));
+		stage.setTitle("Playlist Configurations");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(menuBar.getScene().getWindow());
+		stage.setResizable(false);
+		stage.show();
+	}
+	
+	
 
+	
 	@FXML
 	private void addFileAction(ActionEvent event) throws IOException {
 		FileChooser fileChooser = new FileChooser();

@@ -48,8 +48,7 @@ public class FXMLUserSettingsController implements Initializable{
 	private TableColumn<UsuarioTabela, String> columnVip = new TableColumn<UsuarioTabela, String>("VIP");
 	
 	//Cria uma lista com todos usuários cadastrados
-	private List<Usuario> usuarios;
-	
+	private List<Usuario> usuarios;	
 	private ObservableList<UsuarioTabela> listaUsuarioTabela = FXCollections.observableArrayList();
 	
 	
@@ -262,6 +261,8 @@ public class FXMLUserSettingsController implements Initializable{
 		tableUsuario.setItems(listaUsuarioTabela);
 		tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha,columnVip);
 	}
+	
+	
 	
 	
 
