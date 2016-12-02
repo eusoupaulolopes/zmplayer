@@ -244,9 +244,18 @@ public class FXMLPlayerController implements Initializable {
 		}
 		
 		tc.limparLista();
-		tableMusics.setItems(tc.atualizar(OperationalController.carregarMusicas()));
-		tableMusics.setItems(tc.atualizar(OperationalController.carregarDiretorio()));
+		if(OperationalController.carregarMusicas() != null){
+			tableMusics.setItems(tc.atualizar(OperationalController.carregarMusicas()));
+			
+			
+		}
+		if ( OperationalController.carregarDiretorio() != null) {
+			tableMusics.setItems(tc.atualizar(OperationalController.carregarDiretorio()));
+		}
 		tableMusics.refresh();
+		
+		
+		
 		
 		
 		
