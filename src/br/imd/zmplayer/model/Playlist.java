@@ -24,6 +24,7 @@ public class Playlist {
 	public Playlist(String name, String local){
 		this.name = name;
 		this.local = local;
+		this.setMusicas(new ArrayList<Musica>());
 		
 	}
 
@@ -41,6 +42,20 @@ public class Playlist {
 
 	public void setLocal(String local) {
 		this.local = local;
+	}
+
+	/**
+	 * @return the musicas
+	 */
+	public ArrayList<Musica> getMusicas() {
+		return musicas;
+	}
+
+	/**
+	 * @param musicas the musicas to set
+	 */
+	public void setMusicas(ArrayList<Musica> musicas) {
+		this.musicas = musicas;
 	}
 	
 }

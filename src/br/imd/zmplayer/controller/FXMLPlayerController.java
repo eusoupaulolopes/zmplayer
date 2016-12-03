@@ -78,24 +78,10 @@ public class FXMLPlayerController implements Initializable {
 	public void setLbCurrentPlaying(Label lbCurrentPlaying) {
 		this.lbCurrentPlaying = lbCurrentPlaying;
 	}
-
-	@FXML
-	private void menuUsuarioAction(ActionEvent event) throws IOException {
-		Stage stage = new Stage();
-		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLUserSettingsScene.fxml"));
-		stage.setScene(new Scene(root));
-		stage.setTitle("Configurações de Usuário");
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.initOwner(menuBar.getScene().getWindow());
-		stage.setResizable(false);
-		stage.show();
-	}
-
 	
+	@FXML private TableView<MusicaTable> tableMusicPlaylist;
+	@FXML private TableView<PlaylistTabela> tableMyPlaylists;
 	
-	@FXML
-	private TableView<MusicaTable> tableMusicPlaylist;
-	private TableView<PlaylistTabela> tableMyPlaylists;
 	
 	@FXML
 	private void btnPlaylistAction(ActionEvent event) throws IOException {
@@ -112,6 +98,37 @@ public class FXMLPlayerController implements Initializable {
 			}
 		}
 	}
+	
+	@FXML
+	private void btnAddPlaylistAction(ActionEvent event) throws IOException{
+		Stage stage = new Stage();
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLNamePlaylistScene.fxml"));
+		stage.setScene(new Scene(root));
+		stage.setTitle("New Playlist");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(menuBar.getScene().getWindow());
+		stage.setResizable(false);
+		stage.show();
+		
+		/*PlaylistController controleAdd = new PlaylistController();
+		controleAdd.addPlaylistAction(tableMyPlaylists);*/
+	}
+
+	@FXML
+	private void menuUsuarioAction(ActionEvent event) throws IOException {
+		Stage stage = new Stage();
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLUserSettingsScene.fxml"));
+		stage.setScene(new Scene(root));
+		stage.setTitle("Configurações de Usuário");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(menuBar.getScene().getWindow());
+		stage.setResizable(false);
+		stage.show();
+	}
+
+	
+	
+	
 
 	@FXML
 	private void addFileAction(ActionEvent event) throws IOException {

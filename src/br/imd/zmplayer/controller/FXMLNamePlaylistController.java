@@ -37,7 +37,7 @@ import javafx.scene.layout.Pane;
 
 
 
-public class FXMLUserSettingsController implements Initializable{	
+public class FXMLNamePlaylistController implements Initializable{	
 	
 	
 	@FXML

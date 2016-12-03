@@ -8,6 +8,9 @@
 	
 }
 
+#btnAddMusicPlaylist, #btnRemoveMusicPlaylist, #btnAddPlaylist, #btnRemovePlaylist, #btnEditPlaylist {
+	-fx-font-family: FontAwesome;
+}
 
 #lbUserSession{
 	

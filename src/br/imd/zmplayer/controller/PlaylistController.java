@@ -36,7 +36,7 @@ public class PlaylistController{
 		}
 
 		//So para teste, deve ser criado Repositorio de Playlist
-		todasPlaylists = Arrays.asList( new Playlist("Rock Nacional", "C://lalal") );
+		todasPlaylists = Arrays.asList( new Playlist("Raça Negra", "C://lalal") );
 		
 		for(Playlist playlist: todasPlaylists){
 			PlaylistTabela p = new PlaylistTabela(playlist.getName(),playlist.getLocal());
@@ -49,6 +49,7 @@ public class PlaylistController{
 		tableMyPlaylists.setItems(listaPlaylistTabela);
 		tableMyPlaylists.getColumns().addAll(columnNamePlaylist);
 	}
+	
 	
 	@FXML
 	private TableColumn<MusicaTable, String> columnNameMusic = new TableColumn<MusicaTable, String>("Name");
@@ -77,6 +78,13 @@ public class PlaylistController{
 		
 		tableMusicPlaylist.setItems(listaMusicTabela);
 		tableMusicPlaylist.getColumns().addAll(columnNameMusic);
+	}
+
+	public void addPlaylistAction(TableView<PlaylistTabela> tableMyPlaylists) {
+		
+		
 	}	
+	
+	 
 
 }

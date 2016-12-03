@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLNamePlaylistController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="300.0">
+         <children>
+            <TextField fx:id="txtFieldPlaylistName" layoutX="65.0" layoutY="89.0" />
+            <Button fx:id="btnSave" layoutX="65.0" layoutY="139.0" mnemonicParsing="false" text="Save" />
+            <Button fx:id="btnCancel" layoutX="174.0" layoutY="139.0" mnemonicParsing="false" text="Cancel" />
+            <Label layoutX="74.0" layoutY="54.0" text="Enter the Playlist Name" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
