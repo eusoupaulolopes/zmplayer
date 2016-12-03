@@ -17,7 +17,7 @@ import br.imd.zmplayer.model.tad.NoBinaria;
 
 public class ManipuladorArquivo {
 	private static final String path = "usuarios.zmu";
-	private static final String PATHMUSICAS = "musicas.zmf";
+	public static final String PATHMUSICAS = "musicas.zmf";
 	private static final String PATHFOLDERS = "folders.zmf";
 	
 	/*
@@ -83,11 +83,11 @@ public class ManipuladorArquivo {
 		}
 	}
 
-	public static List<File> openListaMusica() {
+	public static List<File> openListaMusica(String caminho) {
 		BufferedReader buffRead;
 		List<File> files = new ArrayList<File>();
 		try {
-			buffRead = new BufferedReader(new FileReader(PATHMUSICAS));
+			buffRead = new BufferedReader(new FileReader(caminho));
 			if (buffRead != null) {
 				String linha;
 				while (true) {
