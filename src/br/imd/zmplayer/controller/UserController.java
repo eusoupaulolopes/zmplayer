@@ -26,13 +26,39 @@ public class UserController {
 	
 	public static boolean cadastrarUsuario(Usuario novo){
 		
-		RepositorioUsuario.add(novo); //add na arvore
-		ManipuladorArquivo.gravarUsuario("usuarios.zmu",novo); //add no arquivo
-		
 		Usuario encontrado = RepositorioUsuario.buscar(novo);
 		
-		if( encontrado == novo){
+		if( encontrado == null){
+			RepositorioUsuario.add(novo); //add na arvore
+			ManipuladorArquivo.gravarUsuario(novo); //add no arquivo
 			return true;
+			
+		}else{
+			return false;
+		}	
+		
+	}
+
+	public static String removerUsuario(Usuario user) {
+		String msg = RepositorioUsuario.remove(user);
+		
+		RepositorioUsuario.getInstance().inOrder();
+		
+		if(msg.equals("Usuário Removido com sucesso")){
+			ManipuladorArquivo.reescreverArquivo();
+		}
+		
+		return msg;
+	}
+	
+	public static boolean alterarUsuario(Usuario novo){
+		
+		Usuario alterado = RepositorioUsuario.alterar(novo);
+		
+		if( alterado != null){
+			ManipuladorArquivo.reescreverArquivo();//alterar arquivo
+			return true;
+			
 		}else{
 			return false;
 		}	

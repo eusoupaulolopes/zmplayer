@@ -4,38 +4,33 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLUserSettingsController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="533.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLUserSettingsController">
 	<children>
-		<AnchorPane maxHeight="-1.0" maxWidth="617.0" minWidth="300.0" prefHeight="578.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+		<AnchorPane maxHeight="-1.0" maxWidth="617.0" minWidth="300.0" prefHeight="518.0" prefWidth="533.0" VBox.vgrow="ALWAYS">
          <children>
-            <TableView fx:id="tableUsuario" layoutX="14.0" layoutY="39.0" prefHeight="200.0" prefWidth="574.0">
-              <columns>
-                <TableColumn fx:id="columnNome" prefWidth="118.0"  />
-                <TableColumn fx:id="columnId" prefWidth="221.0"  />
-                  <TableColumn fx:id="columnSenha" prefWidth="179.0" />
-                  <TableColumn fx:id="columnVip" minWidth="6.0" prefWidth="55.0"  />
-              </columns>
+            <TableView fx:id="tableUsuario" layoutX="32.0" layoutY="22.0" prefHeight="259.0" prefWidth="466.0">
             </TableView>
-            <Separator layoutX="8.0" layoutY="293.0" prefHeight="4.0" prefWidth="584.0" />
-            <Pane layoutX="80.0" layoutY="306.0" prefHeight="139.0" prefWidth="443.0">
+            <Separator layoutX="23.0" layoutY="293.0" prefHeight="0.0" prefWidth="479.0" />
+            <Pane fx:id="edicaoPane" layoutX="46.0" layoutY="306.0" prefHeight="194.0" prefWidth="443.0">
                <children>
-                  <TextField fx:id="idTextField" layoutX="13.0" layoutY="70.0" prefHeight="25.0" prefWidth="203.0" promptText="Id" />
-                  <TextField fx:id="senhaTextField" layoutX="228.0" layoutY="70.0" prefHeight="25.0" prefWidth="203.0" promptText="Senha" />
-                  <CheckBox fx:id="vipCheckBox" layoutX="392.0" layoutY="105.0" mnemonicParsing="false" text="Vip" />
-                  <TextField fx:id="nomeTextField" layoutX="11.0" layoutY="27.0" prefHeight="25.0" prefWidth="421.0" promptText="Nome" />
+                  <TextField fx:id="idTextField" layoutX="13.0" layoutY="53.0" prefHeight="25.0" prefWidth="203.0" promptText="Id" />
+                  <TextField fx:id="senhaTextField" layoutX="228.0" layoutY="53.0" prefHeight="25.0" prefWidth="203.0" promptText="Senha" />
+                  <CheckBox fx:id="vipCheckBox" layoutX="377.0" layoutY="86.0" mnemonicParsing="false" text="Vip" />
+                  <TextField fx:id="nomeTextField" layoutX="11.0" layoutY="15.0" prefHeight="25.0" prefWidth="421.0" promptText="Nome" />
+                  <Button fx:id="btnCancelar" cancelButton="true" layoutX="105.0" layoutY="104.0" mnemonicParsing="false" onAction="#handleCancelarBtn" text="Cancelar" />
+                  <Button fx:id="btnSalvar" layoutX="14.0" layoutY="104.0" mnemonicParsing="false" onAction="#handleSalvarBtn" prefHeight="26.0" prefWidth="75.0" text="Salvar"/>
+                  <Button fx:id="btnCadastrar" layoutX="21.0" layoutY="156.0" mnemonicParsing="false" onAction="#handleCadastrarBtn" prefHeight="25.0" prefWidth="120.0" text="Cadastrar" />
+                  <Button fx:id="btnAlterar" layoutX="166.0" layoutY="156.0" mnemonicParsing="false" onAction="#handleAlterarBtn" prefHeight="25.0" prefWidth="120.0" text="Alterar" />
+                  <Button fx:id="btnRemover" layoutX="307.0" layoutY="154.0" mnemonicParsing="false" onAction="#handleRemoverBtn" prefHeight="25.0" prefWidth="120.0" text="Remover" />
+                  <Label fx:id="resultadoLabel" alignment="CENTER" layoutX="230.0" layoutY="122.0" prefHeight="16.0" prefWidth="0.0" textAlignment="CENTER" wrapText="true" />
                </children>
             </Pane>
-            <Button fx:id="btnCadastrar" layoutX="80.0" layoutY="458.0" mnemonicParsing="false" onAction="#handleCadastrarBtn" prefHeight="25.0" prefWidth="139.0" text="Cadastrar" />
-            <Button fx:id="btnAlterar" layoutX="238.0" layoutY="458.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Alterar" />
-            <Button fx:id="btnRemover" layoutX="393.0" layoutY="458.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Remover" />
-            <Label fx:id="resultadoLabel" layoutX="282.0" layoutY="532.0" wrapText="true" />
          </children></AnchorPane>
 	</children>
 </VBox>

@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
@@ -46,6 +47,7 @@ public class FXMLLoginController implements Initializable {
 		
 		if (idDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
 			System.out.println("logou como admin");
+			
 			this.abrirTelaPlayer(Usuario.getAdmin());
 		
 		} else{		
@@ -68,7 +70,7 @@ public class FXMLLoginController implements Initializable {
 		OperationalController.iniciarSessao(tipoUsuario);
 		
 		Stage stage = (Stage) btnLogar.getScene().getWindow();
-		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerSceneTeste.fxml"));
 
 		FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
 		ft.setFromValue(0.0);
@@ -83,6 +85,8 @@ public class FXMLLoginController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO
+
+		
 	}
 
 }

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="610.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLPlayerController">
+  <children>
+      <SplitPane dividerPositions="0.5" prefHeight="610.0" prefWidth="610.0">
+        <items>
+          <AnchorPane maxHeight="-1.0" maxWidth="300.0" minWidth="300.0" prefHeight="-1.0" prefWidth="300.0" styleClass="background">
+               <children>
+                  <MenuBar fx:id="menuBar" prefHeight="25.0" prefWidth="300.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                              <MenuItem fx:id="menuOpenFile" mnemonicParsing="false" onAction="#addFileAction" text="Add File" />
+                              <MenuItem fx:id="menuAddFolder" mnemonicParsing="false" onAction="#addFolderListAction" text="Add Folder" />
+                              <MenuItem fx:id="menuLogout" mnemonicParsing="false" onAction="#menuLogoutAction" text="Logout" />
+                          <MenuItem fx:id="closeButton" mnemonicParsing="false" onAction="#closeButtonAction" text="Close" />
+                        </items>
+                      </Menu>
+                      <Menu fx:id="menuUsuario" mnemonicParsing="false" onAction="#menuUsuarioAction" text="Settings">
+                        <items>
+                          <MenuItem fx:id="menuUsuario" mnemonicParsing="false" text="Usuario" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+                  <AnchorPane layoutX="5.0" layoutY="45.0" prefHeight="100.0" prefWidth="290.0" styleClass="background" stylesheets="@styles/FXMLPlayerSceneStyleSheet.css">
+                     <children>
+                        <Label fx:id="lbCurrentPlaying" layoutX="7.0" layoutY="2.0" prefHeight="39.0" prefWidth="261.0" text="Tocando: Dosed - Red Hot Chili Peppers" />
+                        <Text fx:id="playerTime" fill="#00eeff" fontSmoothingType="LCD" layoutX="10.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txText" wrappingWidth="119.13671875">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+                  
+                  <Button id="btnPlay" fx:id="btnPlay" alignment="CENTER" layoutX="7.0" layoutY="181.0" mnemonicParsing="false" onAction="#btnPlayAction" prefHeight="57.0" prefWidth="192.0" stylesheets="@styles/FXMLPlayerbtn.css" text="" textAlignment="CENTER" /> 
+                  <Button id="btnPause" fx:id="btnPause" alignment="CENTER" layoutX="6.0" layoutY="181.0" mnemonicParsing="false" onAction="#btnPlayAction" prefHeight="57.0" prefWidth="192.0" stylesheets="@styles/FXMLPlayerbtn.css" text="" textAlignment="CENTER" />
+                  <Button id="btnStop" fx:id="btnStop" layoutX="213.0" layoutY="181.0" mnemonicParsing="false" onAction="#btnStopAction" prefHeight="57.0" prefWidth="80.0" stylesheets="@styles/FXMLPlayerbtn.css" text="" />
+                  <ProgressBar fx:id="pbMusic" layoutX="10.0" layoutY="152.0" prefHeight="20.0" prefWidth="280.0" progress="0.0" />
+                  <AnchorPane fx:id="anchorPaneLista" layoutY="250.0" maxHeight="350.0" maxWidth="300.0" minHeight="350.0" minWidth="300.0" prefHeight="350.0" prefWidth="300.0" stylesheets="@styles/FXMLPlayerbtn.css">
+                     <children>
+                        <TextField id="txtFdSearch" layoutX="9.0" layoutY="313.0" prefHeight="25.0" prefWidth="280.0" promptText="" />
+                        <Label id="lbUserSession" fx:id="lbUserSession" layoutX="13.0" layoutY="259.0" prefHeight="14.0" prefWidth="0.0" stylesheets="@styles/FXMLPlayerSceneStyleSheet.css" />
+                       
+                        <ButtonBar buttonMinWidth="25.0" layoutX="162.0" layoutY="13.0" prefHeight="39.0" prefWidth="127.0">
+                          <buttons>
+                            <Button id="btnSaveList" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="&#xf0c7;" textAlignment="JUSTIFY" />
+                              <Button id="btnPlaylist" minWidth="28.0" mnemonicParsing="false" onAction="#btnPlaylistAction" prefHeight="25.0" text="&#xf03a;" textAlignment="JUSTIFY" />
+                              <Button id="btnidontknow" fx:id="btnLimparLista" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnLimparListaAction" text="" textAlignment="JUSTIFY" />
+                          </buttons>
+                        </ButtonBar>
+                        <TableView fx:id="tableMusics" layoutX="9.0" layoutY="55.0" prefHeight="250.0" prefWidth="280.0">
+                          <columns>
+                          
+                            <TableColumn fx:id="columnNumber" editable="false" prefWidth="31.0" text="Nº" />
+                            <TableColumn fx:id="columnMusic" editable="false" prefWidth="250.0" text="Musica" />
+                             <TableColumn fx:id="columnPath" editable="false" minWidth="0.0" prefWidth="68.0" text="Path" visible="false" />
+                          </columns>
+                        </TableView>
+                        <Label layoutX="14.0" layoutY="33.0" text="General Playlist" />
+                        
+                     </children>
+                  </AnchorPane>
+                  
+                 
+               </children>
+      
+          </AnchorPane>
+          <AnchorPane fx:id="vipPlaylistPane" minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
+               <children>
+                  <AnchorPane fx:id="anchorPaneMyPlaylists" maxHeight="250.0" maxWidth="300.0" minHeight="250.0" minWidth="300.0" prefHeight="250.0" prefWidth="300.0" stylesheets="@styles/FXMLPlayerbtn.css">
+                     <children>
+                        <ButtonBar fx:id="btnBarMusicPlaylist1" buttonMinWidth="25.0" layoutX="146.0" layoutY="14.0" prefHeight="39.0" prefWidth="142.0">
+                           <buttons>
+                              <Button id="btnPlaylist" minWidth="28.0" mnemonicParsing="false" onAction="#btnPlaylistAction" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
+                              <Button id="btnidontknow" fx:id="btnLimparLista11" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnLimparListaAction" text="" textAlignment="JUSTIFY" />
+                              <Button id="btnSaveList" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
+                           </buttons>
+                        </ButtonBar>
+                        <TableView fx:id="tableMyPlaylists" layoutX="129.0" layoutY="55.0" prefHeight="190.0" prefWidth="160.0" />
+                        <Label fx:id="labelPlaylistName1" layoutX="20.0" layoutY="31.0" text="My Playlists" />
+                        <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="15.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../img/playlist.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="anchorPaneMusicPlaylist" layoutY="250.0" maxHeight="350.0" maxWidth="300.0" minHeight="350.0" minWidth="300.0" prefHeight="350.0" prefWidth="300.0" stylesheets="@styles/FXMLPlayerbtn.css">
+                     <children>
+                        <TextField id="txtFdSearch" fx:id="textFieldBuscaMusicPlaylist" layoutX="9.0" layoutY="313.0" prefHeight="25.0" prefWidth="280.0" promptText="" />
+                        <ButtonBar fx:id="btnBarMusicPlaylist" buttonMinWidth="25.0" layoutX="146.0" layoutY="14.0" prefHeight="39.0" prefWidth="142.0">
+                           <buttons>
+                              <Button id="btnPlaylist" minWidth="28.0" mnemonicParsing="false" onAction="#btnPlaylistAction" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
+                              <Button id="btnidontknow" fx:id="btnLimparLista1" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnLimparListaAction" text="" textAlignment="JUSTIFY" />
+                              <Button id="btnSaveList" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
+                           </buttons>
+                        </ButtonBar>
+                        <TableView fx:id="tableMusicPlaylist" layoutX="9.0" layoutY="55.0" prefHeight="250.0" prefWidth="280.0" />
+                        <Label fx:id="labelPlaylistName" layoutX="9.0" layoutY="31.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      
+  </children>
+</VBox>

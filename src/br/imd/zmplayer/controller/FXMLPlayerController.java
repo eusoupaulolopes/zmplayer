@@ -1,37 +1,42 @@
 package br.imd.zmplayer.controller;
 
-import br.imd.zmplayer.*;
-import br.imd.zmplayer.controller.utils.OperationalController;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
-import com.sun.javafx.tk.FontLoader;
-
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
+import br.imd.zmplayer.controller.musictable.MusicaTable;
+import br.imd.zmplayer.controller.utils.OperationalController;
+import br.imd.zmplayer.model.tabela.PlaylistTabela;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.layout.AnchorPane;
 
 public class FXMLPlayerController implements Initializable {
 
@@ -40,14 +45,39 @@ public class FXMLPlayerController implements Initializable {
 	public MenuBar menuBar;
 	public MenuItem menuUsuario;
 	public MenuItem menuOpenFile;
+	public MenuItem menuAddFolder;
+	private ProgressBar pbMusic;
+	private ChangeListener<Duration> progressMusicChangeListener;
+
 	public Button btnPlay;
 	public Button btnStop;
 	public Button btnPause;
+
+	public Button btnPlaylist;
+
 	public Text playerTime;
 	public Text txtBtnText;
-
 	private PlayerController pc;
 	private Font fontAwesome;
+	public Label lbUserSession;
+	public Label lbCurrentPlaying;
+
+	private TabelaControler tc;
+	public Button btnLimparLista;
+
+	public TableView<MusicaTable> tableMusics;
+	public TableColumn<MusicaTable, Integer> columnNumber;
+	public TableColumn<MusicaTable, String> columnMusic;
+	public TableColumn<MusicaTable, String> columnPath;
+	@FXML AnchorPane vipPlaylistPane;
+
+	public Label getLbCurrentPlaying() {
+		return lbCurrentPlaying;
+	}
+
+	public void setLbCurrentPlaying(Label lbCurrentPlaying) {
+		this.lbCurrentPlaying = lbCurrentPlaying;
+	}
 
 	@FXML
 	private void menuUsuarioAction(ActionEvent event) throws IOException {
@@ -61,112 +91,186 @@ public class FXMLPlayerController implements Initializable {
 		stage.show();
 	}
 
+	
+	
 	@FXML
-	private void menuOpenFileAction(ActionEvent event) throws IOException {
+	private TableView<MusicaTable> tableMusicPlaylist;
+	private TableView<PlaylistTabela> tableMyPlaylists;
+	
+	@FXML
+	private void btnPlaylistAction(ActionEvent event) throws IOException {
+		PlaylistController controle = new PlaylistController();
+		
+		boolean disableVipPlaylistPane = vipPlaylistPane.isDisable();
+		if(OperationalController.getSessao().isVip()){
+			if(disableVipPlaylistPane){
+				vipPlaylistPane.setDisable(false);
+				controle.listarMusicasPlaylist(tableMusicPlaylist);
+				controle.listarPlaylists(tableMyPlaylists);
+			}else{
+				vipPlaylistPane.setDisable(true);
+			}
+		}
+	}
+
+	@FXML
+	private void addFileAction(ActionEvent event) throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Abrir mp3");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp4"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		File selectedFile = fileChooser.showOpenDialog(null);
 		if (selectedFile != null) {
-			try {
-				pc.tocar(selectedFile);
+			tableMusics.setItems(tc.atualizar(selectedFile));
+			tableMusics.refresh();
+			// tableMusics.getSelectionModel().selectFirst();
+			OperationalController.gravarMusica(selectedFile.getPath());
+		}
+	}
 
-				// updateDisplay();
-			} catch (Exception e) {
-				e.printStackTrace();
+	@FXML
+	private void addFolderListAction(ActionEvent event) throws IOException {
+
+		DirectoryChooser chooser = new DirectoryChooser();
+		chooser.setTitle("Selecionar diretório");
+
+		FilenameFilter mp3Filter = new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				String lowercaseName = name.toLowerCase();
+				if (lowercaseName.endsWith(".mp3")) {
+					return true;
+				} else {
+					return false;
+				}
 			}
+		};
+
+		File selectedDirectory = chooser.showDialog(btnPlay.getScene().getWindow());
+		if (selectedDirectory == null) {
+			System.out.println("Nenhum diretório encontrado");
+		} else {
+			System.out.println("Achei");
+		}
+
+		/*
+		 * FileChooser fileChooser = new FileChooser();
+		 * fileChooser.setTitle("Selecionar musicas");
+		 * fileChooser.getExtensionFilters().addAll(new
+		 * FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
+		 */
+
+		List<File> selectedFiles = new ArrayList<File>();
+		for (File file : selectedDirectory.listFiles(mp3Filter)) {
+			selectedFiles.add(file);
+		}
+
+		if (selectedFiles != null) {
+			OperationalController.gravarFolder(selectedDirectory.getPath());
+			tableMusics.setItems(tc.atualizar(selectedFiles));
+			tableMusics.refresh();
 		}
 	}
 
 	@FXML
 	private void btnPlayAction(ActionEvent event) throws IOException {
-		/*File selectedFile = new File("C:\\Users\\Paulo Lopes\\Downloads\\Z-Maguinho do Piauí - Deus.mp3");
-		pc.tocar(selectedFile);
-		*/
-		
-		Boolean pause = pc.MediaControl();
-		
-		if(pause){
-			btnPause.setVisible(true);
-			btnPlay.setVisible(false);
-		}else{
-			btnPause.setVisible(false);
-			btnPlay.setVisible(true);
+		if (tableMusics.getSelectionModel().getSelectedIndex() < 0) {
+			System.out.println("Sem música a tocar");
+		} else {
+			List<MusicaTable> selected = tableMusics.getItems()
+					.subList(tableMusics.getSelectionModel().getSelectedIndex(), tableMusics.getItems().size());
+			List<File> files = new ArrayList<File>();
+			for (MusicaTable musica : selected) {
+				File file = new File(musica.getLocal());
+				System.out.println("Seduzindo: " + musica.getNome());
+				files.add(file);
+			}
+			pc.tocar(files);
+			Status pause = pc.getMediaControlStatus();
+			if (pause != Status.PLAYING) {
+				btnPause.setVisible(true);
+				btnPlay.setVisible(false);
+			} else {
+				btnPause.setVisible(false);
+				btnPlay.setVisible(true);
+			}
 		}
-		
-		
+
 	}
+
 	@FXML
 	private void btnStopAction(ActionEvent event) throws IOException {
-		
 		pc.parar();
 		btnPause.setVisible(false);
 		btnPlay.setVisible(true);
-		
+
 	}
-	
+
 	@FXML
 	private void menuLogoutAction(ActionEvent event) throws IOException {
+
 		Stage stage = (Stage) btnPlay.getScene().getWindow();
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));
-
-		FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
-		ft.setFromValue(0.0);
-		ft.setToValue(1.0);
-		ft.play();
-		OperationalController.iniciarSessao(null);
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
+		OperationalController.iniciarSessao(null);
 		stage.show();
-		
-		
-		
 	}
-	
+
 	@FXML
 	private void closeButtonAction(ActionEvent event) throws IOException {
 		OperationalController.closeProgram();
 	}
 
+	@FXML
+	private void btnLimparListaAction(ActionEvent event) throws IOException {
+		tableMusics.setItems(tc.limparLista());
+		tableMusics.refresh();
+	}
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO
-		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(), 12);
+		tc = TabelaControler.getInstance();
+		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(),
+				12);
 		pc = PlayerController.getInstance();
 		btnPause.setVisible(false);
-		
-	}
+		lbUserSession.setText(OperationalController.getSessao().getLt() + " - "
+				+ OperationalController.getSessao().getUser().getNome());
+		columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
+		columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
+		columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
 
-	private static String formatTime(Duration elapsed, Duration duration) {
-		int intElapsed = (int) Math.floor(elapsed.toSeconds());
-		int elapsedHours = intElapsed / (60 * 60);
-		if (elapsedHours > 0) {
-			intElapsed -= elapsedHours * 60 * 60;
+		if (!OperationalController.getSessao().isVip()) {
+			menuUsuario.setDisable(true);
 		}
-		int elapsedMinutes = intElapsed / 60;
-		int elapsedSeconds = intElapsed - elapsedHours * 60 * 60 - elapsedMinutes * 60;
+		//Player inicializa com a parte de Playlist Desabilitada
+		vipPlaylistPane.setDisable(true);
 
-		if (duration.greaterThan(Duration.ZERO)) {
-			int intDuration = (int) Math.floor(duration.toSeconds());
-			int durationHours = intDuration / (60 * 60);
-			if (durationHours > 0) {
-				intDuration -= durationHours * 60 * 60;
-			}
-			int durationMinutes = intDuration / 60;
-			int durationSeconds = intDuration - durationHours * 60 * 60 - durationMinutes * 60;
-			if (durationHours > 0) {
-				return String.format("%d:%02d:%02d/%d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds,
-						durationHours, durationMinutes, durationSeconds);
-			} else {
-				return String.format("%02d:%02d/%02d:%02d", elapsedMinutes, elapsedSeconds, durationMinutes,
-						durationSeconds);
-			}
-		} else {
-			if (elapsedHours > 0) {
-				return String.format("%d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
-			} else {
-				return String.format("%02d:%02d", elapsedMinutes, elapsedSeconds);
-			}
+		tc.limparLista();
+		if (OperationalController.carregarMusicas() != null) {
+			tableMusics.setItems(tc.atualizar(OperationalController.carregarMusicas()));
+
 		}
+		if (OperationalController.carregarDiretorio() != null) {
+			tableMusics.setItems(tc.atualizar(OperationalController.carregarDiretorio()));
+		}
+		tableMusics.refresh();
+		tableMusics.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent click) {
+				if (click.getClickCount() == 2) {
+					// Use ListView's getSelected Item
+					try {
+						btnPlayAction(new ActionEvent());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					// use this to do whatever you want to. Open Link etc.
+				}
+
+			}
+		});
+
 	}
 }
