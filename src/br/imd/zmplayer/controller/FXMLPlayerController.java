@@ -69,35 +69,15 @@ public class FXMLPlayerController implements Initializable {
 	public TableColumn<MusicaTable, Integer> columnNumber;
 	public TableColumn<MusicaTable, String> columnMusic;
 	public TableColumn<MusicaTable, String> columnPath;
-	@FXML AnchorPane vipPlaylistPane;
-
-	public Label getLbCurrentPlaying() {
-		return lbCurrentPlaying;
-	}
-
-	public void setLbCurrentPlaying(Label lbCurrentPlaying) {
-		this.lbCurrentPlaying = lbCurrentPlaying;
-	}
 	
+	
+	//------------- Inicio - Atributos Playlist --------------//
+	@FXML AnchorPane vipPlaylistPane;
 	@FXML private TableView<MusicaTable> tableMusicPlaylist;
 	@FXML private TableView<PlaylistTabela> tableMyPlaylists;
+	//-------------Fim - Atributos Playlist --------------//
 	
-	
-	@FXML
-	private void btnPlaylistAction(ActionEvent event) throws IOException {
-		PlaylistController controle = new PlaylistController();
-		boolean disableVipPlaylistPane = vipPlaylistPane.isDisable();
-		if(OperationalController.getSessao().isVip()){
-			if(disableVipPlaylistPane){
-				vipPlaylistPane.setDisable(false);
-				controle.listarMusicasPlaylist(tableMusicPlaylist);
-				controle.listarPlaylists(tableMyPlaylists);
-			}else{
-				vipPlaylistPane.setDisable(true);
-			}
-		}
-	}
-	
+	//-------------Inicio - Metodos Playlist --------------//
 	@FXML
 	private void btnAddPlaylistAction(ActionEvent event) throws IOException{
 		Stage stage = new Stage();
@@ -108,10 +88,19 @@ public class FXMLPlayerController implements Initializable {
 		stage.initOwner(menuBar.getScene().getWindow());
 		stage.setResizable(false);
 		stage.show();
-		
-		/*PlaylistController controleAdd = new PlaylistController();
-		controleAdd.addPlaylistAction(tableMyPlaylists);*/
 	}
+	
+	//-------------Fim - Metodos Playlist --------------//
+	
+	public Label getLbCurrentPlaying() {
+		return lbCurrentPlaying;
+	}
+
+	public void setLbCurrentPlaying(Label lbCurrentPlaying) {
+		this.lbCurrentPlaying = lbCurrentPlaying;
+	}
+
+	
 
 	@FXML
 	private void menuUsuarioAction(ActionEvent event) throws IOException {
@@ -257,15 +246,22 @@ public class FXMLPlayerController implements Initializable {
 		columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
 		columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
 		columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
-
+		
+		/*
+		 * Controle em relação a playlist em que verifica se o usuário da sessão é vip ou comum 
+		 */
 		if (!OperationalController.getSessao().isVip()) {
 			menuUsuario.setDisable(true);
 			vipPlaylistPane.setVisible(false);
+			
+		}else{
+			PlaylistController controle = new PlaylistController();
+			controle.listarMusicasPlaylist(tableMusicPlaylist);
+			controle.listarPlaylists(tableMyPlaylists);
 		}
-		//Player inicializa com a parte de Playlist Desabilitada
 		
-
 		tc.limparLista();
+		
 		if (OperationalController.carregarMusicas() != null) {
 			tableMusics.setItems(tc.atualizar(OperationalController.carregarMusicas()));
 
