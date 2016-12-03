@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
+import br.imd.zmplayer.model.tabela.PlaylistTabela;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -91,13 +92,21 @@ public class FXMLPlayerController implements Initializable {
 	}
 
 	
-
+	
+	@FXML
+	private TableView<MusicaTable> tableMusicPlaylist;
+	private TableView<PlaylistTabela> tableMyPlaylists;
+	
 	@FXML
 	private void btnPlaylistAction(ActionEvent event) throws IOException {
+		PlaylistController controle = new PlaylistController();
+		
 		boolean disableVipPlaylistPane = vipPlaylistPane.isDisable();
 		if(OperationalController.getSessao().isVip()){
 			if(disableVipPlaylistPane){
 				vipPlaylistPane.setDisable(false);
+				controle.listarMusicasPlaylist(tableMusicPlaylist);
+				controle.listarPlaylists(tableMyPlaylists);
 			}else{
 				vipPlaylistPane.setDisable(true);
 			}
