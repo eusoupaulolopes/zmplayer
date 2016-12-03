@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.model.Playlist;
 import br.imd.zmplayer.model.RepositorioUsuario;
+import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.Musica;
 import br.imd.zmplayer.model.tabela.PlaylistTabela;
 import br.imd.zmplayer.model.tabela.UsuarioTabela;
@@ -80,7 +81,7 @@ public class PlaylistController{
 		tableMusicPlaylist.getColumns().addAll(columnNameMusic);
 	}
 
-	public void addPlaylistAction(TableView<PlaylistTabela> tableMyPlaylists) {
+	public void addPlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nome) {
 		
 		
 	}	

@@ -16,9 +16,11 @@ import br.imd.zmplayer.model.tad.ArvoreBinaria;
 import br.imd.zmplayer.model.tad.NoBinaria;
 
 public class ManipuladorArquivo {
-	private static final String path = "usuarios.zmu";
+	private static final String PATHUSERS = "usuarios.zmu";
 	public static final String PATHMUSICAS = "musicas.zmf";
 	private static final String PATHFOLDERS = "folders.zmf";
+	private static final String PATHVIPFILES = "./vipfiles/playlist/";
+	
 	
 	/*
 	 * public static void leitor(String path) throws IOException {
@@ -41,7 +43,7 @@ public class ManipuladorArquivo {
 	public static void gravarUsuario(Usuario user) {
 		BufferedWriter buffWrite;
 		try {
-			buffWrite = new BufferedWriter(new FileWriter(path, true));
+			buffWrite = new BufferedWriter(new FileWriter(PATHUSERS, true));
 			String linha = user.getId() + ";" + user.getNome() + ";" + user.getSenha() + ";" + user.isVIP();
 			buffWrite.write(linha + "\n");
 			buffWrite.flush();
@@ -50,6 +52,24 @@ public class ManipuladorArquivo {
 			e.getMessage();
 		}
 	}
+	/**
+	 * Método cria um arquivo (.zmf) de acesso a playlist de usuaŕios VIPs.
+	 * 
+	 * @param user
+	 */
+/*	public static void criarArquivoUserVip(String nome) {
+		BufferedWriter buffWrite;
+		String path = PATHVIPFILES+nome+".zmf";
+		try {
+			buffWrite = new BufferedWriter(new FileWriter(path, true));
+			String linha = user.getId() + ";" + user.getNome() + ";" + user.getSenha() + ";" + user.isVIP();
+			buffWrite.write(linha + "\n");
+			buffWrite.flush();
+			buffWrite.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+	}*/
 
 	/**
 	 * Metodo que escreve na lista de Musicas compartilhadas
@@ -141,6 +161,7 @@ public class ManipuladorArquivo {
 					}
 				}
 			}
+			
 			buffRead.close();
 			return files;
 		} catch (IOException e) {
@@ -152,8 +173,7 @@ public class ManipuladorArquivo {
 	/**
 	 * Método que ler o arquivo .zmu e cria a arvore binaria
 	 * 
-	 * @param path
-	 *            Caminho do local do arquivo
+	 * @param path Caminho do local do arquivo
 	 * @throws IOException
 	 */
 	public static void lerZmu(String path) {
@@ -193,7 +213,7 @@ public class ManipuladorArquivo {
 
 		BufferedWriter buffWrite;
 		try {
-			buffWrite = new BufferedWriter(new FileWriter(path));
+			buffWrite = new BufferedWriter(new FileWriter(PATHUSERS));
 
 			for (NoBinaria no : lista) {
 				Usuario user = no.getUsuario();
