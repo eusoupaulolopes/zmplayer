@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="610.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLPlayerController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="610.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.zmplayer.controller.FXMLPlayerController">
   <children>
       <SplitPane dividerPositions="0.5" prefHeight="610.0" prefWidth="610.0">
         <items>
@@ -63,8 +63,6 @@
                   <ProgressBar fx:id="pbMusic" layoutX="10.0" layoutY="152.0" prefHeight="20.0" prefWidth="280.0" progress="0.0" />
                   <AnchorPane fx:id="anchorPaneLista" layoutY="250.0" maxHeight="350.0" maxWidth="300.0" minHeight="350.0" minWidth="300.0" prefHeight="350.0" prefWidth="300.0" stylesheets="@styles/FXMLPlayerbtn.css">
                      <children>
-                        <TextField id="txtFdSearch" layoutX="9.0" layoutY="313.0" prefHeight="25.0" prefWidth="280.0" promptText="" />
-                        <Label id="lbUserSession" fx:id="lbUserSession" layoutX="13.0" layoutY="259.0" prefHeight="14.0" prefWidth="0.0" stylesheets="@styles/FXMLPlayerSceneStyleSheet.css" />
                        
                         <ButtonBar buttonMinWidth="25.0" layoutX="162.0" layoutY="13.0" prefHeight="39.0" prefWidth="127.0">
                           <buttons>
@@ -80,6 +78,7 @@
                           </columns>
                         </TableView>
                         <Label layoutX="14.0" layoutY="33.0" text="General Playlist" />
+                        <Label fx:id="lbUserSession" layoutX="7.0" layoutY="319.0" prefHeight="17.0" prefWidth="280.0" />
                         
                      </children>
                   </AnchorPane>
@@ -90,13 +89,14 @@
           </AnchorPane>
           <AnchorPane fx:id="vipPlaylistPane" minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
                <children>
-                  <AnchorPane fx:id="anchorPaneMyPlaylists" maxHeight="250.0" maxWidth="300.0" minHeight="250.0" minWidth="300.0" prefHeight="250.0" prefWidth="300.0" stylesheets="@styles/FXMLPlayerbtn.css">
+                  <AnchorPane fx:id="anchorPaneMyPlaylists" maxHeight="250.0" maxWidth="300.0" minHeight="250.0" minWidth="300.0" prefHeight="250.0" prefWidth="300.0" stylesheets="@styles/FXMLPlayerbtn2.css">
                      <children>
-                        <ButtonBar fx:id="btnBarMusicPlaylist1" buttonMinWidth="25.0" layoutX="146.0" layoutY="14.0" prefHeight="39.0" prefWidth="142.0" stylesheets="@styles/FXMLPlayerbtn.css">
+                        <ButtonBar fx:id="btnBarMusicPlaylist1" buttonMinWidth="25.0" layoutX="146.0" layoutY="14.0" prefHeight="39.0" prefWidth="142.0">
                            <buttons>
-                              <Button id="btnAddPlaylist" fx:id="btnAddPlaylist" minWidth="28.0" mnemonicParsing="false" onAction="#btnAddPlaylistAction" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
-                              <Button id="btnRemovePlaylist" fx:id="btnRemovePlaylist" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="" textAlignment="JUSTIFY" />
-                              <Button id="btnEditPlaylist" fx:id="btnEditPlaylist" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
+                              <Button id="btnAddPlaylist" fx:id="btnAddPlaylist" minWidth="28.0" mnemonicParsing="false" onAction="#btnAddPlaylistAction" prefHeight="25.0" prefWidth="28.0" text="" textAlignment="JUSTIFY" />
+                              
+                              <Button id="btnRemovePlaylist" fx:id="btnRemovePlaylist" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="" textAlignment="JUSTIFY" />
+                              <Button id="btnEditPlaylist" fx:id="btnEditPlaylist" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
                            </buttons>
                         </ButtonBar>
                         <TableView fx:id="tableMyPlaylists" layoutX="129.0" layoutY="55.0" prefHeight="190.0" prefWidth="160.0" />

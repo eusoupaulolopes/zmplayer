@@ -9,8 +9,9 @@
 	-fx-font-size: 16;
 }
 
-#btnAddMusicPlaylist, #btnRemoveMusicPlaylist, #btnAddPlaylist, #btnRemovePlaylist, #btnEditPlaylist {
-	-fx-font-family: FontAwesome;
+#btnBarMusicPlaylist1, #btnAddMusicPlaylist, #btnRemoveMusicPlaylist, #btnAddPlaylist, #btnRemovePlaylist, #btnEditPlaylist {
+	-fx-font-family: 'FontAwesome';
+	-fx-font-size: 16;
 }
 
 #txtFdSearch{
