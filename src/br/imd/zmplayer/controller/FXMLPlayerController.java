@@ -86,7 +86,6 @@ public class FXMLPlayerController implements Initializable {
 	@FXML
 	private void btnPlaylistAction(ActionEvent event) throws IOException {
 		PlaylistController controle = new PlaylistController();
-		
 		boolean disableVipPlaylistPane = vipPlaylistPane.isDisable();
 		if(OperationalController.getSessao().isVip()){
 			if(disableVipPlaylistPane){
@@ -189,6 +188,8 @@ public class FXMLPlayerController implements Initializable {
 
 	@FXML
 	private void btnPlayAction(ActionEvent event) throws IOException {
+		
+		
 		if (tableMusics.getSelectionModel().getSelectedIndex() < 0) {
 			System.out.println("Sem música a tocar");
 		} else {
@@ -259,9 +260,10 @@ public class FXMLPlayerController implements Initializable {
 
 		if (!OperationalController.getSessao().isVip()) {
 			menuUsuario.setDisable(true);
+			vipPlaylistPane.setVisible(false);
 		}
 		//Player inicializa com a parte de Playlist Desabilitada
-		vipPlaylistPane.setDisable(true);
+		
 
 		tc.limparLista();
 		if (OperationalController.carregarMusicas() != null) {
@@ -283,7 +285,7 @@ public class FXMLPlayerController implements Initializable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					// use this to do whatever you want to. Open Link etc.
+					
 				}
 
 			}

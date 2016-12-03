@@ -43,8 +43,12 @@ public class OperationalController {
 	}
 
 	public static List<File> carregarMusicas() {
+		return ManipuladorArquivo.openListaMusica(ManipuladorArquivo.PATHMUSICAS);
 
-		return ManipuladorArquivo.openListaMusica();
+	}
+	
+	public static List<File> carregarMusicas(String path) {
+		return ManipuladorArquivo.openListaMusica(path);
 
 	}
 
