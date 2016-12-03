@@ -70,7 +70,7 @@ public class FXMLLoginController implements Initializable {
 		OperationalController.iniciarSessao(tipoUsuario);
 		
 		Stage stage = (Stage) btnLogar.getScene().getWindow();
-		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerScene.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlayerSceneTeste.fxml"));
 
 		FadeTransition ft = new FadeTransition(Duration.millis(1500), root);
 		ft.setFromValue(0.0);

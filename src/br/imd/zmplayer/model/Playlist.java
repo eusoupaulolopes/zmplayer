@@ -3,6 +3,8 @@
  */
 package br.imd.zmplayer.model;
 
+import java.util.ArrayList;
+
 /**
  * Classe que implementa um objeto Playlist.
  * 
@@ -12,6 +14,7 @@ package br.imd.zmplayer.model;
 public class Playlist {
 	private String name;
 	private String local;
+	private ArrayList<Musica> musicas;
 	
 	/**
 	 * Método que instancia um objeto Playlist.

@@ -35,6 +35,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.layout.AnchorPane;
 
 public class FXMLPlayerController implements Initializable {
 
@@ -67,6 +68,7 @@ public class FXMLPlayerController implements Initializable {
 	public TableColumn<MusicaTable, Integer> columnNumber;
 	public TableColumn<MusicaTable, String> columnMusic;
 	public TableColumn<MusicaTable, String> columnPath;
+	@FXML AnchorPane vipPlaylistPane;
 
 	public Label getLbCurrentPlaying() {
 		return lbCurrentPlaying;
@@ -88,16 +90,18 @@ public class FXMLPlayerController implements Initializable {
 		stage.show();
 	}
 
+	
+
 	@FXML
 	private void btnPlaylistAction(ActionEvent event) throws IOException {
-		Stage stage = new Stage();
-		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLPlaylistScene.fxml"));
-		stage.setScene(new Scene(root));
-		stage.setTitle("Playlist Configurations");
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.initOwner(menuBar.getScene().getWindow());
-		stage.setResizable(false);
-		stage.show();
+		boolean disableVipPlaylistPane = vipPlaylistPane.isDisable();
+		if(OperationalController.getSessao().isVip()){
+			if(disableVipPlaylistPane){
+				vipPlaylistPane.setDisable(false);
+			}else{
+				vipPlaylistPane.setDisable(true);
+			}
+		}
 	}
 
 	@FXML
@@ -227,9 +231,11 @@ public class FXMLPlayerController implements Initializable {
 		columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
 		columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
 
-		if (!OperationalController.getSessao().getUser().isVIP()) {
+		if (!OperationalController.getSessao().isVip()) {
 			menuUsuario.setDisable(true);
 		}
+		//Player inicializa com a parte de Playlist Desabilitada
+		vipPlaylistPane.setDisable(true);
 
 		tc.limparLista();
 		if (OperationalController.carregarMusicas() != null) {

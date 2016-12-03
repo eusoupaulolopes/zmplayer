@@ -9,11 +9,13 @@ public class Sessao {
 	private Usuario user;
 	private LocalDateTime lt;
 	private DateTimeFormatter df;
+	private boolean vip;
 	
 	
 	public Sessao(Usuario user){
 		this.user = user;
 		lt = LocalDateTime.now();
+		vip = user.isVIP();
 	}
 
 	public Usuario getUser() {
@@ -25,5 +27,9 @@ public class Sessao {
 		String text = lt.format(df);
 		LocalDateTime parsedDate = LocalDateTime.parse(text, df);
 		return text;
+	}
+	
+	public boolean isVip(){
+		return vip;
 	}
 }

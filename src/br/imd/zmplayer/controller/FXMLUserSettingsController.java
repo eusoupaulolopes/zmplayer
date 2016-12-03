@@ -74,8 +74,6 @@ public class FXMLUserSettingsController implements Initializable{
 	@FXML
 	private void handleCadastrarBtn(ActionEvent event) throws IOException {
 		
-		this.desabilitarModoEdicao();
-		
 		boolean vip;
 		if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
 			vip = false;
@@ -108,9 +106,6 @@ public class FXMLUserSettingsController implements Initializable{
 	@FXML Pane edicaoPane;
 	@FXML
 	private void handleRemoverBtn(ActionEvent event) throws IOException {
-		
-		
-		this.desabilitarModoEdicao();
 		
 		//Pega o item selecionado na tabela
 		UsuarioTabela temp = tableUsuario.getSelectionModel().getSelectedItem();
@@ -194,7 +189,9 @@ public class FXMLUserSettingsController implements Initializable{
 	private void habilitarModoEdicao() {
 		btnCancelar.setVisible(true);
 		btnSalvar.setVisible(true);
-		idTextField.setEditable(false);	
+		idTextField.setEditable(false);
+		btnRemover.setDisable(false);
+		btnCadastrar.setDisable(false);
 		
 	}
 	
@@ -203,10 +200,14 @@ public class FXMLUserSettingsController implements Initializable{
 		btnCancelar.setVisible(false);
 		btnSalvar.setVisible(false);
 		idTextField.setEditable(true);
+		btnRemover.setDisable(true);
+		btnCadastrar.setDisable(true);
 	}
 	
+	/**
+	 * Método que limpa os TextFields da janela User Settings.
+	 */
 	private void limparTextField(){
-		//garante que os botoes nao aprecem caso o alterar tenha sido acionado antes.
 		nomeTextField.setText("");
 		idTextField.setText("");		
 		senhaTextField.setText("");
@@ -220,6 +221,11 @@ public class FXMLUserSettingsController implements Initializable{
 		
 		this.listarUsuarios();
 		
+		try {
+			this.desabilitarModoEdicao();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 			
 		//Verifica se o usuário da sessão é o admin, se não for, não pode cadastrar usuário VIP
 		if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
