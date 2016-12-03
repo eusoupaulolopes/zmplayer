@@ -39,10 +39,16 @@ import javafx.scene.layout.Pane;
 
 public class FXMLNamePlaylistController implements Initializable{
 
+	
+	
+	@FXML TextField txtFieldPlaylistName;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-		
+		/*PlaylistController addControl = new PlaylistController();
+		addControl.addPlaylist(tableMyPlaylists,nome);
+		*/
 	}	
 	
 	
