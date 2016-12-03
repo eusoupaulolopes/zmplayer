@@ -73,6 +73,9 @@ public class FXMLPlayerController implements Initializable {
 	
 	//------------- Inicio - Atributos Playlist --------------//
 	@FXML AnchorPane vipPlaylistPane;
+	@FXML Button btnAddPlaylist;
+	@FXML Button btnRemovePlaylist;
+	@FXML Button btnEditPlaylist;
 	@FXML private TableView<MusicaTable> tableMusicPlaylist;
 	@FXML private TableView<PlaylistTabela> tableMyPlaylists;
 	//-------------Fim - Atributos Playlist --------------//
@@ -93,13 +96,6 @@ public class FXMLPlayerController implements Initializable {
 	
 	//-------------Fim - Metodos Playlist --------------//
 	
-	public Label getLbCurrentPlaying() {
-		return lbCurrentPlaying;
-	}
-
-	public void setLbCurrentPlaying(Label lbCurrentPlaying) {
-		this.lbCurrentPlaying = lbCurrentPlaying;
-	}
 
 	
 
