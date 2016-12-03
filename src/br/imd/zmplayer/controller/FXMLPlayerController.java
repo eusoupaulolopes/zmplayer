@@ -88,6 +88,11 @@ public class FXMLPlayerController implements Initializable {
 		stage.initOwner(menuBar.getScene().getWindow());
 		stage.setResizable(false);
 		stage.show();
+	
+		
+		/*PlaylistController addControl = new PlaylistController();
+		addControl.addPlaylist(tableMyPlaylists,nome);
+		*/
 	}
 	
 	//-------------Fim - Metodos Playlist --------------//

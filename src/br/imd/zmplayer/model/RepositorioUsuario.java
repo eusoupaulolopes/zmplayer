@@ -10,7 +10,7 @@ import br.imd.zmplayer.model.tad.NoBinaria;
 
 public class RepositorioUsuario {
 	
-	private static ArvoreBinaria instance;
+private static ArvoreBinaria instance;
 	
 	static{
 		try {
