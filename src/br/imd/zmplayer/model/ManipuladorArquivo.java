@@ -12,14 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import br.imd.zmplayer.controller.utils.OperationalController;
 import br.imd.zmplayer.model.tad.ArvoreBinaria;
 import br.imd.zmplayer.model.tad.NoBinaria;
+import javafx.stage.FileChooser;
 
 public class ManipuladorArquivo {
 	private static final String PATHUSERS = "usuarios.zmu";
 	public static final String PATHMUSICAS = "musicas.zmf";
 	private static final String PATHFOLDERS = "folders.zmf";
-	private static final String PATHVIPFILES = "./vipfiles/playlist/";
+	private static final String PATHVIPFILES = "./vipfiles/";
+	private static final String PATHPLAYLIST = "./vipfiles/playlist/";
 	
 	
 	/*
@@ -57,19 +60,50 @@ public class ManipuladorArquivo {
 	 * 
 	 * @param user
 	 */
-/*	public static void criarArquivoUserVip(String nome) {
+	public static void criarArquivoUserVip(String nome) {
 		BufferedWriter buffWrite;
-		String path = PATHVIPFILES+nome+".zmf";
+		String path = PATHVIPFILES+nome+".zmf";		
+		System.out.println(nome);
 		try {
+			File file = new File(path);	
 			buffWrite = new BufferedWriter(new FileWriter(path, true));
-			String linha = user.getId() + ";" + user.getNome() + ";" + user.getSenha() + ";" + user.isVIP();
-			buffWrite.write(linha + "\n");
+			buffWrite.write(nome);
 			buffWrite.flush();
 			buffWrite.close();
 		} catch (IOException e) {
 			e.getMessage();
 		}
-	}*/
+	}
+	
+	/**
+	 * Método retorna um arquivo (.zmf) de com as playlists de usuaŕios VIPs.
+	 * 
+	 * @param user
+	 */
+	public static File getArquivoUserVip() {
+		String path = PATHVIPFILES+OperationalController.getSessao().getUser().getId()+".zmf";
+		return new File(path);
+		
+	}
+	
+	/**
+	 * Método cria um arquivo (.zmp) referente a uma playlist de um usuário
+	 * 
+	 * @param user
+	 */
+	public static String criarPlaylist(String nome) {
+		BufferedWriter buffWrite;
+		String path = PATHPLAYLIST+OperationalController.getSessao().getUser().getId()+"_"+nome+".zmp";
+		
+		try {
+			buffWrite = new BufferedWriter(new FileWriter(path, true));
+			buffWrite.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+		
+		return path;
+	}
 
 	/**
 	 * Metodo que escreve na lista de Musicas compartilhadas
@@ -227,6 +261,21 @@ public class ManipuladorArquivo {
 			e.getMessage();
 		}
 
+	}
+	public static void addPlaylistToUserFile(String playlistName, String playlistPath) {
+		BufferedWriter bw;
+		System.out.println("adcionando no file: "+playlistName);
+		try {
+			File file = getArquivoUserVip();
+			bw = new BufferedWriter(new FileWriter(file.getPath(),true));
+			bw.write(playlistName+";"+playlistPath.substring(1)+"\n");
+			bw.flush();
+			bw.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
 	}
 
 }

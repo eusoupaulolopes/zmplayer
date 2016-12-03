@@ -34,21 +34,39 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 
 
-public class FXMLNamePlaylistController implements Initializable{
+public class FXMLNamePlaylistController extends FXMLPlayerController implements Initializable {
 
 	
 	
 	@FXML TextField txtFieldPlaylistName;
+	@FXML Button btnSave;
+	@FXML Button btnCancel;
+	
+	@FXML
+	private void saveButtonAction(ActionEvent event) throws IOException {
+		String nome = txtFieldPlaylistName.getText();
+	
+		if(nome != null){
+			new PlaylistController().addPlaylist(super.getTableMyPlaylists(),nome);
+		}
+		cancelButtonAction(event);
+	}
+	
+	@FXML
+	private void cancelButtonAction(ActionEvent event) throws IOException {
+		
+		Stage stage = (Stage) btnCancel.getScene().getWindow();
+		stage.close();
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-		/*PlaylistController addControl = new PlaylistController();
-		addControl.addPlaylist(tableMyPlaylists,nome);
-		*/
+		
 	}	
 	
 	

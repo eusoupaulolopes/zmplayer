@@ -1,5 +1,6 @@
 package br.imd.zmplayer.controller;
 import br.imd.zmplayer.*;
+import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.RepositorioUsuario;
 import br.imd.zmplayer.model.Usuario;
 import br.imd.zmplayer.model.tabela.UsuarioTabela;
@@ -93,8 +94,13 @@ public class FXMLUserSettingsController implements Initializable{
 			listaUsuarioTabela.add(new UsuarioTabela(id, nome, senha, vip));			
 			tableUsuario.refresh();
 			
+			if(vip){
+				ManipuladorArquivo.criarArquivoUserVip(id); //se for vip, cria seu arquivo de playlist
+			}
+			
 			resultadoLabel.setText("Usuário cadastrado com sucesso!");
 			this.limparTextField();
+			
 			
 		}else{
 			System.out.println("no");

@@ -94,6 +94,14 @@ public class FXMLPlayerController implements Initializable {
 	
 	}
 	
+	public TableView<MusicaTable> getTableMusicPlaylist() {
+		return tableMusicPlaylist;
+	}
+	
+	public TableView<PlaylistTabela> getTableMyPlaylists() {
+		return tableMyPlaylists;
+	}
+	
 	//-------------Fim - Metodos Playlist --------------//
 	
 

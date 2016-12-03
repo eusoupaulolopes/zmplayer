@@ -4,15 +4,18 @@ import java.io.File;
 import java.util.List;
 
 import br.imd.zmplayer.controller.musictable.MusicaTable;
+import br.imd.zmplayer.model.tabela.PlaylistTabela;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class TabelaControler {
 	private final ObservableList<MusicaTable> listMT;
-	private static TabelaControler tc;
+	private static TabelaControler tc;	
+	private final ObservableList<PlaylistTabela> listPT;
 
 	private TabelaControler() {
 		listMT = FXCollections.observableArrayList();
+		listPT = FXCollections.observableArrayList();
 	}
 
 	public static TabelaControler getInstance() {
@@ -53,6 +56,19 @@ public class TabelaControler {
 			cont++;
 		}
 		return listMT;
+	}
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public ObservableList<PlaylistTabela> atualizarPT(File file) {
+		PlaylistTabela mt = new PlaylistTabela(file.getName(),file.getPath());
+		if (!listPT.contains(mt)) {
+			listPT.add(mt);
+			
+		}
+		return listPT;
 	}
 
 	public ObservableList<MusicaTable> limparLista() {

@@ -1,11 +1,13 @@
 package br.imd.zmplayer.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import br.imd.zmplayer.controller.musictable.MusicaTable;
+import br.imd.zmplayer.controller.utils.OperationalController;
 import br.imd.zmplayer.model.Playlist;
 import br.imd.zmplayer.model.RepositorioUsuario;
 import br.imd.zmplayer.model.ManipuladorArquivo;
@@ -44,7 +46,7 @@ public class PlaylistController{
 			listaPlaylistTabela.add(p);
 		}
 		
-		columnNamePlaylist.setPrefWidth(120.0);
+		columnNamePlaylist.setPrefWidth(150.0);
 		columnNamePlaylist.setCellValueFactory(new PropertyValueFactory<PlaylistTabela,String>("name"));
 		
 		tableMyPlaylists.setItems(listaPlaylistTabela);
@@ -81,7 +83,14 @@ public class PlaylistController{
 		tableMusicPlaylist.getColumns().addAll(columnNameMusic);
 	}
 
-	public void addPlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nome) {
+	public void addPlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nome) {	
+		String path = ManipuladorArquivo.criarPlaylist(nome);
+		ManipuladorArquivo.addPlaylistToUserFile(nome,path);
+		
+		/*//listaPlaylistTabela = TabelaControler.getInstance().atualizarPT(new File(path.substring(1)));
+		listaPlaylistTabela.add(new PlaylistTabela(nome, path));
+		tableMyPlaylists.refresh();*/
+		
 		
 		
 	}	
