@@ -166,7 +166,8 @@ public class ManipuladorArquivo {
 					if (linha != null) {
 						String pĺaylist[] = linha.split(";");
 						Playlist novo = new Playlist(pĺaylist[0], pĺaylist[1]);
-						TabelaControler.getInstance().atualizarPT(pĺaylist[0], pĺaylist[1]);
+					//	TabelaControler.getInstance().atualizarPT(pĺaylist[0], pĺaylist[1]);
+						
 						RepositorioPlaylist.getInstance().getArrayPlaylist().add(novo);
 
 					} else {

@@ -33,7 +33,7 @@ public class PlaylistController extends FXMLPlayerController{
 	private ObservableList<PlaylistTabela> listaPlaylistTabela = FXCollections.observableArrayList();
 	
 	public void listarPlaylists(TableView<PlaylistTabela> tableMyPlaylists){
-		
+
 		if(!listaPlaylistTabela.isEmpty()){
 			listaPlaylistTabela.clear();
 			System.out.println("limpou observale table");
@@ -61,11 +61,24 @@ public class PlaylistController extends FXMLPlayerController{
 			RepositorioPlaylist.getInstance().getArrayPlaylist().add(nova);//add no repositorio
 			ManipuladorArquivo.addPlaylistToUserFile(nomePlaylist,path); //add no arquivo uservip.zmf
 			listaPlaylistTabela.add(new PlaylistTabela(nomePlaylist, path)); //add na observable list
-			super.atualizarTabela();
+			atualizarTabela();
+			/*System.out.println("Tamanho: "+listaPlaylistTabela.size());
+			tableMyPlaylists.setItems(listaPlaylistTabela);
+			tableMyPlaylists.refresh();*/
 		}
 		
 	}	
 	
+	public void atualizarTabela(){
+		System.out.println("Chegou na atualizar tabela");
+		tableMyPlaylists.setItems(getListaPlaylistTabela());
+		tableMyPlaylists.refresh();
+	}
+	
+	public ObservableList<PlaylistTabela> getListaPlaylistTabela() {
+		return listaPlaylistTabela;
+	}
+
 	@FXML
 	private TableColumn<MusicaTable, String> columnNameMusic = new TableColumn<MusicaTable, String>("Name");
 	

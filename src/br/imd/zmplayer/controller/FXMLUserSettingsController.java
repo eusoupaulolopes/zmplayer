@@ -1,4 +1,5 @@
 package br.imd.zmplayer.controller;
+
 import br.imd.zmplayer.*;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.RepositorioUsuario;
@@ -36,240 +37,229 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
+public class FXMLUserSettingsController implements Initializable {
 
-
-public class FXMLUserSettingsController implements Initializable{	
-	
-	
 	@FXML
 	private TableView<UsuarioTabela> tableUsuario;
 	private TableColumn<UsuarioTabela, String> columnNome = new TableColumn<UsuarioTabela, String>("Nome");
 	private TableColumn<UsuarioTabela, String> columnId = new TableColumn<UsuarioTabela, String>("Id");
 	private TableColumn<UsuarioTabela, String> columnSenha = new TableColumn<UsuarioTabela, String>("Senha");
 	private TableColumn<UsuarioTabela, String> columnVip = new TableColumn<UsuarioTabela, String>("VIP");
-	
-	//Cria uma lista com todos usuários cadastrados
-	private List<Usuario> usuarios;	
+
+	// Cria uma lista com todos usuários cadastrados
+	private List<Usuario> usuarios;
 	private ObservableList<UsuarioTabela> listaUsuarioTabela = FXCollections.observableArrayList();
-	
-	
+
 	@FXML
 	private Button btnCadastrar;
-	@FXML Button btnCancelar;
-	@FXML Button btnSalvar;
-	@FXML Button btnAlterar;
-	@FXML Button btnRemover;
-	
-	
-	
+	@FXML
+	Button btnCancelar;
+	@FXML
+	Button btnSalvar;
+	@FXML
+	Button btnAlterar;
+	@FXML
+	Button btnRemover;
+
 	@FXML
 	private Label resultadoLabel;
-	
+
 	@FXML
 	public TextField nomeTextField;
 	public TextField idTextField;
 	public TextField senhaTextField;
 	public CheckBox vipCheckBox;
-	
-	
+
 	@FXML
 	private void handleCadastrarBtn(ActionEvent event) throws IOException {
-		
+
 		boolean vip;
-		if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
+		if (!OperationalController.getSessao().getUser().getId().equals("admin")) {
 			vip = false;
-		}else{
+		} else {
 			vip = vipCheckBox.isSelected();
 		}
-		
-		
+
 		String nome = nomeTextField.getText();
 		String id = idTextField.getText();
 		String senha = senhaTextField.getText();
-		
-		if(!nome.equals("") && !id.equals("") && !senha.equals("")){				
-			if(UserController.cadastrarUsuario(new Usuario(id,nome,senha,vip))){
-				System.out.println(id+" cadastrado");
-				
-				listaUsuarioTabela.add(new UsuarioTabela(id, nome, senha, vip));			
+
+		if (!nome.equals("") && !id.equals("") && !senha.equals("")) {
+			if (UserController.cadastrarUsuario(new Usuario(id, nome, senha, vip))) {
+				System.out.println(id + " cadastrado");
+
+				listaUsuarioTabela.add(new UsuarioTabela(id, nome, senha, vip));
 				tableUsuario.refresh();
-				
-				if(vip){
-					ManipuladorArquivo.criarArquivoUserVip(id); //se for vip, cria seu arquivo de playlist
+
+				if (vip) {
+					ManipuladorArquivo.criarArquivoUserVip(id); // se for vip,
+																// cria seu
+																// arquivo de
+																// playlist
 				}
-				
+
 				resultadoLabel.setText("Usuário cadastrado com sucesso!");
 				this.limparTextField();
-				
-				
-			}else{
+
+			} else {
 				System.out.println("no");
 				resultadoLabel.setText("Id já cadastrada!");
 			}
-		}else{
+		} else {
 			resultadoLabel.setText("Porfavor, preencha todos os campos!");
 		}
-		
+
 	}
+
 	private int index;
-	@FXML Pane edicaoPane;
+	@FXML
+	Pane edicaoPane;
 
 	@FXML
 	private void handleRemoverBtn(ActionEvent event) throws IOException {
-		
-		//Pega o item selecionado na tabela
+
+		// Pega o item selecionado na tabela
 		UsuarioTabela temp = tableUsuario.getSelectionModel().getSelectedItem();
-				
-		if(temp != null){
-			
+
+		if (temp != null) {
+
 			Usuario user = temp.toUsuario();
 			resultadoLabel.setText(UserController.removerUsuario(user));
 			listaUsuarioTabela.remove(temp);
-			usuarios =  RepositorioUsuario.listUsuarios();
-			
+			usuarios = RepositorioUsuario.listUsuarios();
+
 			tableUsuario.refresh();
 
-		}else{
+		} else {
 			resultadoLabel.setText("Selecione o usuário a ser removido.");
 		}
-		
-		
-		
+
 	}
-	
+
 	@FXML
 	public void handleAlterarBtn(ActionEvent event) throws IOException {
-		
+
 		habilitarModoEdicao();
-		
-		//Pega o item selecionado na tabela
+
+		// Pega o item selecionado na tabela
 		UsuarioTabela temp = tableUsuario.getSelectionModel().getSelectedItem();
-		
+
 		index = listaUsuarioTabela.indexOf(temp);
-		if(temp != null){
+		if (temp != null) {
 
 			nomeTextField.setText(temp.getNome());
-			idTextField.setText(temp.getId());		
+			idTextField.setText(temp.getId());
 			senhaTextField.setText(temp.getSenha());
-			vipCheckBox.setSelected(temp.getVipBoolean());		
-			
-		}else{
+			vipCheckBox.setSelected(temp.getVipBoolean());
+
+		} else {
 			resultadoLabel.setText("Selecione o usuário a ser alterado.");
-		}		
+		}
 	}
-	
-	
+
 	@FXML
 	public void handleSalvarBtn(ActionEvent event) throws IOException {
-		
-		Usuario user = new Usuario(idTextField.getText(), nomeTextField.getText(),
-				senhaTextField.getText(), vipCheckBox.isSelected());
-		
+
+		Usuario user = new Usuario(idTextField.getText(), nomeTextField.getText(), senhaTextField.getText(),
+				vipCheckBox.isSelected());
+
 		UsuarioTabela temp = new UsuarioTabela(user.getId(), user.getNome(), user.getSenha(), user.isVIP());
-		
-		if(UserController.alterarUsuario(user)){
-			
-			
-			usuarios =  RepositorioUsuario.listUsuarios();
+
+		if (UserController.alterarUsuario(user)) {
+
+			usuarios = RepositorioUsuario.listUsuarios();
 			listaUsuarioTabela.set(index, temp);
-			
+
 			tableUsuario.refresh();
-			
-			resultadoLabel.setText("Usuário "+user.getId()+" alterado com sucesso!");	
-			
+
+			resultadoLabel.setText("Usuário " + user.getId() + " alterado com sucesso!");
+
+		} else {
+			resultadoLabel.setText("Usuário " + user.getId() + " não pode ser alterado!");
+
 		}
-		else{
-			resultadoLabel.setText("Usuário "+user.getId()+" não pode ser alterado!");
-			
-		}
-		this.desabilitarModoEdicao();	
+		this.desabilitarModoEdicao();
 		this.limparTextField();
-		
+
 	}
-	
+
 	@FXML
 	public void handleCancelarBtn(ActionEvent event) throws IOException {
-		this.desabilitarModoEdicao();	
+		this.desabilitarModoEdicao();
 		this.limparTextField();
 	}
-	
+
 	private void habilitarModoEdicao() {
 		btnCancelar.setVisible(true);
 		btnSalvar.setVisible(true);
 		idTextField.setEditable(false);
 		btnRemover.setDisable(true);
 		btnCadastrar.setDisable(true);
-		
+
 	}
-	
-	private void desabilitarModoEdicao(){
-		//garante que os botoes nao aparecem caso o alterar tenha sido acionado antes.
+
+	private void desabilitarModoEdicao() {
+		// garante que os botoes nao aparecem caso o alterar tenha sido acionado
+		// antes.
 		btnCancelar.setVisible(false);
 		btnSalvar.setVisible(false);
 		idTextField.setEditable(true);
 		btnRemover.setDisable(false);
 		btnCadastrar.setDisable(false);
 	}
-	
+
 	/**
 	 * Método que limpa os TextFields da janela User Settings.
 	 */
-	private void limparTextField(){
+	private void limparTextField() {
 		nomeTextField.setText("");
-		idTextField.setText("");		
+		idTextField.setText("");
 		senhaTextField.setText("");
-		vipCheckBox.setSelected(false);		
+		vipCheckBox.setSelected(false);
 	}
-	
-	public void listarUsuarios(){
-		if(!listaUsuarioTabela.isEmpty()){
+
+	public void listarUsuarios() {
+		if (!listaUsuarioTabela.isEmpty()) {
 			listaUsuarioTabela.clear();
 			System.out.println("limpou observale table");
 		}
-		
-		usuarios =  RepositorioUsuario.listUsuarios();
-		
-		for(Usuario usuario: usuarios){
-			UsuarioTabela u = new UsuarioTabela(usuario.getId(),usuario.getNome(), usuario.getSenha(), usuario.isVIP());
+
+		usuarios = RepositorioUsuario.listUsuarios();
+
+		for (Usuario usuario : usuarios) {
+			UsuarioTabela u = new UsuarioTabela(usuario.getId(), usuario.getNome(), usuario.getSenha(),
+					usuario.isVIP());
 			listaUsuarioTabela.add(u);
 		}
-		
+
 		columnNome.setPrefWidth(120.0);
 		columnId.setPrefWidth(120.0);
 		columnSenha.setPrefWidth(120.0);
 		columnVip.setPrefWidth(100.0);
-		
-		columnNome.setCellValueFactory(new PropertyValueFactory<UsuarioTabela,String>("nome"));
-		columnId.setCellValueFactory(new PropertyValueFactory<UsuarioTabela,String>("id"));
-		columnSenha.setCellValueFactory(new PropertyValueFactory<UsuarioTabela,String>("senha"));
-		columnVip.setCellValueFactory(new PropertyValueFactory<UsuarioTabela,String>("vip"));
-		
+
+		columnNome.setCellValueFactory(new PropertyValueFactory<UsuarioTabela, String>("nome"));
+		columnId.setCellValueFactory(new PropertyValueFactory<UsuarioTabela, String>("id"));
+		columnSenha.setCellValueFactory(new PropertyValueFactory<UsuarioTabela, String>("senha"));
+		columnVip.setCellValueFactory(new PropertyValueFactory<UsuarioTabela, String>("vip"));
+
 		tableUsuario.setItems(listaUsuarioTabela);
-		tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha,columnVip);
+		tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha, columnVip);
 	}
-	
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		this.listarUsuarios();
-			
-		//Verifica se o usuário da sessão é o admin, se não for, não pode cadastrar usuário VIP
-		if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
+
+		// Verifica se o usuário da sessão é o admin, se não for, não pode
+		// cadastrar usuário VIP
+		if (!OperationalController.getSessao().getUser().getId().equals("admin")) {
 			vipCheckBox.setVisible(false);
-						
+
 		}
-		
+
 		this.desabilitarModoEdicao();
 
-		
 	}
-	
-	
-	
-
-	
-	
-	
 
 }
