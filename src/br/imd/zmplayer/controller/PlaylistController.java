@@ -145,12 +145,13 @@ public class PlaylistController{
 	
 	public void removePlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nomePlaylist) {	
 		
-		String path = ManipuladorArquivo.getPathArquivoPlaylist(nomePlaylist);
+		String pathPlaylist = ManipuladorArquivo.getPathArquivoPlaylist(nomePlaylist);
+		String pathUserFile = ManipuladorArquivo.getArquivoUserVip().getPath();
 		
 		if(ManipuladorArquivo.getArquivoPlaylist(nomePlaylist).exists()){
 			ManipuladorArquivo.excluirPlaylist(nomePlaylist);//excluir playlist.zmp
-			ManipuladorArquivo.removePlaylistOfUserFile(nomePlaylist); //remove no arquivo uservip.zmf
-			playlistControler.removerListaPT(new PlaylistTabela(nomePlaylist, path));
+			ManipuladorArquivo.removePlaylistOfUserFile(nomePlaylist,pathUserFile); //remove no arquivo uservip.zmf
+			playlistControler.removerListaPT(new PlaylistTabela(nomePlaylist, pathPlaylist));
 		}
 		else{
 			System.out.println("Nao existe playlist "+nomePlaylist);

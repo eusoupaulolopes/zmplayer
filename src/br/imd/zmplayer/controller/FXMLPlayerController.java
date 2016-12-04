@@ -8,13 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.tabela.PlaylistTabela;
-import br.imd.zmplayer.model.tabela.UsuarioTabela;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,7 +30,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaPlayer.Status;
@@ -137,6 +133,7 @@ public class FXMLPlayerController implements Initializable {
 			PlaylistController.getInstance().addMusicPlaylist(tableMyPlaylists, labelPlaylistName.getText(),
 					selectedFile);
 		}
+		tableMusicPlaylist.refresh();
 	}
 
 	@FXML
@@ -256,7 +253,7 @@ public class FXMLPlayerController implements Initializable {
 
 	}
 
-	@FXML
+	
 	private void btnPlayActionWithTable(ActionEvent event, TableView<MusicaTable> table) throws IOException {
 
 		if (table.getSelectionModel().getSelectedIndex() < 0) {
@@ -404,8 +401,8 @@ public class FXMLPlayerController implements Initializable {
 
 				if (click.getClickCount() == 2) {
 					PlaylistTabela selecionado = tableMyPlaylists.getSelectionModel().getSelectedItem();
-
 					System.out.println("Nome do selecionao:"+selecionado.getName());
+					
 					PlaylistController.getInstance().limparListaMTPlaylist(); //limpa lista observable
 					if(selecionado != null){
 						ManipuladorArquivo.lerPlaylist(selecionado.getName()); //ler arquivo .zmp da playlist selecionada
