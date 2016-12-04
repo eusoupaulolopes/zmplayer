@@ -6,14 +6,20 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
+import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.Sessao;
 import br.imd.zmplayer.model.Usuario;
+import br.imd.zmplayer.model.tad.ArvorePatricia;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 
 public class OperationalController {
 
 	public static Sessao sessao;
+	private static ArvorePatricia<MusicaTable> ap;
 
 	public static void closeProgram() {
 		Platform.exit();
@@ -32,6 +38,7 @@ public class OperationalController {
 		if(tipo.isVIP()){
 			ManipuladorArquivo.lerArquivoUserVip(tipo);
 		}
+		ap = new ArvorePatricia<>();
 		
 	}
 	
@@ -63,6 +70,37 @@ public class OperationalController {
 
 	public static List<File> carregarDiretorio() {
 		return ManipuladorArquivo.openListaFolder();
+	}
+
+
+
+	public static void carregarArvorePatricia(ObservableList<MusicaTable> items) {
+
+		for(MusicaTable mt : items){
+			ap.add(mt.getNome(),mt.getNome());
+		}
+		
+		System.out.println("Carregado Arvore Patricia... ("+ap.size()+") elementos.. [LETS ROCK!]");
+	}
+	
+	
+	public static void buscarMusicaArvorePatricia(String musica){
+		/*if(ap.get(musica) != null){
+			System.out.println(ap.get(musica).getLocal());
+		}else{
+			System.out.println("ainda nada, total de músicas" + ap.size());
+		}*/
+		if(musica.length() > 0){
+			for(String s : ap.chaves()){
+				if(s.startsWith(musica)){
+					System.out.println("Achei: " +s);
+				}
+			}
+
+		}
+				
+			
+		
 	}
 	
 
