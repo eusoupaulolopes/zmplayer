@@ -28,7 +28,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.Font;
@@ -62,6 +64,7 @@ public class FXMLPlayerController implements Initializable {
 	private PlayerController pc;
 	private Font fontAwesome;
 	public Label lbUserSession;
+	public TextField tfBuscaMusic;
 	public Label lbCurrentPlaying;
 
 	private TabelaControler tc;
@@ -160,11 +163,7 @@ public class FXMLPlayerController implements Initializable {
 		stage.setResizable(false);
 		stage.show();
 	}
-
 	
-	
-	
-
 	@FXML
 	private void addFileAction(ActionEvent event) throws IOException {
 		FileChooser fileChooser = new FileChooser();
@@ -268,6 +267,28 @@ public class FXMLPlayerController implements Initializable {
 		OperationalController.encerrarSessao();
 		stage.show();
 	}
+	
+	public void kpTextFieldBuscaMusic(KeyEvent event) throws IOException{
+			//OperationalController.buscarMusicaArvorePatricia(tfBuscaMusic.getText());
+		if(event.getCode().isLetterKey() || event.getCode().isDigitKey()){
+
+			OperationalController.buscarMusicaArvorePatricia(tfBuscaMusic.getText());
+		}
+		
+		
+		
+	/*	
+		tfBuscaMusic = new TextField();
+		
+		tfBuscaMusic.getOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                System.out.println("Test");
+            }
+        });
+	*/	
+	}
+	
 
 	@FXML
 	private void closeButtonAction(ActionEvent event) throws IOException {
@@ -318,6 +339,9 @@ public class FXMLPlayerController implements Initializable {
 			tableMusics.setItems(tc.atualizar(OperationalController.carregarDiretorio()));
 		}
 		tableMusics.refresh();
+		OperationalController.carregarArvorePatricia(tableMusics.getItems());
+
+		
 		tableMusics.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent click) {
@@ -329,7 +353,6 @@ public class FXMLPlayerController implements Initializable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
 				}
 
 			}

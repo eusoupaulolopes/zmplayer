@@ -78,7 +78,9 @@
                           </columns>
                         </TableView>
                         <Label layoutX="14.0" layoutY="33.0" text="General Playlist" />
-                        <Label fx:id="lbUserSession" layoutX="7.0" layoutY="319.0" prefHeight="17.0" prefWidth="280.0" />
+                        <TextField id="tfBuscaMusic" fx:id="tfBuscaMusic" layoutX="10.0" layoutY="305.0" onKeyPressed="#kpTextFieldBuscaMusic" prefHeight="25.0" prefWidth="280.0" promptText="" text="adasdas" />
+                        <Label fx:id="lbUserSession" layoutX="7.0" layoutY="338.0" prefHeight="17.0" prefWidth="280.0" />
+                        
                         
                      </children>
                   </AnchorPane>
@@ -111,7 +113,6 @@
                   
                   <AnchorPane fx:id="anchorPaneMusicPlaylist" layoutY="250.0" maxHeight="350.0" maxWidth="300.0" minHeight="350.0" minWidth="300.0" prefHeight="350.0" prefWidth="300.0" stylesheets="@styles/FXMLPlayerbtn.css">
                      <children>
-                        <TextField id="txtFdSearch" fx:id="textFieldBuscaMusicPlaylist" layoutX="9.0" layoutY="313.0" prefHeight="25.0" prefWidth="280.0" promptText="" />
                         <ButtonBar fx:id="btnBarMusicPlaylist" buttonMinWidth="25.0" layoutX="146.0" layoutY="14.0" prefHeight="39.0" prefWidth="142.0" stylesheets="@styles/FXMLPlayerbtn.css">
                            <buttons>
                               <Button id="btnAddMusicPlaylist" onAction="#btnAddMusicPlaylistAction" fx:id="btnAddMusicPlaylist" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
