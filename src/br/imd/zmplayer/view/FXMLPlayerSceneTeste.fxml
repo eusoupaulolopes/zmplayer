@@ -71,14 +71,20 @@
                         </ButtonBar>
                         <TableView fx:id="tableMusics" layoutX="9.0" layoutY="55.0" prefHeight="250.0" prefWidth="280.0">
                           <columns>
-                          
                             <TableColumn fx:id="columnNumber" editable="false" prefWidth="31.0" text="Nº" />
                             <TableColumn fx:id="columnMusic" editable="false" prefWidth="250.0" text="Musica" />
                              <TableColumn fx:id="columnPath" editable="false" minWidth="0.0" prefWidth="68.0" text="Path" visible="false" />
                           </columns>
                         </TableView>
+                        <TableView fx:id="tableSearchMusics" layoutX="9.0" layoutY="55.0" prefHeight="250.0" prefWidth="280.0">
+                          <columns>
+                            <TableColumn fx:id="columnSearchNumber" editable="false" prefWidth="31.0" text="Nº" />
+                            <TableColumn fx:id="columnSearchMusic" editable="false" prefWidth="250.0" text="Musica" />
+                             <TableColumn fx:id="columnSearchPath" editable="false" minWidth="0.0" prefWidth="68.0" text="Path" visible="false" />
+                          </columns>
+                        </TableView>
                         <Label layoutX="14.0" layoutY="33.0" text="General Playlist" />
-                        <TextField id="tfBuscaMusic" fx:id="tfBuscaMusic" layoutX="10.0" layoutY="305.0" onKeyPressed="#kpTextFieldBuscaMusic" prefHeight="25.0" prefWidth="280.0" promptText="" text="adasdas" />
+                        <TextField id="tfBuscaMusic" fx:id="tfBuscaMusic" layoutX="10.0" layoutY="305.0" onKeyPressed="#kpTextFieldBuscaMusic" prefHeight="25.0" prefWidth="280.0" promptText="" />
                         <Label fx:id="lbUserSession" layoutX="7.0" layoutY="338.0" prefHeight="17.0" prefWidth="280.0" />
                         
                         

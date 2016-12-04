@@ -123,7 +123,7 @@ public class PlaylistController{
 	public void addPlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nomePlaylist) {	
 		String path = ManipuladorArquivo.criarPlaylist(nomePlaylist); //cria playlist.zmp
 		
-		if(playlistControler.buscarListaPT(new PlaylistTabela(nomePlaylist, path))){
+		if(!playlistControler.buscarListaPT(new PlaylistTabela(nomePlaylist, path))){
 			
 			ManipuladorArquivo.addPlaylistToUserFile(nomePlaylist,path); //add no arquivo uservip.zmf
 			playlistControler.atualizarListaPT(new PlaylistTabela(nomePlaylist, path));

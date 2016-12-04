@@ -1,9 +1,12 @@
 package br.imd.zmplayer.controller.utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
+import br.imd.zmplayer.controller.FXMLPlaylistController;
 import br.imd.zmplayer.controller.PlaylistController;
+import br.imd.zmplayer.controller.SearchController;
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.Sessao;
@@ -12,7 +15,7 @@ import br.imd.zmplayer.model.tad.ArvorePatricia;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 
-public class OperationalController {
+public class OperationalController extends FXMLPlaylistController{
 
 	public static Sessao sessao;
 	private static ArvorePatricia<MusicaTable> ap;
@@ -76,21 +79,25 @@ public class OperationalController {
 		System.out.println("Carregado Arvore Patricia... (" + ap.size() + ") elementos.. [LETS ROCK!]");
 	}
 
-	public static void buscarMusicaArvorePatricia(String musica) {
-		/*
-		 * if(ap.get(musica) != null){
-		 * System.out.println(ap.get(musica).getLocal()); }else{
-		 * System.out.println("ainda nada, total de músicas" + ap.size()); }
-		 */
-		if (musica.length() > 0) {
-			for (String s : ap.chaves()) {
-				if (s.startsWith(musica)) {
-					System.out.println("Achei: " + s);
-				}
-			}
-
+	public static ObservableList<MusicaTable> buscarMusicaArvorePatricia(String musica) {
+		SearchController sc = new SearchController();
+		List<String> achaveis = new ArrayList<>();
+		if(musica.length() < 2){
+			return null;
 		}
-
+		for(String s : ap.chaves()){
+			if(s.startsWith(musica)){
+				achaveis.add(s);
+			}
+		}
+		if(!achaveis.isEmpty()){
+			return (ObservableList<MusicaTable>) sc.atualizar(achaveis);
+		}
+		return null;
+	}
+	
+	public static ObservableList<MusicaTable> limparTabela(){
+		return new SearchController().limpar();
 	}
 
 }

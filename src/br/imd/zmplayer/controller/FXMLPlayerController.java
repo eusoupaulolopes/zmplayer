@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.tabela.PlaylistTabela;
 import br.imd.zmplayer.model.tabela.UsuarioTabela;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -30,6 +33,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaPlayer.Status;
@@ -74,20 +78,32 @@ public class FXMLPlayerController implements Initializable {
 	public TableColumn<MusicaTable, Integer> columnNumber;
 	public TableColumn<MusicaTable, String> columnMusic;
 	public TableColumn<MusicaTable, String> columnPath;
-	
-	
-	//------------- Inicio - Atributos Playlist --------------//
-	@FXML AnchorPane vipPlaylistPane;
-	@FXML Button btnAddPlaylist;
-	@FXML Button btnRemovePlaylist;
-	@FXML Button btnEditPlaylist;
-	@FXML TableView<MusicaTable> tableMusicPlaylist;
-	@FXML TableView<PlaylistTabela> tableMyPlaylists;
-	//-------------Fim - Atributos Playlist --------------//
-	
-	//-------------Inicio - Metodos Playlist --------------//
+
+	// ------------- Inicio - Atributos SearchList --------------//
+	public TableView<MusicaTable> tableSearchMusics;
+	public TableColumn<MusicaTable, Integer> columnSearchNumber;
+	public TableColumn<MusicaTable, String> columnSearchMusic;
+	public TableColumn<MusicaTable, String> columnSearchPath;
+	// ------------- Final - Atributos SearchList --------------//
+
+	// ------------- Inicio - Atributos Playlist --------------//
 	@FXML
-	private void btnAddPlaylistAction(ActionEvent event) throws IOException{
+	AnchorPane vipPlaylistPane;
+	@FXML
+	Button btnAddPlaylist;
+	@FXML
+	Button btnRemovePlaylist;
+	@FXML
+	Button btnEditPlaylist;
+	@FXML
+	TableView<MusicaTable> tableMusicPlaylist;
+	@FXML
+	TableView<PlaylistTabela> tableMyPlaylists;
+	// -------------Fim - Atributos Playlist --------------//
+
+	// -------------Inicio - Metodos Playlist --------------//
+	@FXML
+	private void btnAddPlaylistAction(ActionEvent event) throws IOException {
 		Stage stage = new Stage();
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLNamePlaylistScene.fxml"));
 		stage.setScene(new Scene(root));
@@ -96,22 +112,18 @@ public class FXMLPlayerController implements Initializable {
 		stage.initOwner(menuBar.getScene().getWindow());
 		stage.setResizable(false);
 		stage.show();
-	
+
 	}
-	
+
 	public TableView<MusicaTable> getTableMusicPlaylist() {
 		return tableMusicPlaylist;
 	}
-	
+
 	public TableView<PlaylistTabela> getTableMyPlaylists() {
 		return tableMyPlaylists;
 	}
 
-	
-	//-------------Fim - Metodos Playlist --------------//
-	
-
-	
+	// -------------Fim - Metodos Playlist --------------//
 
 	@FXML
 	private void menuUsuarioAction(ActionEvent event) throws IOException {
@@ -124,7 +136,7 @@ public class FXMLPlayerController implements Initializable {
 		stage.setResizable(false);
 		stage.show();
 	}
-	
+
 	@FXML
 	private void addFileAction(ActionEvent event) throws IOException {
 		FileChooser fileChooser = new FileChooser();
@@ -184,13 +196,39 @@ public class FXMLPlayerController implements Initializable {
 
 	@FXML
 	private void btnPlayAction(ActionEvent event) throws IOException {
-		
-		
+
 		if (tableMusics.getSelectionModel().getSelectedIndex() < 0) {
-			System.out.println("Sem música a tocar");
+			System.out.println("Sem música a tocar na tabela 1");
 		} else {
 			List<MusicaTable> selected = tableMusics.getItems()
 					.subList(tableMusics.getSelectionModel().getSelectedIndex(), tableMusics.getItems().size());
+			List<File> files = new ArrayList<File>();
+			for (MusicaTable musica : selected) {
+				File file = new File(musica.getLocal());
+				System.out.println("Seduzindo: " + musica.getNome());
+				files.add(file);
+			}
+			pc.tocar(files);
+			Status pause = pc.getMediaControlStatus();
+			if (pause != Status.PLAYING) {
+				btnPause.setVisible(true);
+				btnPlay.setVisible(false);
+			} else {
+				btnPause.setVisible(false);
+				btnPlay.setVisible(true);
+			}
+		}
+
+	}
+
+	@FXML
+	private void btnPlayActionWithTable(ActionEvent event, TableView<MusicaTable> table) throws IOException {
+
+		if (table.getSelectionModel().getSelectedIndex() < 0) {
+			System.out.println("Sem música a tocar na tabela 1");
+		} else {
+			List<MusicaTable> selected = table.getItems().subList(table.getSelectionModel().getSelectedIndex(),
+					table.getItems().size());
 			List<File> files = new ArrayList<File>();
 			for (MusicaTable musica : selected) {
 				File file = new File(musica.getLocal());
@@ -228,28 +266,27 @@ public class FXMLPlayerController implements Initializable {
 		OperationalController.encerrarSessao();
 		stage.show();
 	}
-	
-	public void kpTextFieldBuscaMusic(KeyEvent event) throws IOException{
-			//OperationalController.buscarMusicaArvorePatricia(tfBuscaMusic.getText());
-		if(event.getCode().isLetterKey() || event.getCode().isDigitKey()){
 
-			OperationalController.buscarMusicaArvorePatricia(tfBuscaMusic.getText());
+	public void kpTextFieldBuscaMusic(KeyEvent event) throws IOException {
+
+		if (event.getCode().isLetterKey() || event.getCode().isDigitKey()) {
+			tableMusics.setVisible(false);
+			tableSearchMusics.setVisible(true);
+			ObservableList<MusicaTable> oSearchList = OperationalController
+					.buscarMusicaArvorePatricia(tfBuscaMusic.getText());
+			if (oSearchList != null) {
+
+				tableSearchMusics.setItems(oSearchList);
+			} else {
+				tableSearchMusics.setItems(OperationalController.limparTabela());
+			}
+		} else if (tfBuscaMusic.getText().length() <= 1) {
+			tableSearchMusics.setVisible(false);
+			tableMusics.setVisible(true);
+			tableSearchMusics.setVisible(false);
+
 		}
-		
-		
-		
-	/*	
-		tfBuscaMusic = new TextField();
-		
-		tfBuscaMusic.getOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                System.out.println("Test");
-            }
-        });
-	*/	
 	}
-	
 
 	@FXML
 	private void closeButtonAction(ActionEvent event) throws IOException {
@@ -275,22 +312,29 @@ public class FXMLPlayerController implements Initializable {
 		columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
 		columnMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
 		columnPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
-		
+
+		columnSearchNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
+		columnSearchMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
+		columnSearchPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
+
+		tableSearchMusics.setVisible(false);
+
 		/*
-		 * Controle em relação a playlist em que verifica se o usuário da sessão é vip ou comum 
+		 * Controle em relação a playlist em que verifica se o usuário da sessão
+		 * é vip ou comum
 		 */
 		if (!OperationalController.getSessao().isVip()) {
 			menuUsuario.setDisable(true);
 			vipPlaylistPane.setVisible(false);
-			
-		}else{
-			
+
+		} else {
+
 			PlaylistController.getInstance().listarMyPlaylists(tableMyPlaylists);
-			
+
 		}
-		
+
 		tc.limparLista();
-		
+
 		if (OperationalController.carregarMusicas() != null) {
 			tableMusics.setItems(tc.atualizar(OperationalController.carregarMusicas()));
 
@@ -301,14 +345,13 @@ public class FXMLPlayerController implements Initializable {
 		tableMusics.refresh();
 		OperationalController.carregarArvorePatricia(tableMusics.getItems());
 
-		
 		tableMusics.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent click) {
 				if (click.getClickCount() == 2) {
 					// Use ListView's getSelected Item
 					try {
-						btnPlayAction(new ActionEvent());
+						btnPlayActionWithTable(new ActionEvent(), tableMusics);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -317,38 +360,64 @@ public class FXMLPlayerController implements Initializable {
 
 			}
 		});
-		
+
 		tableMyPlaylists.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent click) {
-				
+
 				if (click.getClickCount() == 2) {
 					PlaylistTabela selecionado = tableMyPlaylists.getSelectionModel().getSelectedItem();
-					System.out.println("Nome do selecionao:"+selecionado.getName());
-					ManipuladorArquivo.lerPlaylist(selecionado.getName()); //ler arquivo .zmp da playlist selecionada
-					PlaylistController.getInstance().listarMusicasPlaylist(tableMusicPlaylist,selecionado);
-					
+					System.out.println("Nome do selecionao:" + selecionado.getName());
+					ManipuladorArquivo.lerPlaylist(selecionado.getName()); // ler
+																			// arquivo
+																			// .zmp
+																			// da
+																			// playlist
+																			// selecionada
+					PlaylistController.getInstance().listarMusicasPlaylist(tableMusicPlaylist, selecionado);
+
 				}
 
 			}
 		});
-		
+
 		tableMusicPlaylist.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent click) {
 				if (click.getClickCount() == 2) {
 					// Use ListView's getSelected Item
 					try {
-						btnPlayAction(new ActionEvent());
+						btnPlayActionWithTable(new ActionEvent(), tableMusicPlaylist);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
+				}
+
+			}
+		});
+		
+		tableSearchMusics.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent click) {
+				if (click.getClickCount() == 2) {
+					// Use ListView's getSelected Item
+					try {
+						btnPlayActionWithTable(new ActionEvent(), tableSearchMusics);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
 
 			}
 		});
 
+	}
+
+	public TableView<MusicaTable> getTableSearchMusics() {
+		return tableSearchMusics;
 	}
 }

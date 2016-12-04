@@ -11,7 +11,6 @@ public class TabelaControler {
 	private final ObservableList<MusicaTable> listMT;
 	private static TabelaControler tc;	
 	
-
 	private TabelaControler() {
 		listMT = FXCollections.observableArrayList();
 		
