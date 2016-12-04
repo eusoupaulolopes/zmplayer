@@ -45,9 +45,9 @@ public class FXMLLoginController implements Initializable {
 		String idDigitado = userTextField.getText();
 		String senhaDigitada = passwordField.getText();
 		
-		if (idDigitado.equals(Usuario.getAdmin().getId()) && senhaDigitada.equals(Usuario.getAdmin().getSenha())) {
-			System.out.println("logou como admin");
-			
+		
+		if (Usuario.isAdmin(idDigitado, senhaDigitada)){
+			System.out.println("logou como admin");			
 			this.abrirTelaPlayer(Usuario.getAdmin());
 		
 		} else{		
@@ -60,7 +60,7 @@ public class FXMLLoginController implements Initializable {
 				this.abrirTelaPlayer(user);
 			}else{
 				lbLoginInfo.setText("Usuário/Senha Inválidos");
-				System.out.println("Login invalido");
+				System.out.println("Usuário/Senha Inválidos");
 			}
 		}
 	}

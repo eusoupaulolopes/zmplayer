@@ -62,8 +62,8 @@ public class TabelaControler {
 	 * @param file
 	 * @return
 	 */
-	public ObservableList<PlaylistTabela> atualizarPT(File file) {
-		PlaylistTabela mt = new PlaylistTabela(file.getName(),file.getPath());
+	public ObservableList<PlaylistTabela> atualizarPT(String name, String path) {
+		PlaylistTabela mt = new PlaylistTabela(name,path);
 		if (!listPT.contains(mt)) {
 			listPT.add(mt);
 			

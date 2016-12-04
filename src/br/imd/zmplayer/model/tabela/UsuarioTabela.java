@@ -37,7 +37,7 @@ public class UsuarioTabela {
 	}
 	
 	public boolean getVipBoolean(){
-		boolean vipBoolean = (vip.equals("true"))?true:false;
+		boolean vipBoolean = (vip.get().equals("true"))?true:false;
 		return vipBoolean;
 	}
 	

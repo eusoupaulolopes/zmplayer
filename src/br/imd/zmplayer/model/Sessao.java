@@ -15,7 +15,9 @@ public class Sessao {
 	public Sessao(Usuario user){
 		this.user = user;
 		lt = LocalDateTime.now();
-		vip = user.isVIP();
+		if(user!=null){
+			vip = user.isVIP();
+		}
 	}
 
 	public Usuario getUser() {

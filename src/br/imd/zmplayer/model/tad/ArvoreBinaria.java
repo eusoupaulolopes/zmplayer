@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-
 import br.imd.zmplayer.model.Usuario;
 import br.imd.zmplayer.model.exceptions.NodeNotFoundedException;
 import br.imd.zmplayer.model.exceptions.ValoresNulosException;
@@ -265,14 +264,18 @@ public class ArvoreBinaria {
 	 * 
 	 * @param arvoreEmArray
 	 */
-	private void inserirNoArray(ArrayList<NoBinaria> arvoreEmArray) {
+	private void inserirNoArray(ArrayList<NoBinaria> arvoreEmArray) {	    
+	    
 		if (this.raiz == null) {
-
+			return;			
 		}
+
 		arvoreEmArray.add(this.getRaiz());
+		
 		if (this.raiz.getArvEsquerda() != null) {
 			this.raiz.getArvEsquerda().inserirNoArray(arvoreEmArray);
 		}
+		
 		if (this.raiz.getArvDireita() != null) {
 			this.raiz.getArvDireita().inserirNoArray(arvoreEmArray);
 		}

@@ -55,10 +55,10 @@ public class FXMLUserSettingsController implements Initializable{
 	
 	@FXML
 	private Button btnCadastrar;
-	private Button btnRemover;
-	private Button btnAlterar;
-	private Button btnSalvar;
-	private Button btnCancelar;
+	@FXML Button btnCancelar;
+	@FXML Button btnSalvar;
+	@FXML Button btnAlterar;
+	@FXML Button btnRemover;
 	
 	
 	
@@ -87,44 +87,44 @@ public class FXMLUserSettingsController implements Initializable{
 		String id = idTextField.getText();
 		String senha = senhaTextField.getText();
 		
+		if(!nome.equals("") && !id.equals("") && !senha.equals("")){				
+			if(UserController.cadastrarUsuario(new Usuario(id,nome,senha,vip))){
+				System.out.println(id+" cadastrado");
 				
-		if(UserController.cadastrarUsuario(new Usuario(id,nome,senha,vip))){
-			System.out.println("ok");
-			
-			listaUsuarioTabela.add(new UsuarioTabela(id, nome, senha, vip));			
-			tableUsuario.refresh();
-			
-			if(vip){
-				ManipuladorArquivo.criarArquivoUserVip(id); //se for vip, cria seu arquivo de playlist
+				listaUsuarioTabela.add(new UsuarioTabela(id, nome, senha, vip));			
+				tableUsuario.refresh();
+				
+				if(vip){
+					ManipuladorArquivo.criarArquivoUserVip(id); //se for vip, cria seu arquivo de playlist
+				}
+				
+				resultadoLabel.setText("Usuário cadastrado com sucesso!");
+				this.limparTextField();
+				
+				
+			}else{
+				System.out.println("no");
+				resultadoLabel.setText("Id já cadastrada!");
 			}
-			
-			resultadoLabel.setText("Usuário cadastrado com sucesso!");
-			this.limparTextField();
-			
-			
 		}else{
-			System.out.println("no");
-			resultadoLabel.setText("Id já cadastrada!");
+			resultadoLabel.setText("Porfavor, preencha todos os campos!");
 		}
 		
 	}
 	private int index;
 	@FXML Pane edicaoPane;
+
 	@FXML
 	private void handleRemoverBtn(ActionEvent event) throws IOException {
 		
 		//Pega o item selecionado na tabela
 		UsuarioTabela temp = tableUsuario.getSelectionModel().getSelectedItem();
-		
-		
-		
+				
 		if(temp != null){
 			
 			Usuario user = temp.toUsuario();
-			listaUsuarioTabela.remove(temp);
-			
 			resultadoLabel.setText(UserController.removerUsuario(user));
-			
+			listaUsuarioTabela.remove(temp);
 			usuarios =  RepositorioUsuario.listUsuarios();
 			
 			tableUsuario.refresh();
@@ -147,13 +147,11 @@ public class FXMLUserSettingsController implements Initializable{
 		
 		index = listaUsuarioTabela.indexOf(temp);
 		if(temp != null){
-			this.habilitarModoEdicao();
-			
+
 			nomeTextField.setText(temp.getNome());
 			idTextField.setText(temp.getId());		
 			senhaTextField.setText(temp.getSenha());
-			boolean vipCheck = (temp.getVipBoolean())?true:false;
-			vipCheckBox.setSelected(vipCheck);		
+			vipCheckBox.setSelected(temp.getVipBoolean());		
 			
 		}else{
 			resultadoLabel.setText("Selecione o usuário a ser alterado.");
@@ -178,12 +176,13 @@ public class FXMLUserSettingsController implements Initializable{
 			tableUsuario.refresh();
 			
 			resultadoLabel.setText("Usuário "+user.getId()+" alterado com sucesso!");	
-			this.desabilitarModoEdicao();
+			
 		}
 		else{
 			resultadoLabel.setText("Usuário "+user.getId()+" não pode ser alterado!");
-		}
 			
+		}
+		this.desabilitarModoEdicao();	
 		this.limparTextField();
 		
 	}
@@ -198,8 +197,8 @@ public class FXMLUserSettingsController implements Initializable{
 		btnCancelar.setVisible(true);
 		btnSalvar.setVisible(true);
 		idTextField.setEditable(false);
-		btnRemover.setDisable(false);
-		btnCadastrar.setDisable(false);
+		btnRemover.setDisable(true);
+		btnCadastrar.setDisable(true);
 		
 	}
 	
@@ -208,8 +207,8 @@ public class FXMLUserSettingsController implements Initializable{
 		btnCancelar.setVisible(false);
 		btnSalvar.setVisible(false);
 		idTextField.setEditable(true);
-		btnRemover.setDisable(true);
-		btnCadastrar.setDisable(true);
+		btnRemover.setDisable(false);
+		btnCadastrar.setDisable(false);
 	}
 	
 	/**
@@ -221,24 +220,6 @@ public class FXMLUserSettingsController implements Initializable{
 		senhaTextField.setText("");
 		vipCheckBox.setSelected(false);		
 	}
-	
-	
-	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		
-		this.listarUsuarios();
-			
-		//Verifica se o usuário da sessão é o admin, se não for, não pode cadastrar usuário VIP
-		if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
-			vipCheckBox.setDisable(true);
-						
-		}
-
-		
-	}
-	
-	
 	
 	public void listarUsuarios(){
 		if(!listaUsuarioTabela.isEmpty()){
@@ -267,6 +248,26 @@ public class FXMLUserSettingsController implements Initializable{
 		tableUsuario.getColumns().addAll(columnNome, columnId, columnSenha,columnVip);
 	}
 	
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		
+		this.listarUsuarios();
+			
+		//Verifica se o usuário da sessão é o admin, se não for, não pode cadastrar usuário VIP
+		if( !OperationalController.getSessao().getUser().getId().equals("admin") ){
+			vipCheckBox.setVisible(false);
+						
+		}
+		
+		this.desabilitarModoEdicao();
+
+		
+	}
+	
+	
+	
+
 	
 	
 	

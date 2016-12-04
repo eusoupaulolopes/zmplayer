@@ -19,15 +19,24 @@ public class OperationalController {
 		Platform.exit();
 		System.exit(0);
 	}
+	
+
 
 	/**
-	 * Método usuário que está logado na sessão atual.
+	 * Método que adciona a sessão o usuário que está logado na sessão atual.
 	 * 
 	 * @return tipo representa o usuário que logou na sessao atual do player.
 	 */
-	public static Usuario iniciarSessao(Usuario tipo) {
+	public static void iniciarSessao(Usuario tipo) {
 		sessao = new Sessao(tipo);
-		return tipo;
+		if(tipo.isVIP()){
+			ManipuladorArquivo.lerArquivoUserVip(tipo);
+		}
+		
+	}
+	
+	public static void encerrarSessao(){
+		sessao = new Sessao(null);
 	}
 
 	public static Sessao getSessao() {

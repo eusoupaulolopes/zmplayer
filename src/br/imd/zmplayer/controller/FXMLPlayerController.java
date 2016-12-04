@@ -76,8 +76,8 @@ public class FXMLPlayerController implements Initializable {
 	@FXML Button btnAddPlaylist;
 	@FXML Button btnRemovePlaylist;
 	@FXML Button btnEditPlaylist;
-	@FXML private TableView<MusicaTable> tableMusicPlaylist;
-	@FXML private TableView<PlaylistTabela> tableMyPlaylists;
+	@FXML TableView<MusicaTable> tableMusicPlaylist;
+	@FXML TableView<PlaylistTabela> tableMyPlaylists;
 	//-------------Fim - Atributos Playlist --------------//
 	
 	//-------------Inicio - Metodos Playlist --------------//
@@ -100,6 +100,10 @@ public class FXMLPlayerController implements Initializable {
 	
 	public TableView<PlaylistTabela> getTableMyPlaylists() {
 		return tableMyPlaylists;
+	}
+	
+	public void atualizarTabela(){
+
 	}
 	
 	//-------------Fim - Metodos Playlist --------------//
@@ -223,7 +227,7 @@ public class FXMLPlayerController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
-		OperationalController.iniciarSessao(null);
+		OperationalController.encerrarSessao();
 		stage.show();
 	}
 

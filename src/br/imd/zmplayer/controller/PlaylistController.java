@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
 import br.imd.zmplayer.model.Playlist;
+import br.imd.zmplayer.model.RepositorioPlaylist;
 import br.imd.zmplayer.model.RepositorioUsuario;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.Musica;
@@ -22,7 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class PlaylistController{
+public class PlaylistController extends FXMLPlayerController{
 
 	@FXML
 	private TableColumn<PlaylistTabela, String> columnNamePlaylist = new TableColumn<PlaylistTabela, String>("Name");
@@ -39,20 +40,31 @@ public class PlaylistController{
 		}
 
 		//So para teste, deve ser criado Repositorio de Playlist
-		todasPlaylists = Arrays.asList( new Playlist("Raça Negra", "C://lalal") );
+		todasPlaylists = RepositorioPlaylist.getInstance().listPlaylist();
 		
 		for(Playlist playlist: todasPlaylists){
 			PlaylistTabela p = new PlaylistTabela(playlist.getName(),playlist.getLocal());
 			listaPlaylistTabela.add(p);
 		}
 		
-		columnNamePlaylist.setPrefWidth(150.0);
+		columnNamePlaylist.setPrefWidth(160.0);
 		columnNamePlaylist.setCellValueFactory(new PropertyValueFactory<PlaylistTabela,String>("name"));
 		
 		tableMyPlaylists.setItems(listaPlaylistTabela);
 		tableMyPlaylists.getColumns().addAll(columnNamePlaylist);
 	}
 	
+	public void addPlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nomePlaylist) {	
+		String path = ManipuladorArquivo.criarPlaylist(nomePlaylist); //cria playlist.zmp
+		Playlist nova = new Playlist(nomePlaylist, path);
+		if(!RepositorioPlaylist.getInstance().getArrayPlaylist().contains(nova)){
+			RepositorioPlaylist.getInstance().getArrayPlaylist().add(nova);//add no repositorio
+			ManipuladorArquivo.addPlaylistToUserFile(nomePlaylist,path); //add no arquivo uservip.zmf
+			listaPlaylistTabela.add(new PlaylistTabela(nomePlaylist, path)); //add na observable list
+			super.atualizarTabela();
+		}
+		
+	}	
 	
 	@FXML
 	private TableColumn<MusicaTable, String> columnNameMusic = new TableColumn<MusicaTable, String>("Name");
@@ -83,17 +95,7 @@ public class PlaylistController{
 		tableMusicPlaylist.getColumns().addAll(columnNameMusic);
 	}
 
-	public void addPlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nome) {	
-		String path = ManipuladorArquivo.criarPlaylist(nome);
-		ManipuladorArquivo.addPlaylistToUserFile(nome,path);
-		
-		/*//listaPlaylistTabela = TabelaControler.getInstance().atualizarPT(new File(path.substring(1)));
-		listaPlaylistTabela.add(new PlaylistTabela(nome, path));
-		tableMyPlaylists.refresh();*/
-		
-		
-		
-	}	
+	
 	
 	 
 

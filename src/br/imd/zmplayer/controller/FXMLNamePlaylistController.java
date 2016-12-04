@@ -48,12 +48,14 @@ public class FXMLNamePlaylistController extends FXMLPlayerController implements 
 	
 	@FXML
 	private void saveButtonAction(ActionEvent event) throws IOException {
-		String nome = txtFieldPlaylistName.getText();
+		String nomePlaylist = txtFieldPlaylistName.getText();
 	
-		if(nome != null){
-			new PlaylistController().addPlaylist(super.getTableMyPlaylists(),nome);
+		if(!nomePlaylist.equals("")){
+			new PlaylistController().addPlaylist(super.getTableMyPlaylists(),nomePlaylist);
+		}else{
+			System.out.println("Nenhum nome inserido!");
 		}
-		cancelButtonAction(event);
+		cancelButtonAction(null);
 	}
 	
 	@FXML

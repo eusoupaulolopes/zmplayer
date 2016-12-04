@@ -21,6 +21,24 @@ public class Usuario {
 		return admin;
 	}
 	
+	public static boolean isAdmin(String id, String senha){
+		if(id.equals(admin.getId()) && senha.equals(admin.getSenha())){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public static boolean isAdmin(Usuario user){
+		if(user.equals(admin)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 	public String getId() {
 		return id;
 	}

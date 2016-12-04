@@ -9,12 +9,12 @@ import br.imd.zmplayer.model.tad.ArvoreBinaria;
 import br.imd.zmplayer.model.tad.NoBinaria;
 
 public class RepositorioPlaylist {
-	
-	private static ArrayList<Playlist> instance;
+	private static RepositorioPlaylist instance;
+	private  ArrayList<Playlist> arrayPlaylist;
 	
 	static{
 		try {
-			instance = new ArrayList<Playlist>();
+			instance = new RepositorioPlaylist();
 		} catch (Exception e) {
 			e.getMessage();
 		}
@@ -22,21 +22,35 @@ public class RepositorioPlaylist {
 	}
 	
 	private RepositorioPlaylist(){
-		
+		this.arrayPlaylist = new ArrayList<Playlist>();
 	}
 	
-	public synchronized static ArrayList<Playlist> getInstance(){
+	public synchronized static RepositorioPlaylist getInstance(){
 		return instance;
 		
 	}
 	
 	/**
+	 * @return the arrayPlaylist
+	 */
+	public ArrayList<Playlist> getArrayPlaylist() {
+		return arrayPlaylist;
+	}
+
+	/**
+	 * @param arrayPlaylist the arrayPlaylist to set
+	 */
+	public void setArrayPlaylist(ArrayList<Playlist> arrayPlaylist) {
+		this.arrayPlaylist = arrayPlaylist;
+	}
+
+	/**
 	 * Método cria uma List<Playlist>
 	 * @return retorna uma lista de playlist
 	 */
-	public static List<Playlist> listPlaylist(){
-		int size = instance.size();
-		return instance.subList(0, size);
+	public List<Playlist> listPlaylist(){
+		int size = getInstance().getArrayPlaylist().size();
+		return getInstance().getArrayPlaylist().subList(0, size);
 	}	
 
 }

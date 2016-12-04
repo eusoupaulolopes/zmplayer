@@ -5,6 +5,7 @@ import java.io.IOException;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.RepositorioUsuario;
 import br.imd.zmplayer.model.Usuario;
+import br.imd.zmplayer.model.exceptions.NodeNotFoundedException;
 import br.imd.zmplayer.model.tad.NoBinaria;
 
 public class UserController {
@@ -12,11 +13,11 @@ public class UserController {
 	public static Usuario verificarLogin(String id, String senha){
 				
 		Usuario provisorio = new Usuario(id, "", senha, false);		
-		Usuario encontrado = RepositorioUsuario.buscar(provisorio);
+		NoBinaria encontrado = RepositorioUsuario.getArvoreUsuario().buscar(new NoBinaria(provisorio));
 		
 		if( encontrado != null){
-			if(encontrado.getSenha().equals(senha)){
-				return encontrado;
+			if(encontrado.getUsuario().getSenha().equals(senha)){
+				return encontrado.getUsuario();
 			}
 		}
 		//Se encontrado for igual a null (nao existe usuario) 
@@ -26,10 +27,10 @@ public class UserController {
 	
 	public static boolean cadastrarUsuario(Usuario novo){
 		
-		Usuario encontrado = RepositorioUsuario.buscar(novo);
+		NoBinaria encontrado = RepositorioUsuario.getArvoreUsuario().buscar(new NoBinaria(novo));
 		
 		if( encontrado == null){
-			RepositorioUsuario.add(novo); //add na arvore
+			RepositorioUsuario.getArvoreUsuario().inserir(new NoBinaria(novo)); //add na arvore
 			ManipuladorArquivo.gravarUsuario(novo); //add no arquivo
 			return true;
 			
@@ -40,12 +41,23 @@ public class UserController {
 	}
 
 	public static String removerUsuario(Usuario user) {
-		String msg = RepositorioUsuario.remove(user);
+		String msg;
+		try {
+			RepositorioUsuario.getArvoreUsuario().remover(new NoBinaria(user));//remove da arvore
+			msg = "Usuário Removido com sucesso";
+		} catch (NodeNotFoundedException e) {
+			msg = "Usuário não encontrado!";
+		}
 		
-		RepositorioUsuario.getInstance().inOrder();
+		RepositorioUsuario.getArvoreUsuario().inOrder();
 		
 		if(msg.equals("Usuário Removido com sucesso")){
-			ManipuladorArquivo.reescreverArquivo();
+			ManipuladorArquivo.reescreverArquivoZmu();
+			
+			if(user.isVIP()){
+				ManipuladorArquivo.excluirArquivoUserVip(user.getId());
+				ManipuladorArquivo.excluirTodasPlaylist(user.getId());
+			}
 		}
 		
 		return msg;
@@ -53,10 +65,10 @@ public class UserController {
 	
 	public static boolean alterarUsuario(Usuario novo){
 		
-		Usuario alterado = RepositorioUsuario.alterar(novo);
+		NoBinaria alterado = RepositorioUsuario.getArvoreUsuario().alterar(novo);
 		
 		if( alterado != null){
-			ManipuladorArquivo.reescreverArquivo();//alterar arquivo
+			ManipuladorArquivo.reescreverArquivoZmu();//alterar arquivo
 			return true;
 			
 		}else{

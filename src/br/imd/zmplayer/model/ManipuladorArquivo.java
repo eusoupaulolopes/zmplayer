@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import br.imd.zmplayer.controller.TabelaControler;
 import br.imd.zmplayer.controller.utils.OperationalController;
 import br.imd.zmplayer.model.tad.ArvoreBinaria;
 import br.imd.zmplayer.model.tad.NoBinaria;
@@ -24,16 +25,6 @@ public class ManipuladorArquivo {
 	private static final String PATHVIPFILES = "./vipfiles/";
 	private static final String PATHPLAYLIST = "./vipfiles/playlist/";
 	
-	
-	/*
-	 * public static void leitor(String path) throws IOException {
-	 * BufferedReader buffRead = new BufferedReader(new FileReader(path));
-	 * String linha = ""; while (true) { if (linha != null) {
-	 * System.out.println(linha);
-	 * 
-	 * } else break; linha = buffRead.readLine(); } buffRead.close(); }
-	 */
-
 	/**
 	 * Método que grava o usuário no arquivo .zmu
 	 * 
@@ -55,6 +46,66 @@ public class ManipuladorArquivo {
 			e.getMessage();
 		}
 	}
+	
+	/**
+	 * Método que ler o arquivo .zmu e cria a arvore binaria
+	 * 
+	 * @param path Caminho do local do arquivo
+	 * @throws IOException
+	 */
+	public static void lerZmu(String path) {
+		BufferedReader buffRead;
+		try {
+			buffRead = new BufferedReader(new FileReader(path));
+			if (buffRead != null) {
+				String linha;
+				while (true) {
+					linha = buffRead.readLine();
+					if (linha != null) {
+						String user[] = linha.split(";");
+						boolean vip = (user[3].equals("true")) ? true : false;
+						RepositorioUsuario.getArvoreUsuario().inserir(new NoBinaria(new Usuario(user[0], user[1], user[2], vip)));
+					} else {
+						break;
+					}
+				}
+			}
+			buffRead.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+
+	}
+
+	/**
+	 * Método que reescreve o arquivo .zmu a partir da árvore.
+	 * 
+	 */
+	public static void reescreverArquivoZmu() {
+
+		ArrayList<NoBinaria> lista = new ArrayList<NoBinaria>();
+
+		RepositorioUsuario.getArvoreUsuario().arvoreToArrayList(lista);
+
+		BufferedWriter buffWrite;
+		try {
+			buffWrite = new BufferedWriter(new FileWriter(PATHUSERS));
+
+			for (NoBinaria no : lista) {
+				Usuario user = no.getUsuario();
+				String linha = user.getId() + ";" + user.getNome() + ";" + user.getSenha() + ";" + user.isVIP();
+				buffWrite.write(linha + "\n");
+			}
+
+			buffWrite.flush();
+			buffWrite.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+
+	}
+	
+	//------------------------------------------ Inicio - Métodos Playlis -------------------------------
 	/**
 	 * Método cria um arquivo (.zmf) de acesso a playlist de usuaŕios VIPs.
 	 * 
@@ -63,16 +114,30 @@ public class ManipuladorArquivo {
 	public static void criarArquivoUserVip(String nome) {
 		BufferedWriter buffWrite;
 		String path = PATHVIPFILES+nome+".zmf";		
-		System.out.println(nome);
+		System.out.println("criando arquivo zmf de"+nome);
+		
 		try {
 			File file = new File(path);	
 			buffWrite = new BufferedWriter(new FileWriter(path, true));
-			buffWrite.write(nome);
+			buffWrite.write(nome+"\n");
 			buffWrite.flush();
 			buffWrite.close();
 		} catch (IOException e) {
 			e.getMessage();
 		}
+	}
+	
+	/**
+	 * Método cria um arquivo (.zmf) de acesso a playlist de usuaŕios VIPs.
+	 * 
+	 * @param user
+	 */
+	public static void excluirArquivoUserVip(String nome) {
+		BufferedWriter buffWrite;
+		String path = PATHVIPFILES+nome+".zmf";		
+		System.out.println("excluindo arquivo zmf de "+nome);
+		File file = new File(path);	
+		file.delete();
 	}
 	
 	/**
@@ -83,6 +148,52 @@ public class ManipuladorArquivo {
 	public static File getArquivoUserVip() {
 		String path = PATHVIPFILES+OperationalController.getSessao().getUser().getId()+".zmf";
 		return new File(path);
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public static void lerArquivoUserVip(Usuario user) {
+		BufferedReader buffRead;
+		String path = PATHVIPFILES+user.getId()+".zmf";
+		try {
+			buffRead = new BufferedReader(new FileReader(path));
+			if (buffRead != null) {
+				String linha;
+				while (true) {
+					linha = buffRead.readLine();
+					if (linha != null) {
+						String pĺaylist[] = linha.split(";");
+						Playlist novo = new Playlist(pĺaylist[0], pĺaylist[1]);
+						TabelaControler.getInstance().atualizarPT(pĺaylist[0], pĺaylist[1]);
+						RepositorioPlaylist.getInstance().getArrayPlaylist().add(novo);
+
+					} else {
+						break;
+					}
+				}
+			}
+			buffRead.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+		
+	}	
+	
+	public static void addPlaylistToUserFile(String playlistName, String playlistPath) {
+		BufferedWriter bw;
+		System.out.println("adcionando no file: "+playlistName);
+		try {
+			File file = getArquivoUserVip();
+			bw = new BufferedWriter(new FileWriter(file.getPath(),true));
+			bw.write(playlistName+";"+playlistPath.substring(1)+"\n");
+			bw.flush();
+			bw.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		
 	}
 	
@@ -104,6 +215,28 @@ public class ManipuladorArquivo {
 		
 		return path;
 	}
+	/**
+	 * Método exclui todas as playlist do usuário
+	 */
+	public static void excluirTodasPlaylist(String nomeUsuario) {
+		File pasta = new File(PATHPLAYLIST);    
+		File[] arquivos = pasta.listFiles();    
+		for(File arquivo : arquivos) {
+		    if(arquivo.getName().startsWith(nomeUsuario) && arquivo.getName().endsWith("zmp")) {
+		        arquivo.delete();
+		    }
+		}
+	}
+	
+	public static void excluirPlaylist(String nomeUsuario, String nomePlaylist){
+		String path = PATHPLAYLIST+nomeUsuario+"_"+nomePlaylist+".zmp";		
+		System.out.println("excluindo pĺaylist"+nomePlaylist+" de "+nomeUsuario);
+		File file = new File(path);	
+		file.delete();
+	}
+	
+	
+	//------------------------------------------ Fim - Métodos Playlis -------------------------------
 
 	/**
 	 * Metodo que escreve na lista de Musicas compartilhadas
@@ -204,78 +337,6 @@ public class ManipuladorArquivo {
 		return null;
 	}
 
-	/**
-	 * Método que ler o arquivo .zmu e cria a arvore binaria
-	 * 
-	 * @param path Caminho do local do arquivo
-	 * @throws IOException
-	 */
-	public static void lerZmu(String path) {
-		BufferedReader buffRead;
-		try {
-			buffRead = new BufferedReader(new FileReader(path));
-			if (buffRead != null) {
-				String linha;
-				while (true) {
-					linha = buffRead.readLine();
-					if (linha != null) {
-						String user[] = linha.split(";");
-						boolean vip = (user[3].equals("true")) ? true : false;
-						RepositorioUsuario.add(new Usuario(user[0], user[1], user[2], vip));
-					} else {
-						break;
-					}
-				}
-			}
-			buffRead.close();
-		} catch (IOException e) {
-			e.getMessage();
-		}
-
-	}
-
-	/**
-	 * Método que reescreve o arquivo .zmu a partir da árvore.
-	 * 
-	 * @param user
-	 */
-	public static void reescreverArquivo() {
-
-		ArrayList<NoBinaria> lista = new ArrayList<NoBinaria>();
-
-		RepositorioUsuario.getInstance().arvoreToArrayList(lista);
-
-		BufferedWriter buffWrite;
-		try {
-			buffWrite = new BufferedWriter(new FileWriter(PATHUSERS));
-
-			for (NoBinaria no : lista) {
-				Usuario user = no.getUsuario();
-				String linha = user.getId() + ";" + user.getNome() + ";" + user.getSenha() + ";" + user.isVIP();
-				buffWrite.write(linha + "\n");
-			}
-
-			buffWrite.flush();
-			buffWrite.close();
-		} catch (IOException e) {
-			e.getMessage();
-		}
-
-	}
-	public static void addPlaylistToUserFile(String playlistName, String playlistPath) {
-		BufferedWriter bw;
-		System.out.println("adcionando no file: "+playlistName);
-		try {
-			File file = getArquivoUserVip();
-			bw = new BufferedWriter(new FileWriter(file.getPath(),true));
-			bw.write(playlistName+";"+playlistPath.substring(1)+"\n");
-			bw.flush();
-			bw.close();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		
-	}
+	
 
 }
