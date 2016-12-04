@@ -80,7 +80,9 @@ public class FXMLPlayerController implements Initializable {
 	@FXML Button btnEditPlaylist;
 	@FXML TableView<MusicaTable> tableMusicPlaylist;
 	@FXML TableView<PlaylistTabela> tableMyPlaylists;
+	@FXML Label labelPlaylistName;
 	//-------------Fim - Atributos Playlist --------------//
+	
 	
 	//-------------Inicio - Metodos Playlist --------------//
 	@FXML
@@ -94,6 +96,43 @@ public class FXMLPlayerController implements Initializable {
 		stage.setResizable(false);
 		stage.show();
 	
+	}
+	
+	@FXML
+	private void btnRemovePlaylistAction(ActionEvent event) throws IOException{
+		PlaylistTabela selecionado = tableMyPlaylists.getSelectionModel().getSelectedItem();
+		if(selecionado!=null){
+			
+			PlaylistController.getInstance().removePlaylist(tableMyPlaylists, selecionado.getName());
+			
+		}
+		
+	}
+	
+	@FXML
+	private void btnAddMusicPlaylistAction(ActionEvent event) throws IOException {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Abrir mp3");
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
+		File selectedFile = fileChooser.showOpenDialog(null);
+		if (selectedFile != null) {
+			PlaylistController.getInstance().addMusicPlaylist(tableMyPlaylists,labelPlaylistName.getText(),selectedFile);
+		}
+	}
+	
+	
+	@FXML
+	private void btnRemoveMusicPlaylistAction(ActionEvent event) throws IOException{
+		MusicaTable musicaSelecionada = tableMusicPlaylist.getSelectionModel().getSelectedItem();
+		if(musicaSelecionada!=null){
+			String nomePlaylist = labelPlaylistName.getText();
+			PlaylistController.getInstance().removeMusicPlaylist(tableMusicPlaylist, musicaSelecionada,nomePlaylist);
+
+		}
+		
+		
+		
+		
 	}
 	
 	public TableView<MusicaTable> getTableMusicPlaylist() {
@@ -265,6 +304,7 @@ public class FXMLPlayerController implements Initializable {
 		}else{
 			
 			PlaylistController.getInstance().listarMyPlaylists(tableMyPlaylists);
+			PlaylistController.getInstance().inicializarTabelaPlaylist(tableMusicPlaylist);
 			
 		}
 		
@@ -302,8 +342,13 @@ public class FXMLPlayerController implements Initializable {
 				if (click.getClickCount() == 2) {
 					PlaylistTabela selecionado = tableMyPlaylists.getSelectionModel().getSelectedItem();
 					System.out.println("Nome do selecionao:"+selecionado.getName());
-					ManipuladorArquivo.lerPlaylist(selecionado.getName()); //ler arquivo .zmp da playlist selecionada
-					PlaylistController.getInstance().listarMusicasPlaylist(tableMusicPlaylist,selecionado);
+					PlaylistController.getInstance().limparListaMTPlaylist(); //limpa lista observable
+					if(selecionado != null){
+						ManipuladorArquivo.lerPlaylist(selecionado.getName()); //ler arquivo .zmp da playlist selecionada
+						PlaylistController.getInstance().listarMusicasPlaylist(tableMusicPlaylist,selecionado);
+						labelPlaylistName.setText(selecionado.getName());
+					}
+					
 					
 				}
 

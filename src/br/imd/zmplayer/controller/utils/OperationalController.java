@@ -32,7 +32,9 @@ public class OperationalController {
 	public static void iniciarSessao(Usuario tipo) {
 		sessao = new Sessao(tipo);
 		if(tipo.isVIP()){
-			PlaylistController.getInstance().limparListaPT();
+			PlaylistController.getInstance().limparListaPT(); //limpa lista observable de My Playlists
+			
+			PlaylistController.getInstance().limparListaMTPlaylist(); //limpa lista observable de Music Playlists
 			ManipuladorArquivo.lerArquivoUserVip(tipo);
 		}
 		

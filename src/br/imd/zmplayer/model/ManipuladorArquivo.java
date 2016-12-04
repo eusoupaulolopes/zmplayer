@@ -108,7 +108,9 @@ public class ManipuladorArquivo {
 
 	}
 	
-	//------------------------------------------ Inicio - Métodos Playlis -------------------------------
+	
+	
+	//------------------------------------------ Inicio - Métodos Playlist -------------------------------
 	/**
 	 * Método cria um arquivo (.zmf) de acesso a playlist de usuaŕios VIPs.
 	 * 
@@ -155,7 +157,7 @@ public class ManipuladorArquivo {
 	}
 	
 	/**
-	 * 
+	 * Método que carrega a ObservableList da tabela de My Playlists
 	 */
 	public static void lerArquivoUserVip(Usuario user) {
 		BufferedReader buffRead;
@@ -183,21 +185,7 @@ public class ManipuladorArquivo {
 		
 	}	
 	
-	public static void addPlaylistToUserFile(String playlistName, String playlistPath) {
-		BufferedWriter bw;
-		System.out.println("adcionando no file: "+playlistName);
-		try {
-			File file = getArquivoUserVip();
-			bw = new BufferedWriter(new FileWriter(file.getPath(),true));
-			bw.write(playlistName+";"+playlistPath.substring(1)+"\n");
-			bw.flush();
-			bw.close();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		
-	}
+	
 	
 	/**
 	 * Método cria um arquivo (.zmp) referente a uma playlist de um usuário
@@ -262,14 +250,114 @@ public class ManipuladorArquivo {
 		}
 	}
 	
-	public static void excluirPlaylist(String nomeUsuario, String nomePlaylist){
+	public static void excluirPlaylist(String nomePlaylist){
+		String nomeUsuario = OperationalController.getSessao().getUser().getId();
 		String path = PATHPLAYLIST+nomeUsuario+"_"+nomePlaylist+".zmp";		
 		System.out.println("excluindo pĺaylist"+nomePlaylist+" de "+nomeUsuario);
 		File file = new File(path);	
 		file.delete();
 	}
 	
+	/**
+	 * Método retorna um arquivo de playlist(.zmp) com as musicas cadastradas.
+	 * 
+	 * @param user
+	 */
+	public static File getArquivoPlaylist(String nomePlaylist) {
+		String nomeUsuario = OperationalController.getSessao().getUser().getId();
+		String path = PATHPLAYLIST+nomeUsuario+"_"+nomePlaylist+".zmp";
+		return new File(path);
+		
+	}
 	
+	/**
+	 * Método retorna o caminho do arquivo de playlist(.zmp).
+	 * 
+	 * @param user
+	 */
+	public static String getPathArquivoPlaylist(String nomePlaylist) {
+		String nomeUsuario = OperationalController.getSessao().getUser().getId();
+		String path = PATHPLAYLIST+nomeUsuario+"_"+nomePlaylist+".zmp";
+		return path;
+		
+	}
+	
+	public static void addMusicToPlaylistFile(MusicaTable musicaNova, String playlistPath) {
+		BufferedWriter bw;
+		System.out.println("adcionando musica no file: "+musicaNova.getNome());
+		try {
+			File file = new File(playlistPath);
+			bw = new BufferedWriter(new FileWriter(file.getPath(),true));
+			bw.write(musicaNova.getNome()+";"+musicaNova.getLocal().substring(1)+"\n");
+			bw.flush();
+			bw.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+	}
+	
+	public static void addPlaylistToUserFile(String playlistName, String playlistPath) {
+		BufferedWriter bw;
+		System.out.println("adcionando no file: "+playlistName);
+		try {
+			File file = getArquivoUserVip();
+			bw = new BufferedWriter(new FileWriter(file.getPath(),true));
+			bw.write(playlistName+";"+playlistPath.substring(1)+"\n");
+			bw.flush();
+			bw.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+	}
+	
+	public static void removePlaylistOfUserFile(String nomePlaylist) {
+		BufferedReader buffRead;
+		BufferedWriter buffWrite;
+		String pathUserfile = PATHVIPFILES+OperationalController.getSessao().getUser().getId()+".zmf";
+		ArrayList <String> linhasNaoRemovidas = new ArrayList<String>();
+		
+		//Lendo arquivo e salvando as linhas que devem permanecer no arquivo
+		try {
+			buffRead = new BufferedReader(new FileReader(pathUserfile));
+			if (buffRead != null) {
+				String linha;
+				while (true) {
+					linha = buffRead.readLine();
+					if (linha != null) {
+						String playlist[] = linha.split(";");
+						//se o nomeda da playlist nao for a que deve ser removida, coloca no array
+						if(!playlist[0].equals(nomePlaylist)){
+							linhasNaoRemovidas.add(linha);
+						}
+					} else {
+						break;
+					}
+				}
+			}
+			buffRead.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+		//exclui o arquivo user file
+		excluirArquivoUserVip(OperationalController.getSessao().getUser().getId());
+		
+		//cria novamente
+		try {
+			buffWrite = new BufferedWriter(new FileWriter(pathUserfile));
+			for(String linha: linhasNaoRemovidas){
+				buffWrite.write(linha + "\n");
+				buffWrite.flush();
+			}			
+			buffWrite.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+		
+	}
 	//------------------------------------------ Fim - Métodos Playlis -------------------------------
 
 	/**
@@ -370,6 +458,8 @@ public class ManipuladorArquivo {
 		}
 		return null;
 	}
+
+	
 
 	
 
