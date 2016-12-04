@@ -244,16 +244,23 @@ public class FXMLPlayerController implements Initializable {
 				files.add(file);
 			}
 			pc.tocar(files);
-			Status pause = pc.getMediaControlStatus();
-			if (pause != Status.PLAYING) {
-				btnPause.setVisible(true);
-				btnPlay.setVisible(false);
-			} else {
-				btnPause.setVisible(false);
-				btnPlay.setVisible(true);
-			}
+			String label = pc.getMediaPlayer().getMedia().getSource().substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/")+1);
+			lbCurrentPlaying.setText("Seduzindo: "+label.replaceAll("%20", " "));
 		}
-
+	}
+	
+	@FXML
+	private void btnPauseAction(ActionEvent event) throws IOException {
+		String label = pc.getMediaPlayer().getMedia().getSource().substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/")+1);
+		if(pc.getMediaControlStatus() == Status.PLAYING){
+			
+			pc.getMediaPlayer().pause();
+			lbCurrentPlaying.setText("Dando tempo: "+label.replaceAll("%20", " "));
+			
+		}else{
+			pc.getMediaPlayer().play();
+			lbCurrentPlaying.setText("Seduzindo: "+label.replaceAll("%20", " "));
+		}
 	}
 
 	@FXML
@@ -271,14 +278,11 @@ public class FXMLPlayerController implements Initializable {
 				files.add(file);
 			}
 			pc.tocar(files);
-			Status pause = pc.getMediaControlStatus();
-			if (pause != Status.PLAYING) {
-				btnPause.setVisible(true);
-				btnPlay.setVisible(false);
-			} else {
-				btnPause.setVisible(false);
-				btnPlay.setVisible(true);
-			}
+			
+			
+			String label = pc.getMediaPlayer().getMedia().getSource().toString().substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/")+1);
+			lbCurrentPlaying.setText("Seduzindo: "+label.replaceAll("%20", " "));
+			
 		}
 
 	}
@@ -286,8 +290,7 @@ public class FXMLPlayerController implements Initializable {
 	@FXML
 	private void btnStopAction(ActionEvent event) throws IOException {
 		pc.parar();
-		btnPause.setVisible(false);
-		btnPlay.setVisible(true);
+		lbCurrentPlaying.setText("");
 
 	}
 
@@ -341,7 +344,7 @@ public class FXMLPlayerController implements Initializable {
 		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(),
 				12);
 		pc = PlayerController.getInstance();
-		btnPause.setVisible(false);
+		
 		lbUserSession.setText(OperationalController.getSessao().getLt() + " - "
 				+ OperationalController.getSessao().getUser().getNome());
 		columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
