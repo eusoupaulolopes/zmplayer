@@ -1,24 +1,14 @@
 package br.imd.zmplayer.controller;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
 
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
-import br.imd.zmplayer.model.Playlist;
-import br.imd.zmplayer.model.RepositorioPlaylist;
-import br.imd.zmplayer.model.RepositorioUsuario;
 import br.imd.zmplayer.model.ManipuladorArquivo;
-import br.imd.zmplayer.model.Musica;
 import br.imd.zmplayer.model.tabela.PlaylistTabela;
-import br.imd.zmplayer.model.tabela.UsuarioTabela;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -63,11 +53,13 @@ public class PlaylistController{
 	}
 	
 	public void removerListaPT(PlaylistTabela novo){
-		listPT.remove(novo);
+		
+		
+		listPT.remove(buscarListaPT(novo));
 	}
 	
 	public void removerListaMTPlaylist(MusicaTable novo){
-		listMTPlaylist.remove(novo);
+		listMTPlaylist.remove(buscarListaMTPlaylist(novo));
 	}
 	
 	public ObservableList<PlaylistTabela> limparListaPT() {
@@ -80,15 +72,26 @@ public class PlaylistController{
 		return listMTPlaylist;
 	}
 	
-	public boolean buscarListaPT(PlaylistTabela playlistProcurada) {
+	public PlaylistTabela buscarListaPT(PlaylistTabela playlistProcurada) {
 		
 		for(PlaylistTabela playlist: listPT){
 			if(playlist.getName().equals(playlistProcurada.getName())){
-				return true;
+				return playlist;
 			}
 		}
 		
-		return false;
+		return null;
+	}
+	
+	public MusicaTable buscarListaMTPlaylist(MusicaTable musicaProcurada) {
+		
+		for(MusicaTable musica: listMTPlaylist){
+			if(musica.getNome().equals(musicaProcurada.getNome())){
+				return musica;
+			}
+		}
+		
+		return null;
 	}
 	
 	public ObservableList<PlaylistTabela> atualizarListaPT(PlaylistTabela novo) {
@@ -121,10 +124,14 @@ public class PlaylistController{
 	}
 
 	public void addPlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nomePlaylist) {	
-		String path = ManipuladorArquivo.criarPlaylist(nomePlaylist); //cria playlist.zmp
 		
-		if(!playlistControler.buscarListaPT(new PlaylistTabela(nomePlaylist, path))){
-			
+
+		String path = ManipuladorArquivo.getPathArquivoPlaylist(nomePlaylist);
+		
+		
+		if(playlistControler.buscarListaPT(new PlaylistTabela(nomePlaylist, path)) == null){
+			ManipuladorArquivo.criarPlaylist(nomePlaylist); //cria playlist.zmp
+
 			ManipuladorArquivo.addPlaylistToUserFile(nomePlaylist,path); //add no arquivo uservip.zmf
 			playlistControler.atualizarListaPT(new PlaylistTabela(nomePlaylist, path));
 			
@@ -133,51 +140,88 @@ public class PlaylistController{
 		}
 		
 	}	
+	
+	
+	
+	public void removePlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nomePlaylist) {	
+		
+		String path = ManipuladorArquivo.getPathArquivoPlaylist(nomePlaylist);
+		
+		if(ManipuladorArquivo.getArquivoPlaylist(nomePlaylist).exists()){
+			ManipuladorArquivo.excluirPlaylist(nomePlaylist);//excluir playlist.zmp
+			ManipuladorArquivo.removePlaylistOfUserFile(nomePlaylist); //remove no arquivo uservip.zmf
+			playlistControler.removerListaPT(new PlaylistTabela(nomePlaylist, path));
+		}
+		else{
+			System.out.println("Nao existe playlist "+nomePlaylist);
+		}
+		
+	}
 
 
 	@FXML
 	private TableColumn<MusicaTable, String> columnNameMusic = new TableColumn<MusicaTable, String>("Name");
 	public TableColumn<MusicaTable, Integer> columnNumber = new TableColumn<MusicaTable, Integer>("Nº");
 	
-	public void listarMusicasPlaylist(TableView<MusicaTable> tableMusicPlaylist,PlaylistTabela playlistSelecionada){
-		columnNameMusic.setPrefWidth(160.0);
+	public void inicializarTabelaPlaylist(TableView<MusicaTable> tableMusicPlaylist){
+		columnNameMusic.setPrefWidth(200.0);
 		columnNumber.setPrefWidth(40.0);	
 		columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable,Integer>("numero"));
-		columnNameMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable,String>("nome"));
+		columnNameMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable,String>("nome"));		
+		tableMusicPlaylist.getColumns().addAll(columnNumber,columnNameMusic);
+	}
+	
+	public void listarMusicasPlaylist(TableView<MusicaTable> tableMusicPlaylist,PlaylistTabela playlistSelecionada){		
 		
 		for(MusicaTable musica: listMTPlaylist){
 			System.out.println(musica.getNome());
 		}
 		
 		tableMusicPlaylist.setItems(listMTPlaylist);
-		tableMusicPlaylist.getColumns().addAll(columnNumber,columnNameMusic);
 		tableMusicPlaylist.refresh();
 	}
-	
-	/*public void listarMusicasPlaylist(TableView<MusicaTable> tableMusicPlaylist,PlaylistTabela playlistSelecionada){
-		
-		if(!listaMusicTabela.isEmpty()){
-			listaMusicTabela.clear();
-			System.out.println("limpou observale table");
-		}
+	/**
+	 * Método que gere a adição de música na playlist
+	 * @param tableMyPlaylists
+	 * @param text
+	 */
+	public void addMusicPlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nomePlaylist, File arquivoMp3) {
 
-		//So para teste, deve ser criado Repositorio de Playlist
-		musicasPlaylist = Arrays.asList( new Musica(1,"Rock Nacional", "C://lalal") );
+		//cria uma MusicaTable
+		int cont = 1;
+		if (!listMTPlaylist.isEmpty()) {
+			cont = listMTPlaylist.size() + 1;
+		}
+		MusicaTable musicaNova = new MusicaTable(cont, arquivoMp3.getName(), arquivoMp3.getPath().substring(1));
 		
-		for(Musica music: musicasPlaylist){
-			MusicaTable m = new MusicaTable(music.getNumero(),music.getNome(),music.getLocal());
-			listaMusicTabela.add(m);
+		
+		String playlistPath = ManipuladorArquivo.getPathArquivoPlaylist(nomePlaylist);
+		if(playlistControler.buscarListaMTPlaylist(musicaNova) == null){
+			//add no playlist.zmp
+			ManipuladorArquivo.addMusicToPlaylistFile(musicaNova,playlistPath);
+			//add na observalblelist
+			playlistControler.atualizarListaMTPlaylist(musicaNova);
+		}else{
+			System.out.println("Já existe musica  "+musicaNova.getNome()+" na playlist");
 		}
 		
-		//columnNameMusic.setPrefWidth(120.0);
-		columnNameMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable,String>("nome"));
+	}
+	
+	public void removeMusicPlaylist(TableView<MusicaTable> tableMusicPlaylist,MusicaTable musicaSelecionada, String nomePlaylist) {	
 		
-		tableMusicPlaylist.setItems(listaMusicTabela);
-		tableMusicPlaylist.getColumns().addAll(columnNameMusic);
-	}*/
+	/*	String path = ManipuladorArquivo.getPathArquivoPlaylist(nomePlaylist);
+		
+		if(ManipuladorArquivo.getArquivoPlaylist(nomePlaylist).exists()){
+			ManipuladorArquivo.excluirPlaylist(nomePlaylist);//excluir playlist.zmp
+			ManipuladorArquivo.removePlaylistOfUserFile(nomePlaylist); //remove no arquivo uservip.zmf
+			playlistControler.removerListaPT(new PlaylistTabela(nomePlaylist, path));
+		}
+		else{
+			System.out.println("Nao existe playlist "+nomePlaylist);
+		}*/
+		
+	}
 
 	
-	
-	 
 
 }

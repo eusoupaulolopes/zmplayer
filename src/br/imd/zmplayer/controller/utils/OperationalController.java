@@ -32,8 +32,10 @@ public class OperationalController extends FXMLPlaylistController{
 	 */
 	public static void iniciarSessao(Usuario tipo) {
 		sessao = new Sessao(tipo);
-		if (tipo.isVIP()) {
-			PlaylistController.getInstance().limparListaPT();
+
+		if(tipo.isVIP()){
+			PlaylistController.getInstance().limparListaPT(); //limpa lista observable de My Playlists			
+			PlaylistController.getInstance().limparListaMTPlaylist(); //limpa lista observable de Music Playlists
 			ManipuladorArquivo.lerArquivoUserVip(tipo);
 		}
 		ap = new ArvorePatricia<>();

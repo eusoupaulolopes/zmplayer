@@ -103,7 +103,7 @@
                            <buttons>
                               <Button id="btnAddPlaylist" fx:id="btnAddPlaylist" minWidth="28.0" mnemonicParsing="false" onAction="#btnAddPlaylistAction" prefHeight="25.0" prefWidth="28.0" text="" textAlignment="JUSTIFY" />
                               
-                              <Button id="btnRemovePlaylist" fx:id="btnRemovePlaylist" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="" textAlignment="JUSTIFY" />
+                              <Button id="btnRemovePlaylist" fx:id="btnRemovePlaylist" onAction="#btnRemovePlaylistAction" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="" textAlignment="JUSTIFY" />
                               <Button id="btnEditPlaylist" fx:id="btnEditPlaylist" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
                            </buttons>
                         </ButtonBar>
@@ -121,7 +121,7 @@
                      <children>
                         <ButtonBar fx:id="btnBarMusicPlaylist" buttonMinWidth="25.0" layoutX="146.0" layoutY="14.0" prefHeight="39.0" prefWidth="142.0" stylesheets="@styles/FXMLPlayerbtn.css">
                            <buttons>
-                              <Button id="btnAddMusicPlaylist" fx:id="btnAddMusicPlaylist" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
+                              <Button id="btnAddMusicPlaylist" onAction="#btnAddMusicPlaylistAction" fx:id="btnAddMusicPlaylist" minWidth="28.0" mnemonicParsing="false" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
                               <Button id="btnRemoveMusicPlaylist" fx:id="btnRemoveMusicPlaylist" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="" textAlignment="JUSTIFY" />
                            </buttons>
                         </ButtonBar>
