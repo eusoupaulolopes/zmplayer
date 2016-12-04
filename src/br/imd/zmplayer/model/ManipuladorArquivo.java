@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import br.imd.zmplayer.controller.PlaylistController;
 import br.imd.zmplayer.controller.TabelaControler;
+import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
+import br.imd.zmplayer.model.tabela.PlaylistTabela;
 import br.imd.zmplayer.model.tad.ArvoreBinaria;
 import br.imd.zmplayer.model.tad.NoBinaria;
 import javafx.stage.FileChooser;
@@ -165,10 +168,8 @@ public class ManipuladorArquivo {
 					linha = buffRead.readLine();
 					if (linha != null) {
 						String pĺaylist[] = linha.split(";");
-						Playlist novo = new Playlist(pĺaylist[0], pĺaylist[1]);
-					//	TabelaControler.getInstance().atualizarPT(pĺaylist[0], pĺaylist[1]);
-						
-						RepositorioPlaylist.getInstance().getArrayPlaylist().add(novo);
+						PlaylistTabela novo = new PlaylistTabela(pĺaylist[0], pĺaylist[1]);
+						PlaylistController.getInstance().inserirListaPT(novo);
 
 					} else {
 						break;
@@ -215,6 +216,38 @@ public class ManipuladorArquivo {
 		}
 		
 		return path;
+	}
+	
+	/**
+	 * Método lê um arquivo (.zmp) referente a uma playlist de um usuário
+	 * 
+	 * @param user
+	 */
+	public static void lerPlaylist(String nome) {
+		BufferedReader buffRead;
+		String path = PATHPLAYLIST+OperationalController.getSessao().getUser().getId()+"_"+nome+".zmp";		
+		int cont = 1;
+		try {
+			buffRead = new BufferedReader(new FileReader(path));
+			if (buffRead != null) {
+				String linha;
+				while (true) {
+					linha = buffRead.readLine();
+					if (linha != null) {
+						String musica[] = linha.split(";");
+						MusicaTable novo = new MusicaTable(cont,musica[0], musica[1]);
+						PlaylistController.getInstance().inserirListaMTPlaylist(novo);
+						cont++;
+
+					} else {
+						break;
+					}
+				}
+			}
+			buffRead.close();
+		} catch (IOException e) {
+			e.getMessage();
+		}
 	}
 	/**
 	 * Método exclui todas as playlist do usuário

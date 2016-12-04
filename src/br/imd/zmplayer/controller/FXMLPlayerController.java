@@ -10,7 +10,9 @@ import java.util.ResourceBundle;
 
 import br.imd.zmplayer.controller.musictable.MusicaTable;
 import br.imd.zmplayer.controller.utils.OperationalController;
+import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.tabela.PlaylistTabela;
+import br.imd.zmplayer.model.tabela.UsuarioTabela;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -101,10 +103,7 @@ public class FXMLPlayerController implements Initializable {
 	public TableView<PlaylistTabela> getTableMyPlaylists() {
 		return tableMyPlaylists;
 	}
-	
-	public void atualizarTabela(){
 
-	}
 	
 	//-------------Fim - Metodos Playlist --------------//
 	
@@ -264,9 +263,9 @@ public class FXMLPlayerController implements Initializable {
 			vipPlaylistPane.setVisible(false);
 			
 		}else{
-			PlaylistController controle = new PlaylistController();
-			controle.listarMusicasPlaylist(tableMusicPlaylist);
-			controle.listarPlaylists(tableMyPlaylists);
+			
+			PlaylistController.getInstance().listarMyPlaylists(tableMyPlaylists);
+			
 		}
 		
 		tc.limparLista();
@@ -280,6 +279,38 @@ public class FXMLPlayerController implements Initializable {
 		}
 		tableMusics.refresh();
 		tableMusics.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent click) {
+				if (click.getClickCount() == 2) {
+					// Use ListView's getSelected Item
+					try {
+						btnPlayAction(new ActionEvent());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+
+			}
+		});
+		
+		tableMyPlaylists.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent click) {
+				
+				if (click.getClickCount() == 2) {
+					PlaylistTabela selecionado = tableMyPlaylists.getSelectionModel().getSelectedItem();
+					System.out.println("Nome do selecionao:"+selecionado.getName());
+					ManipuladorArquivo.lerPlaylist(selecionado.getName()); //ler arquivo .zmp da playlist selecionada
+					PlaylistController.getInstance().listarMusicasPlaylist(tableMusicPlaylist,selecionado);
+					
+				}
+
+			}
+		});
+		
+		tableMusicPlaylist.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent click) {
 				if (click.getClickCount() == 2) {

@@ -6,6 +6,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.imd.zmplayer.controller.PlayerController;
+import br.imd.zmplayer.controller.PlaylistController;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.Sessao;
 import br.imd.zmplayer.model.Usuario;
@@ -30,6 +32,7 @@ public class OperationalController {
 	public static void iniciarSessao(Usuario tipo) {
 		sessao = new Sessao(tipo);
 		if(tipo.isVIP()){
+			PlaylistController.getInstance().limparListaPT();
 			ManipuladorArquivo.lerArquivoUserVip(tipo);
 		}
 		

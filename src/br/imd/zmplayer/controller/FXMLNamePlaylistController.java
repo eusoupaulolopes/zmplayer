@@ -51,7 +51,7 @@ public class FXMLNamePlaylistController extends FXMLPlayerController implements 
 		String nomePlaylist = txtFieldPlaylistName.getText();
 	
 		if(!nomePlaylist.equals("")){
-			new PlaylistController().addPlaylist(super.getTableMyPlaylists(),nomePlaylist);
+			PlaylistController.getInstance().addPlaylist(super.getTableMyPlaylists(),nomePlaylist);
 		}else{
 			System.out.println("Nenhum nome inserido!");
 		}
