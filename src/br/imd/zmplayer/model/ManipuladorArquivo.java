@@ -288,7 +288,7 @@ public class ManipuladorArquivo {
 		try {
 			File file = new File(playlistPath);
 			bw = new BufferedWriter(new FileWriter(file.getPath(),true));
-			bw.write(musicaNova.getNome()+";"+musicaNova.getLocal().substring(1)+"\n");
+			bw.write(musicaNova.getNome()+";/"+musicaNova.getLocal()+"\n");
 			bw.flush();
 			bw.close();
 		} catch (Exception e) {
@@ -314,10 +314,10 @@ public class ManipuladorArquivo {
 		
 	}
 	
-	public static void removePlaylistOfUserFile(String nomePlaylist) {
+	public static void removePlaylistOfUserFile(String nomePlaylist,String pathUserfile) {
 		BufferedReader buffRead;
 		BufferedWriter buffWrite;
-		String pathUserfile = PATHVIPFILES+OperationalController.getSessao().getUser().getId()+".zmf";
+		
 		ArrayList <String> linhasNaoRemovidas = new ArrayList<String>();
 		
 		//Lendo arquivo e salvando as linhas que devem permanecer no arquivo
@@ -328,9 +328,9 @@ public class ManipuladorArquivo {
 				while (true) {
 					linha = buffRead.readLine();
 					if (linha != null) {
-						String playlist[] = linha.split(";");
-						//se o nomeda da playlist nao for a que deve ser removida, coloca no array
-						if(!playlist[0].equals(nomePlaylist)){
+						String nome[] = linha.split(";");
+						//se o nome do arquivo nao for o que deve ser removido, coloca no array
+						if(!nome[0].equals(nomePlaylist)){
 							linhasNaoRemovidas.add(linha);
 						}
 					} else {
