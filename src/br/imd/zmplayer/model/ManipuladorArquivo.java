@@ -314,7 +314,7 @@ public class ManipuladorArquivo {
 		
 	}
 	
-	public static void removePlaylistOfUserFile(String nomePlaylist,String pathUserfile) {
+	public static void removeLinhaFromFile(String nomeLinha,String pathUserfile) {
 		BufferedReader buffRead;
 		BufferedWriter buffWrite;
 		
@@ -330,7 +330,7 @@ public class ManipuladorArquivo {
 					if (linha != null) {
 						String nome[] = linha.split(";");
 						//se o nome do arquivo nao for o que deve ser removido, coloca no array
-						if(!nome[0].equals(nomePlaylist)){
+						if(!nome[0].equals(nomeLinha)){
 							linhasNaoRemovidas.add(linha);
 						}
 					} else {

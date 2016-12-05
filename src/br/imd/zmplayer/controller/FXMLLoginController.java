@@ -1,16 +1,13 @@
 package br.imd.zmplayer.controller;
 
-import br.imd.zmplayer.*;
-import br.imd.zmplayer.controller.utils.OperationalController;
-import br.imd.zmplayer.model.ManipuladorArquivo;
-import br.imd.zmplayer.model.Usuario;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import br.imd.zmplayer.controller.utils.OperationalController;
+import br.imd.zmplayer.model.ManipuladorArquivo;
+import br.imd.zmplayer.model.Usuario;
 import javafx.animation.FadeTransition;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
@@ -26,6 +22,12 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Classe responsável por controlar a Tela de Login no Player
+ * @author Clarissa Soares / Paulo Henrique
+ * @version 1.0
+ *
+ */
 public class FXMLLoginController implements Initializable {
 
 	@FXML
@@ -64,8 +66,12 @@ public class FXMLLoginController implements Initializable {
 			}
 		}
 	}
-	
-	private void abrirTelaPlayer(Usuario tipoUsuario) throws IOException{
+	/**
+	 * Metodo responsável por iniciar sessão e abrir a Tela do Player
+	 * @param tipoUsuario Refere-se ao usuário que fez login.
+	 * @throws IOException Exceção de operaçções de I/O 
+	 */
+	private void abrirTelaPlayer(Usuario tipoUsuario)throws IOException{
 		
 		OperationalController.iniciarSessao(tipoUsuario);
 		

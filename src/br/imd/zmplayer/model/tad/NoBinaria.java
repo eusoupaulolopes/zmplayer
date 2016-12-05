@@ -1,6 +1,7 @@
 package br.imd.zmplayer.model.tad;
 
 import br.imd.zmplayer.model.Usuario;
+import br.imd.zmplayer.model.interfaces.No;
 
 /**
  * Classe para objetos do tipo No, em que serão contidos valores e métodos inerentes.
@@ -9,7 +10,7 @@ import br.imd.zmplayer.model.Usuario;
  * @version 1.0
  * @since #20161025
  */
-public class NoBinaria {
+public class NoBinaria implements No{
 
 	private Usuario user;
 	private ArvoreBinaria arvDireita;
@@ -62,6 +63,8 @@ public class NoBinaria {
 		return arvDireita;
 	}
 
+
+	@Override
 	public void setArvDireita(ArvoreBinaria arvDireita) {
 		this.arvDireita = arvDireita;
 	}
@@ -89,6 +92,8 @@ public class NoBinaria {
 	public void setUsuario(Usuario user) {
 		this.user = user;
 	}
+
+	
 	
 	
 

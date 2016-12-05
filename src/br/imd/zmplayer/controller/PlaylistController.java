@@ -3,7 +3,6 @@ package br.imd.zmplayer.controller;
 import java.io.File;
 
 import br.imd.zmplayer.controller.musictable.MusicaTable;
-import br.imd.zmplayer.controller.utils.OperationalController;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.tabela.PlaylistTabela;
 import javafx.collections.FXCollections;
@@ -150,7 +149,7 @@ public class PlaylistController{
 		
 		if(ManipuladorArquivo.getArquivoPlaylist(nomePlaylist).exists()){
 			ManipuladorArquivo.excluirPlaylist(nomePlaylist);//excluir playlist.zmp
-			ManipuladorArquivo.removePlaylistOfUserFile(nomePlaylist,pathUserFile); //remove no arquivo uservip.zmf
+			ManipuladorArquivo.removeLinhaFromFile(nomePlaylist,pathUserFile); //remove no arquivo uservip.zmf
 			playlistControler.removerListaPT(new PlaylistTabela(nomePlaylist, pathPlaylist));
 		}
 		else{
@@ -165,15 +164,16 @@ public class PlaylistController{
 	public TableColumn<MusicaTable, Integer> columnNumber = new TableColumn<MusicaTable, Integer>("Nº");
 	
 	public void inicializarTabelaPlaylist(TableView<MusicaTable> tableMusicPlaylist){
-		columnNameMusic.setPrefWidth(200.0);
+		columnNameMusic.setPrefWidth(240.0);
 		columnNumber.setPrefWidth(40.0);	
+		columnNameMusic.setResizable(false);
+		columnNumber.setResizable(false);
 		columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable,Integer>("numero"));
 		columnNameMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable,String>("nome"));		
 		tableMusicPlaylist.getColumns().addAll(columnNumber,columnNameMusic);
 	}
 	
-	public void listarMusicasPlaylist(TableView<MusicaTable> tableMusicPlaylist,PlaylistTabela playlistSelecionada){		
-		
+	public void listarMusicasPlaylist(TableView<MusicaTable> tableMusicPlaylist){		
 		for(MusicaTable musica: listMTPlaylist){
 			System.out.println(musica.getNome());
 		}
@@ -186,22 +186,22 @@ public class PlaylistController{
 	 * @param tableMyPlaylists
 	 * @param text
 	 */
-	public void addMusicPlaylist(TableView<PlaylistTabela> tableMyPlaylists, String nomePlaylist, File arquivoMp3) {
+	public void addMusicPlaylist(TableView<MusicaTable> tableMusicPlaylist, String nomePlaylist, File arquivoMp3) {
 
 		//cria uma MusicaTable
 		int cont = 1;
 		if (!listMTPlaylist.isEmpty()) {
 			cont = listMTPlaylist.size() + 1;
 		}
-		MusicaTable musicaNova = new MusicaTable(cont, arquivoMp3.getName(), arquivoMp3.getPath().substring(1));
-		
-		
+		MusicaTable musicaNova = new MusicaTable(cont, arquivoMp3.getName(), arquivoMp3.getPath().substring(1));	
 		String playlistPath = ManipuladorArquivo.getPathArquivoPlaylist(nomePlaylist);
 		if(playlistControler.buscarListaMTPlaylist(musicaNova) == null){
 			//add no playlist.zmp
 			ManipuladorArquivo.addMusicToPlaylistFile(musicaNova,playlistPath);
 			//add na observalblelist
 			playlistControler.atualizarListaMTPlaylist(musicaNova);
+			
+			listarMusicasPlaylist(tableMusicPlaylist);
 		}else{
 			System.out.println("Já existe musica  "+musicaNova.getNome()+" na playlist");
 		}
@@ -210,16 +210,19 @@ public class PlaylistController{
 	
 	public void removeMusicPlaylist(TableView<MusicaTable> tableMusicPlaylist,MusicaTable musicaSelecionada, String nomePlaylist) {	
 		
-	/*	String path = ManipuladorArquivo.getPathArquivoPlaylist(nomePlaylist);
+		String pathPlaylist = ManipuladorArquivo.getPathArquivoPlaylist(nomePlaylist);
 		
-		if(ManipuladorArquivo.getArquivoPlaylist(nomePlaylist).exists()){
-			ManipuladorArquivo.excluirPlaylist(nomePlaylist);//excluir playlist.zmp
-			ManipuladorArquivo.removePlaylistOfUserFile(nomePlaylist); //remove no arquivo uservip.zmf
-			playlistControler.removerListaPT(new PlaylistTabela(nomePlaylist, path));
+		if(playlistControler.buscarListaMTPlaylist(musicaSelecionada) != null){
+			//remove da observablelist
+			playlistControler.removerListaMTPlaylist(musicaSelecionada);
+			listarMusicasPlaylist(tableMusicPlaylist);
+			
+			//remove a musica do arquivo playlist.zmp
+			ManipuladorArquivo.removeLinhaFromFile(musicaSelecionada.getNome(),pathPlaylist);
 		}
 		else{
 			System.out.println("Nao existe playlist "+nomePlaylist);
-		}*/
+		}
 		
 	}
 

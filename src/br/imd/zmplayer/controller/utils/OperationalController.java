@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.imd.zmplayer.controller.FXMLPlaylistController;
 import br.imd.zmplayer.controller.PlaylistController;
 import br.imd.zmplayer.controller.SearchController;
 import br.imd.zmplayer.controller.musictable.MusicaTable;
@@ -15,7 +14,7 @@ import br.imd.zmplayer.model.tad.ArvorePatricia;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 
-public class OperationalController extends FXMLPlaylistController{
+public class OperationalController{
 
 	public static Sessao sessao;
 	private static ArvorePatricia<MusicaTable> ap;

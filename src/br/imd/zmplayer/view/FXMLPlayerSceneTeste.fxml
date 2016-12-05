@@ -121,7 +121,7 @@
                         <ButtonBar fx:id="btnBarMusicPlaylist" buttonMinWidth="25.0" layoutX="146.0" layoutY="14.0" prefHeight="39.0" prefWidth="142.0" stylesheets="@styles/FXMLPlayerbtn.css">
                            <buttons>
                               <Button id="btnAddMusicPlaylist" fx:id="btnAddMusicPlaylist" minWidth="28.0" mnemonicParsing="false" onAction="#btnAddMusicPlaylistAction" prefHeight="25.0" text="" textAlignment="JUSTIFY" />
-                              <Button id="btnRemoveMusicPlaylist" fx:id="btnRemoveMusicPlaylist" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="" textAlignment="JUSTIFY" />
+                              <Button id="btnRemoveMusicPlaylist" fx:id="btnRemoveMusicPlaylist" onAction="#btnRemoveMusicPlaylistAction" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="" textAlignment="JUSTIFY" />
                            </buttons>
                         </ButtonBar>
                         <TableView fx:id="tableMusicPlaylist" layoutX="9.0" layoutY="55.0" prefHeight="250.0" prefWidth="280.0" />

@@ -32,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -40,7 +41,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.layout.AnchorPane;
 
 public class FXMLPlayerController implements Initializable {
 
@@ -130,10 +130,10 @@ public class FXMLPlayerController implements Initializable {
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		File selectedFile = fileChooser.showOpenDialog(null);
 		if (selectedFile != null) {
-			PlaylistController.getInstance().addMusicPlaylist(tableMyPlaylists, labelPlaylistName.getText(),
-					selectedFile);
+			PlaylistController.getInstance().addMusicPlaylist(tableMusicPlaylist, 
+															labelPlaylistName.getText(),
+															selectedFile);
 		}
-		tableMusicPlaylist.refresh();
 	}
 
 	@FXML
@@ -141,9 +141,9 @@ public class FXMLPlayerController implements Initializable {
 		MusicaTable musicaSelecionada = tableMusicPlaylist.getSelectionModel().getSelectedItem();
 		if (musicaSelecionada != null) {
 			String nomePlaylist = labelPlaylistName.getText();
+			System.out.println("Removendo musica "+musicaSelecionada.getNome()+" da playlist "+nomePlaylist);
 			PlaylistController.getInstance().removeMusicPlaylist(tableMusicPlaylist, musicaSelecionada, nomePlaylist);
 		}
-
 	}
 
 
@@ -274,7 +274,8 @@ public class FXMLPlayerController implements Initializable {
 				System.out.println("Seduzindo: " + musica.getNome());
 				files.add(file);
 			}
-			pc.tocar(files);
+			if(files != null)
+				pc.tocar(files);
 			
 			
 			String label = pc.getMediaPlayer().getMedia().getSource().toString().substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/")+1);
@@ -365,7 +366,6 @@ public class FXMLPlayerController implements Initializable {
 		} else {
 
 			PlaylistController.getInstance().listarMyPlaylists(tableMyPlaylists);
-
 			PlaylistController.getInstance().inicializarTabelaPlaylist(tableMusicPlaylist);
 
 		}
@@ -402,14 +402,15 @@ public class FXMLPlayerController implements Initializable {
 			@Override
 			public void handle(MouseEvent click) {
 
-				if (click.getClickCount() == 2) {
+				if (click.getClickCount() > 1) {
 					PlaylistTabela selecionado = tableMyPlaylists.getSelectionModel().getSelectedItem();
-					System.out.println("Nome do selecionao:"+selecionado.getName());
+					
+					System.out.println("Nome do selecionado:"+selecionado.getName());
 					
 					PlaylistController.getInstance().limparListaMTPlaylist(); //limpa lista observable
 					if(selecionado != null){
 						ManipuladorArquivo.lerPlaylist(selecionado.getName()); //ler arquivo .zmp da playlist selecionada
-						PlaylistController.getInstance().listarMusicasPlaylist(tableMusicPlaylist,selecionado);
+						PlaylistController.getInstance().listarMusicasPlaylist(tableMusicPlaylist);
 						labelPlaylistName.setText(selecionado.getName());
 					}
 					
