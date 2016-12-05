@@ -13,27 +13,28 @@ import javafx.util.Duration;
 
 /**
  * Classe responsável por controlar o player de música.
+ * 
  * @author Clarissa Soares / Paulo Henrique
  * @version 1.0
  *
  */
-public class PlayerController extends FXMLPlayerController{
-	
+public class PlayerController extends FXMLPlayerController {
+
 	private static PlayerController pl;
 
 	private ChangeListener<Duration> progressChangeListener = new ChangeListener<Duration>() {
 		String saida = "Parado";
+
 		@Override
-		public void changed(ObservableValue<? extends Duration> observable, Duration oldValue,
-				Duration newValue) {
+		public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
 			String source = getMediaPlayer().getMedia().getSource();
 			source = source.substring(0, source.length() - ".mp3".length());
 			source = source.substring(source.lastIndexOf("/") + 1).replaceAll("%20", " ");
-			saida = "Tocando: "+source;
+			saida = "Tocando: " + source;
 		}
-		
+
 	};
-	
+
 	public ChangeListener<Duration> getProgressChangeListener() {
 		return progressChangeListener;
 	}
@@ -43,7 +44,9 @@ public class PlayerController extends FXMLPlayerController{
 	}
 
 	/**
-	 * Singleton para garantir que apenas uma instancia da classe controle a MediaPlayer
+	 * Singleton para garantir que apenas uma instancia da classe controle a
+	 * MediaPlayer
+	 * 
 	 * @return pl PlayerController
 	 */
 	public static PlayerController getInstance() {
@@ -60,21 +63,23 @@ public class PlayerController extends FXMLPlayerController{
 	public Media media;
 	public MediaPlayer mediaPlayer;
 	public Status status;
-	
+
 	/**
 	 * Método para execução de um único arquivo
-	 * @param file Arquivo Media.
+	 * 
+	 * @param file
+	 *            Arquivo Media.
 	 */
-
 	public void tocar(File file) {
 		media = new Media(file.toURI().toString());
-		
+
 		MediaPlayer mPlayer = new MediaPlayer(media);
 		mediaControl(mPlayer);
 	}
 
 	/**
 	 * Método que recebe a lista de arquivos que será carregada no MediaPlayer
+	 * 
 	 * @param files
 	 */
 	public void tocar(List<File> files) {
@@ -97,22 +102,24 @@ public class PlayerController extends FXMLPlayerController{
 			}
 		}
 	}
-	
+
 	/**
 	 * Método para pausar a media em execução ou continuar.
 	 */
 
-	public void pause(){
+	public void pause() {
 		if (this.mediaPlayer != null) {
-			if (this.mediaPlayer.getStatus() == Status.PLAYING){
+			if (this.mediaPlayer.getStatus() == Status.PLAYING) {
 				this.mediaPlayer.pause();
-			}else{
+			} else {
 				this.mediaPlayer.play();
 			}
 		}
 	}
+
 	/**
 	 * Controla as execuções para evitar que duas medias toquem ao mesmo tempo
+	 * 
 	 * @param mediaPlayer
 	 */
 	public void mediaControl(final MediaPlayer mediaPlayer) {
@@ -130,9 +137,7 @@ public class PlayerController extends FXMLPlayerController{
 		getMediaPlayer().currentTimeProperty().removeListener(progressChangeListener);
 		this.mediaPlayer.play();
 
-
 	}
-
 
 	/**
 	 * Método que recebe a sublista de MediaPlayers para serem tocadas
@@ -161,12 +166,18 @@ public class PlayerController extends FXMLPlayerController{
 
 	}
 
+	/**
+	 * Método que aponta o MediaPlayer vigente
+	 * 
+	 * @param mediaPlayer
+	 */
 	public void setMediaPlayer(MediaPlayer mediaPlayer) {
 		this.mediaPlayer = mediaPlayer;
 	}
 
 	/**
 	 * Método que retorna o Status do Media Player
+	 * 
 	 * @return Status
 	 */
 	public Status getMediaControlStatus() {
@@ -175,8 +186,8 @@ public class PlayerController extends FXMLPlayerController{
 
 	/**
 	 * Método que retorna a Media em Execução
-	 * @return mediaPlayer
-	 * 			MediaPalyer
+	 * 
+	 * @return mediaPlayer MediaPalyer
 	 */
 	public MediaPlayer getMediaPlayer() {
 		return mediaPlayer;
