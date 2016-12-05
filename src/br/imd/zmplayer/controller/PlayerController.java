@@ -18,7 +18,7 @@ import javafx.util.Duration;
  *
  */
 public class PlayerController extends FXMLPlayerController{
-
+	
 	private static PlayerController pl;
 
 	private ChangeListener<Duration> progressChangeListener = new ChangeListener<Duration>() {
@@ -30,14 +30,10 @@ public class PlayerController extends FXMLPlayerController{
 			source = source.substring(0, source.length() - ".mp3".length());
 			source = source.substring(source.lastIndexOf("/") + 1).replaceAll("%20", " ");
 			saida = "Tocando: "+source;
-			
-			System.out.println(getMediaPlayer().getCurrentTime().toSeconds());
 		}
 		
 	};
 	
-	
-
 	public ChangeListener<Duration> getProgressChangeListener() {
 		return progressChangeListener;
 	}
@@ -46,6 +42,10 @@ public class PlayerController extends FXMLPlayerController{
 
 	}
 
+	/**
+	 * Singleton para garantir que apenas uma instancia da classe controle a MediaPlayer
+	 * @return pl PlayerController
+	 */
 	public static PlayerController getInstance() {
 		if (pl == null) {
 			synchronized (PlayerController.class) {
@@ -60,14 +60,23 @@ public class PlayerController extends FXMLPlayerController{
 	public Media media;
 	public MediaPlayer mediaPlayer;
 	public Status status;
+	
+	/**
+	 * Método para execução de um único arquivo
+	 * @param file Arquivo Media.
+	 */
 
 	public void tocar(File file) {
 		media = new Media(file.toURI().toString());
-		System.out.println(file.toURI());
+		
 		MediaPlayer mPlayer = new MediaPlayer(media);
 		mediaControl(mPlayer);
 	}
 
+	/**
+	 * Método que recebe a lista de arquivos que será carregada no MediaPlayer
+	 * @param files
+	 */
 	public void tocar(List<File> files) {
 		List<MediaPlayer> mp = new ArrayList<MediaPlayer>();
 		for (File fl : files) {
@@ -78,6 +87,9 @@ public class PlayerController extends FXMLPlayerController{
 
 	}
 
+	/**
+	 * Usado para interromper a música em execução
+	 */
 	public void parar() {
 		if (this.mediaPlayer != null) {
 			if (this.mediaPlayer.getStatus() == Status.PLAYING || this.mediaPlayer.getStatus() == Status.PAUSED) {
@@ -85,6 +97,10 @@ public class PlayerController extends FXMLPlayerController{
 			}
 		}
 	}
+	
+	/**
+	 * Método para pausar a media em execução ou continuar.
+	 */
 
 	public void pause(){
 		if (this.mediaPlayer != null) {
@@ -95,7 +111,10 @@ public class PlayerController extends FXMLPlayerController{
 			}
 		}
 	}
-	
+	/**
+	 * Controla as execuções para evitar que duas medias toquem ao mesmo tempo
+	 * @param mediaPlayer
+	 */
 	public void mediaControl(final MediaPlayer mediaPlayer) {
 		Status status = null;
 		if (this.mediaPlayer != null) {
@@ -110,13 +129,10 @@ public class PlayerController extends FXMLPlayerController{
 		}
 		getMediaPlayer().currentTimeProperty().removeListener(progressChangeListener);
 		this.mediaPlayer.play();
-		setCurrentlyPlaying(this.mediaPlayer);
+
 
 	}
 
-	private void setCurrentlyPlaying(MediaPlayer mediaPlayer) {
-		mediaPlayer.currentTimeProperty().addListener(progressChangeListener);
-	}
 
 	/**
 	 * Método que recebe a sublista de MediaPlayers para serem tocadas
@@ -136,9 +152,8 @@ public class PlayerController extends FXMLPlayerController{
 					getMediaPlayer().stop();
 					getMediaPlayer().currentTimeProperty().removeListener(progressChangeListener);
 					setMediaPlayer(nextMP);
+					getMediaPlayer().currentTimeProperty().addListener(progressChangeListener);
 					mediaControl(getMediaPlayer());
-					
-
 				}
 			});
 		}
@@ -150,10 +165,19 @@ public class PlayerController extends FXMLPlayerController{
 		this.mediaPlayer = mediaPlayer;
 	}
 
+	/**
+	 * Método que retorna o Status do Media Player
+	 * @return Status
+	 */
 	public Status getMediaControlStatus() {
 		return getMediaPlayer().getStatus();
 	}
 
+	/**
+	 * Método que retorna a Media em Execução
+	 * @return mediaPlayer
+	 * 			MediaPalyer
+	 */
 	public MediaPlayer getMediaPlayer() {
 		return mediaPlayer;
 	}

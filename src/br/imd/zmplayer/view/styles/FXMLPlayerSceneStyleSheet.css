@@ -8,9 +8,11 @@
 	
 }
 
-#btnAddMusicPlaylist, #btnRemoveMusicPlaylist, #btnAddPlaylist, #btnRemovePlaylist, #btnEditPlaylist {
+#btnAddMusicPlaylist,  #btnRemoveMusicPlaylist, #btnAddPlaylist, #btnRemovePlaylist, #btnEditPlaylist {
 	-fx-font-family: FontAwesome;
 }
+
+
 
 #lbUserSession{
 	
@@ -18,6 +20,13 @@
 	-fx-text-fill: black   ;   
 	
 }
+
+#lbMusicTime{
+	-fx-font-size:40pt  ;
+
+}
+
+
 
 .label {
     -fx-font-size: 11pt;

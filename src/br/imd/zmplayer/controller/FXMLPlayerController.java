@@ -13,6 +13,7 @@ import br.imd.zmplayer.controller.utils.OperationalController;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.tabela.PlaylistTabela;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -44,6 +45,7 @@ import javafx.util.Duration;
 
 /**
  * Classe responsável por controlar a Tela do Player.
+ * 
  * @author Clarissa Soares / Paulo Henrique
  * @version 1.0
  *
@@ -56,7 +58,7 @@ public class FXMLPlayerController implements Initializable {
 	public MenuItem menuUsuario;
 	public MenuItem menuOpenFile;
 	public MenuItem menuAddFolder;
-	private ProgressBar pbMusic;
+	public ProgressBar pbMusic;
 	private ChangeListener<Duration> progressMusicChangeListener;
 
 	public Button btnPlay;
@@ -69,9 +71,12 @@ public class FXMLPlayerController implements Initializable {
 	public Text txtBtnText;
 	private PlayerController pc;
 	private Font fontAwesome;
+
 	public Label lbUserSession;
+
 	public TextField tfBuscaMusic;
 	public Label lbCurrentPlaying;
+	public Label lbMusicTime;
 
 	private TabelaControler tc;
 	public Button btnLimparLista;
@@ -136,9 +141,8 @@ public class FXMLPlayerController implements Initializable {
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Arquivo mp3", "*.mp3"));
 		File selectedFile = fileChooser.showOpenDialog(null);
 		if (selectedFile != null) {
-			PlaylistController.getInstance().addMusicPlaylist(tableMusicPlaylist, 
-															labelPlaylistName.getText(),
-															selectedFile);
+			PlaylistController.getInstance().addMusicPlaylist(tableMusicPlaylist, labelPlaylistName.getText(),
+					selectedFile);
 		}
 	}
 
@@ -147,21 +151,23 @@ public class FXMLPlayerController implements Initializable {
 		MusicaTable musicaSelecionada = tableMusicPlaylist.getSelectionModel().getSelectedItem();
 		if (musicaSelecionada != null) {
 			String nomePlaylist = labelPlaylistName.getText();
-			System.out.println("Removendo musica "+musicaSelecionada.getNome()+" da playlist "+nomePlaylist);
+			System.out.println("Removendo musica " + musicaSelecionada.getNome() + " da playlist " + nomePlaylist);
 			PlaylistController.getInstance().removeMusicPlaylist(tableMusicPlaylist, musicaSelecionada, nomePlaylist);
 		}
 	}
 
 	/**
 	 * Retorna a tabela de Musicas da Playlist
+	 * 
 	 * @return tableMusicPlaylist Tabela de Musicas da Playlist.
 	 */
 	public TableView<MusicaTable> getTableMusicPlaylist() {
 		return tableMusicPlaylist;
 	}
-	
+
 	/**
 	 * Retorna a tabela de Playlists do usuário
+	 * 
 	 * @return tableMyPlaylists Tabela de Playlists do usuário.
 	 */
 	public TableView<PlaylistTabela> getTableMyPlaylists() {
@@ -250,33 +256,41 @@ public class FXMLPlayerController implements Initializable {
 			List<File> files = new ArrayList<File>();
 			for (MusicaTable musica : selected) {
 				File file = new File(musica.getLocal());
-				System.out.println("Seduzindo: " + musica.getNome());
+				System.out.println("Seduzirá: " + musica.getNome());
 				files.add(file);
 			}
 			pc.tocar(files);
-			String label = pc.getMediaPlayer().getMedia().getSource().substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/")+1);
-			lbCurrentPlaying.setText("Seduzindo: "+label.replaceAll("%20", " "));
+			pc.getMediaPlayer().currentTimeProperty().addListener(progressMusicChangeListener);
+			String label = pc.getMediaPlayer().getMedia().getSource()
+					.substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/") + 1);
+			lbCurrentPlaying.setText("Seduzindo: " + label.replaceAll("%20", " "));
 		}
 	}
-	
+
 	@FXML
 	private void btnPauseAction(ActionEvent event) throws IOException {
-		String label = pc.getMediaPlayer().getMedia().getSource().substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/")+1);
-		if(pc.getMediaControlStatus() == Status.PLAYING){
-			
+		String label = pc.getMediaPlayer().getMedia().getSource()
+				.substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/") + 1);
+		if (pc.getMediaControlStatus() == Status.PLAYING) {
+
 			pc.getMediaPlayer().pause();
-			lbCurrentPlaying.setText("Dando tempo: "+label.replaceAll("%20", " "));
-			
-		}else{
+			lbCurrentPlaying.setText("Dando tempo: " + label.replaceAll("%20", " "));
+
+		} else {
 			pc.getMediaPlayer().play();
-			lbCurrentPlaying.setText("Seduzindo: "+label.replaceAll("%20", " "));
+			lbCurrentPlaying.setText("Seduzindo: " + label.replaceAll("%20", " "));
 		}
 	}
 
 	/**
-	 * Cria uma List de musicas a partir da musica selecionada até o final da lista e envia para tocar.
-	 * @param table Tabela de Musicas que deve ser analisada e selecionada os itens.
-	 * @throws IOException Exceção de operaçções de I/O
+	 * Cria uma List de musicas a partir da musica selecionada até o final da
+	 * lista e envia para tocar.
+	 * 
+	 * @param table
+	 *            Tabela de Musicas que deve ser analisada e selecionada os
+	 *            itens.
+	 * @throws IOException
+	 *             Exceção de operaçções de I/O
 	 */
 	private void btnPlayActionWithTable(TableView<MusicaTable> table) throws IOException {
 
@@ -291,13 +305,14 @@ public class FXMLPlayerController implements Initializable {
 				System.out.println("Seduzindo: " + musica.getNome());
 				files.add(file);
 			}
-			if(files != null)
+			if (files != null)
 				pc.tocar(files);
-			
-			
-			String label = pc.getMediaPlayer().getMedia().getSource().toString().substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/")+1);
-			lbCurrentPlaying.setText("Seduzindo: "+label.replaceAll("%20", " "));
-			
+	
+			pc.getMediaPlayer().currentTimeProperty().addListener(progressMusicChangeListener);
+			String label = pc.getMediaPlayer().getMedia().getSource().toString()
+					.substring(pc.getMediaPlayer().getMedia().getSource().lastIndexOf("/") + 1);
+			lbCurrentPlaying.setText("Seduzindo: " + label.replaceAll("%20", " "));
+
 		}
 
 	}
@@ -352,13 +367,23 @@ public class FXMLPlayerController implements Initializable {
 		tableMusics.refresh();
 	}
 
+	/**
+	 * Retorna a tabela de Musicas de Busca de Musicas.
+	 * 
+	 * @return tableSearchMusics Tabela de Buscas de Musicas.
+	 */
+	public TableView<MusicaTable> getTableSearchMusics() {
+		return tableSearchMusics;
+	}
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		tc = TabelaControler.getInstance();
 		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(),
 				12);
+
 		pc = PlayerController.getInstance();
-		
+
 		lbUserSession.setText(OperationalController.getSessao().getLt() + " - "
 				+ OperationalController.getSessao().getUser().getNome());
 		columnNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
@@ -368,9 +393,7 @@ public class FXMLPlayerController implements Initializable {
 		columnSearchNumber.setCellValueFactory(new PropertyValueFactory<MusicaTable, Integer>("numero"));
 		columnSearchMusic.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("nome"));
 		columnSearchPath.setCellValueFactory(new PropertyValueFactory<MusicaTable, String>("local"));
-
 		tableSearchMusics.setVisible(false);
-
 		/*
 		 * Controle em relação a playlist em que verifica se o usuário da sessão
 		 * é vip ou comum
@@ -385,7 +408,8 @@ public class FXMLPlayerController implements Initializable {
 		}
 
 		tc.limparLista();
-
+		
+		
 		if (OperationalController.carregarMusicas() != null) {
 			tableMusics.setItems(tc.atualizar(OperationalController.carregarMusicas()));
 
@@ -394,10 +418,9 @@ public class FXMLPlayerController implements Initializable {
 			tableMusics.setItems(tc.atualizar(OperationalController.carregarDiretorio()));
 		}
 		tableMusics.refresh();
-		
+
 		OperationalController.carregarArvorePatricia(tableMusics.getItems());
 
-		
 		tableMusics.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent click) {
@@ -419,16 +442,22 @@ public class FXMLPlayerController implements Initializable {
 
 				if (click.getClickCount() > 1) {
 					PlaylistTabela selecionado = tableMyPlaylists.getSelectionModel().getSelectedItem();
-					
-					System.out.println("Nome do selecionado:"+selecionado.getName());
-					
-					PlaylistController.getInstance().limparListaMTPlaylist(); //limpa lista observable
-					if(selecionado != null){
-						ManipuladorArquivo.lerPlaylist(selecionado.getName()); //ler arquivo .zmp da playlist selecionada
+
+					System.out.println("Nome do selecionado:" + selecionado.getName());
+
+					PlaylistController.getInstance().limparListaMTPlaylist(); // limpa
+																				// lista
+																				// observable
+					if (selecionado != null) {
+						ManipuladorArquivo.lerPlaylist(selecionado.getName()); // ler
+																				// arquivo
+																				// .zmp
+																				// da
+																				// playlist
+																				// selecionada
 						PlaylistController.getInstance().listarMusicasPlaylist(tableMusicPlaylist);
 						labelPlaylistName.setText(selecionado.getName());
 					}
-					
 
 				}
 
@@ -451,7 +480,7 @@ public class FXMLPlayerController implements Initializable {
 
 			}
 		});
-		
+
 		tableSearchMusics.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent click) {
@@ -468,13 +497,30 @@ public class FXMLPlayerController implements Initializable {
 
 			}
 		});
+		
+		
+		progressMusicChangeListener = new ChangeListener<Duration>() {
+			public void changed(ObservableValue<? extends Duration> observableValue, Duration oldValue,
+					Duration newValue) {
+
+				int seconds = (int) (pc.getMediaPlayer().getCurrentTime().toMillis() / 1000) % 60;
+				int minutes = (int) ((pc.getMediaPlayer().getCurrentTime().toMillis() / (1000 * 60)) % 60);
+				String secFormat = String.valueOf(seconds);
+				String minFormat = String.valueOf(minutes);
+				if(seconds < 10){
+					secFormat = "0"+secFormat;
+				}
+				if(minutes < 10){
+					minFormat = "0"+minFormat;
+				}
+				
+				lbMusicTime.setText(minFormat+":" +secFormat); 
+				pbMusic.setProgress((1.0 * pc.getMediaPlayer().getCurrentTime().toMillis())
+						/ pc.getMediaPlayer().getTotalDuration().toMillis());
+				
+			}
+		};
 
 	}
-	/**
-	 * Retorna a tabela de Musicas de Busca de Musicas.
-	 * @return tableSearchMusics Tabela de Buscas de Musicas.
-	 */
-	public TableView<MusicaTable> getTableSearchMusics() {
-		return tableSearchMusics;
-	}
+
 }
