@@ -11,6 +11,12 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 
+/**
+ * Classe responsável por controlar o player de música.
+ * @author Clarissa Soares / Paulo Henrique
+ * @version 1.0
+ *
+ */
 public class PlayerController extends FXMLPlayerController{
 
 	private static PlayerController pl;

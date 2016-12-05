@@ -42,6 +42,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Classe responsável por controlar a Tela do Player.
+ * @author Clarissa Soares / Paulo Henrique
+ * @version 1.0
+ *
+ */
 public class FXMLPlayerController implements Initializable {
 
 	@FXML
@@ -146,11 +152,18 @@ public class FXMLPlayerController implements Initializable {
 		}
 	}
 
-
+	/**
+	 * Retorna a tabela de Musicas da Playlist
+	 * @return tableMusicPlaylist Tabela de Musicas da Playlist.
+	 */
 	public TableView<MusicaTable> getTableMusicPlaylist() {
 		return tableMusicPlaylist;
 	}
-
+	
+	/**
+	 * Retorna a tabela de Playlists do usuário
+	 * @return tableMyPlaylists Tabela de Playlists do usuário.
+	 */
 	public TableView<PlaylistTabela> getTableMyPlaylists() {
 		return tableMyPlaylists;
 	}
@@ -260,8 +273,12 @@ public class FXMLPlayerController implements Initializable {
 		}
 	}
 
-	
-	private void btnPlayActionWithTable(ActionEvent event, TableView<MusicaTable> table) throws IOException {
+	/**
+	 * Cria uma List de musicas a partir da musica selecionada até o final da lista e envia para tocar.
+	 * @param table Tabela de Musicas que deve ser analisada e selecionada os itens.
+	 * @throws IOException Exceção de operaçções de I/O
+	 */
+	private void btnPlayActionWithTable(TableView<MusicaTable> table) throws IOException {
 
 		if (table.getSelectionModel().getSelectedIndex() < 0) {
 			System.out.println("Sem música a tocar na tabela 1");
@@ -337,7 +354,6 @@ public class FXMLPlayerController implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		// TODO
 		tc = TabelaControler.getInstance();
 		fontAwesome = Font.loadFont(getClass().getResource("../view/styles/fontawesomewebfont.ttf").toExternalForm(),
 				12);
@@ -362,9 +378,7 @@ public class FXMLPlayerController implements Initializable {
 		if (!OperationalController.getSessao().isVip()) {
 			menuUsuario.setDisable(true);
 			vipPlaylistPane.setVisible(false);
-
 		} else {
-
 			PlaylistController.getInstance().listarMyPlaylists(tableMyPlaylists);
 			PlaylistController.getInstance().inicializarTabelaPlaylist(tableMusicPlaylist);
 
@@ -380,18 +394,19 @@ public class FXMLPlayerController implements Initializable {
 			tableMusics.setItems(tc.atualizar(OperationalController.carregarDiretorio()));
 		}
 		tableMusics.refresh();
+		
 		OperationalController.carregarArvorePatricia(tableMusics.getItems());
 
+		
 		tableMusics.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent click) {
 				if (click.getClickCount() == 2) {
 					// Use ListView's getSelected Item
 					try {
-						btnPlayActionWithTable(new ActionEvent(), tableMusics);
+						btnPlayActionWithTable(tableMusics);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					}
 				}
 
@@ -426,7 +441,7 @@ public class FXMLPlayerController implements Initializable {
 				if (click.getClickCount() == 2) {
 					// Use ListView's getSelected Item
 					try {
-						btnPlayActionWithTable(new ActionEvent(), tableMusicPlaylist);
+						btnPlayActionWithTable(tableMusicPlaylist);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -443,7 +458,7 @@ public class FXMLPlayerController implements Initializable {
 				if (click.getClickCount() == 2) {
 					// Use ListView's getSelected Item
 					try {
-						btnPlayActionWithTable(new ActionEvent(), tableSearchMusics);
+						btnPlayActionWithTable(tableSearchMusics);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -455,7 +470,10 @@ public class FXMLPlayerController implements Initializable {
 		});
 
 	}
-
+	/**
+	 * Retorna a tabela de Musicas de Busca de Musicas.
+	 * @return tableSearchMusics Tabela de Buscas de Musicas.
+	 */
 	public TableView<MusicaTable> getTableSearchMusics() {
 		return tableSearchMusics;
 	}

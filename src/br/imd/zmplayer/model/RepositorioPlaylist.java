@@ -1,12 +1,7 @@
 package br.imd.zmplayer.model;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import br.imd.zmplayer.model.exceptions.NodeNotFoundedException;
-import br.imd.zmplayer.model.tad.ArvoreBinaria;
-import br.imd.zmplayer.model.tad.NoBinaria;
 
 public class RepositorioPlaylist {
 	private static RepositorioPlaylist instance;

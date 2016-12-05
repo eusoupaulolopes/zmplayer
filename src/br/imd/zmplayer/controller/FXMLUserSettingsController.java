@@ -1,33 +1,20 @@
 package br.imd.zmplayer.controller;
 
-import br.imd.zmplayer.*;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import br.imd.zmplayer.controller.utils.OperationalController;
 import br.imd.zmplayer.model.ManipuladorArquivo;
 import br.imd.zmplayer.model.RepositorioUsuario;
 import br.imd.zmplayer.model.Usuario;
 import br.imd.zmplayer.model.tabela.UsuarioTabela;
-import br.imd.zmplayer.model.tad.NoBinaria;
-
-import br.imd.zmplayer.controller.utils.OperationalController;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Observable;
-import java.util.ResourceBundle;
-
-import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -37,6 +24,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
+/**
+ * Classe responsável por controlar a Tela de user settings
+ * @author Clarissa Soares / Paulo Henrique
+ * @version 1.0
+ *
+ */
 public class FXMLUserSettingsController implements Initializable {
 
 	@FXML
@@ -69,6 +62,10 @@ public class FXMLUserSettingsController implements Initializable {
 	public TextField idTextField;
 	public TextField senhaTextField;
 	public CheckBox vipCheckBox;
+	
+	private int index;
+	@FXML
+	Pane edicaoPane;
 
 	@FXML
 	private void handleCadastrarBtn(ActionEvent event) throws IOException {
@@ -92,10 +89,8 @@ public class FXMLUserSettingsController implements Initializable {
 				tableUsuario.refresh();
 
 				if (vip) {
-					ManipuladorArquivo.criarArquivoUserVip(id); // se for vip,
-																// cria seu
-																// arquivo de
-																// playlist
+					//Se for VIP, cria o seu arquivo de usuário que contém os caminhos para as playlists
+					ManipuladorArquivo.criarArquivoUserVip(id);
 				}
 
 				resultadoLabel.setText("Usuário cadastrado com sucesso!");
@@ -111,9 +106,7 @@ public class FXMLUserSettingsController implements Initializable {
 
 	}
 
-	private int index;
-	@FXML
-	Pane edicaoPane;
+	
 
 	@FXML
 	private void handleRemoverBtn(ActionEvent event) throws IOException {
@@ -188,7 +181,10 @@ public class FXMLUserSettingsController implements Initializable {
 		this.desabilitarModoEdicao();
 		this.limparTextField();
 	}
-
+	/**
+	 * Método que habilita a tela para o modo de edição, alterando a visibilidade de botoes e bloqueando o
+	 * text field do id do usuário.
+	 */
 	private void habilitarModoEdicao() {
 		btnCancelar.setVisible(true);
 		btnSalvar.setVisible(true);
@@ -197,10 +193,12 @@ public class FXMLUserSettingsController implements Initializable {
 		btnCadastrar.setDisable(true);
 
 	}
-
+	
+	/**
+	 * Método que desabilita a tela do modo de edição, alterando a visibilidade de botoes e desbloqueando o
+	 * text field do id do usuário.
+	 */
 	private void desabilitarModoEdicao() {
-		// garante que os botoes nao aparecem caso o alterar tenha sido acionado
-		// antes.
 		btnCancelar.setVisible(false);
 		btnSalvar.setVisible(false);
 		idTextField.setEditable(true);
@@ -217,7 +215,9 @@ public class FXMLUserSettingsController implements Initializable {
 		senhaTextField.setText("");
 		vipCheckBox.setSelected(false);
 	}
-
+	/**
+	 * Método que inicializa a tabela de usuários.
+	 */
 	public void listarUsuarios() {
 		if (!listaUsuarioTabela.isEmpty()) {
 			listaUsuarioTabela.clear();

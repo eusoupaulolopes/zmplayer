@@ -3,8 +3,6 @@
  */
 package br.imd.zmplayer.model;
 
-import java.util.ArrayList;
-
 /**
  * Classe que implementa um objeto Playlist.
  * 
@@ -27,18 +25,33 @@ public class Playlist {
 		
 	}
 
+	
+	/**
+	 * Retorna o nome da playlist
+	 * @return Nome da playlist
+	 */
 	public String getName() {
 		return name;
 	}
-
+	/**
+	 * Muda o nome da playlist
+	 * @param nome Novo nome da musica.
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	/**
+	 * Retorna o local da playlist
+	 * @return Local da playlist
+	 */
 	public String getLocal() {
 		return local;
 	}
-
+	
+	/**
+	 * Muda o local da playlist
+	 * @param local Novo local da musica.
+	 */
 	public void setLocal(String local) {
 		this.local = local;
 	}

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.spi.TimeZoneNameProvider;
 
 import br.imd.zmplayer.controller.PlaylistController;
 import br.imd.zmplayer.controller.TabelaControler;
@@ -20,7 +21,11 @@ import br.imd.zmplayer.model.tabela.PlaylistTabela;
 import br.imd.zmplayer.model.tad.ArvoreBinaria;
 import br.imd.zmplayer.model.tad.NoBinaria;
 import javafx.stage.FileChooser;
-
+/**
+ * Manipula arquivos .zmf, .zmu e .zmp. 
+ * @author Clarissa Soares / Paulo Henrique
+ * @version 1.0
+ */
 public class ManipuladorArquivo {
 	private static final String PATHUSERS = "usuarios.zmu";
 	public static final String PATHMUSICAS = "musicas.zmf";
@@ -30,12 +35,9 @@ public class ManipuladorArquivo {
 	
 	/**
 	 * Método que grava o usuário no arquivo .zmu
-	 * 
-	 * @param path
-	 *            Caminho do local do arquivo
-	 * @param user
-	 *            Usuário a ser inserido
-	 * @throws IOException
+	 * @param path Caminho do local do arquivo
+	 * @param user Usuário a ser inserido
+	 * @throws IOException Exceção de operação de I/O 
 	 */
 	public static void gravarUsuario(Usuario user) {
 		BufferedWriter buffWrite;
@@ -52,9 +54,8 @@ public class ManipuladorArquivo {
 	
 	/**
 	 * Método que ler o arquivo .zmu e cria a arvore binaria
-	 * 
 	 * @param path Caminho do local do arquivo
-	 * @throws IOException
+	 * @throws IOException Exceção de operação de I/O
 	 */
 	public static void lerZmu(String path) {
 		BufferedReader buffRead;
@@ -113,8 +114,7 @@ public class ManipuladorArquivo {
 	//------------------------------------------ Inicio - Métodos Playlist -------------------------------
 	/**
 	 * Método cria um arquivo (.zmf) de acesso a playlist de usuaŕios VIPs.
-	 * 
-	 * @param user
+	 * @param nome Nome do usuário VIP.
 	 */
 	public static void criarArquivoUserVip(String nome) {
 		BufferedWriter buffWrite;
@@ -133,9 +133,8 @@ public class ManipuladorArquivo {
 	}
 	
 	/**
-	 * Método cria um arquivo (.zmf) de acesso a playlist de usuaŕios VIPs.
-	 * 
-	 * @param user
+	 * Método exclui um arquivo (.zmf) de acesso a playlist de usuaŕios VIPs.
+	 * @param nome Nome do usuário VIP.
 	 */
 	public static void excluirArquivoUserVip(String nome) {
 		BufferedWriter buffWrite;
@@ -146,9 +145,7 @@ public class ManipuladorArquivo {
 	}
 	
 	/**
-	 * Método retorna um arquivo (.zmf) de com as playlists de usuaŕios VIPs.
-	 * 
-	 * @param user
+	 * Método retorna um arquivo (.zmf), em que se encontra todas as playlists do usuário atualmente logado.
 	 */
 	public static File getArquivoUserVip() {
 		String path = PATHVIPFILES+OperationalController.getSessao().getUser().getId()+".zmf";
@@ -157,7 +154,8 @@ public class ManipuladorArquivo {
 	}
 	
 	/**
-	 * Método que carrega a ObservableList da tabela de My Playlists
+	 * Método que carrega a ObservableList da tabela MyPlaylists
+	 * @param user Usuário logado no sistema.
 	 */
 	public static void lerArquivoUserVip(Usuario user) {
 		BufferedReader buffRead;
@@ -189,8 +187,7 @@ public class ManipuladorArquivo {
 	
 	/**
 	 * Método cria um arquivo (.zmp) referente a uma playlist de um usuário
-	 * 
-	 * @param user
+	 * @param nome Nome da nova Playlist.
 	 */
 	public static String criarPlaylist(String nome) {
 		BufferedWriter buffWrite;
@@ -208,8 +205,7 @@ public class ManipuladorArquivo {
 	
 	/**
 	 * Método lê um arquivo (.zmp) referente a uma playlist de um usuário
-	 * 
-	 * @param user
+	 * @param nome Nome da Playlist.
 	 */
 	public static void lerPlaylist(String nome) {
 		BufferedReader buffRead;
@@ -237,8 +233,10 @@ public class ManipuladorArquivo {
 			e.getMessage();
 		}
 	}
+	
 	/**
 	 * Método exclui todas as playlist do usuário
+	 * @param nomeUsuario Nome do usuário que terá todas as playlists excluidas.
 	 */
 	public static void excluirTodasPlaylist(String nomeUsuario) {
 		File pasta = new File(PATHPLAYLIST);    
@@ -250,6 +248,10 @@ public class ManipuladorArquivo {
 		}
 	}
 	
+	/**
+	 * Exclui determinada playlist do usuário.
+	 * @param nomePlaylist Nome da Playlist a ser excluída.
+	 */
 	public static void excluirPlaylist(String nomePlaylist){
 		String nomeUsuario = OperationalController.getSessao().getUser().getId();
 		String path = PATHPLAYLIST+nomeUsuario+"_"+nomePlaylist+".zmp";		
@@ -260,8 +262,8 @@ public class ManipuladorArquivo {
 	
 	/**
 	 * Método retorna um arquivo de playlist(.zmp) com as musicas cadastradas.
-	 * 
-	 * @param user
+	 * @param nomePlaylist Nome da Playlist. 
+	 * @return Arquivo da Playlist (.zmp)
 	 */
 	public static File getArquivoPlaylist(String nomePlaylist) {
 		String nomeUsuario = OperationalController.getSessao().getUser().getId();
@@ -272,8 +274,8 @@ public class ManipuladorArquivo {
 	
 	/**
 	 * Método retorna o caminho do arquivo de playlist(.zmp).
-	 * 
-	 * @param user
+	 * @param nomePlaylist Nome da Playlist. 
+	 * @return Caminho do Arquivo da Playlist (.zmp)
 	 */
 	public static String getPathArquivoPlaylist(String nomePlaylist) {
 		String nomeUsuario = OperationalController.getSessao().getUser().getId();
@@ -282,13 +284,18 @@ public class ManipuladorArquivo {
 		
 	}
 	
+	/**
+	 * Adiciona uma musica no arquivo de plahylist do usuário.
+	 * @param musicaNova Música a ser adicionada.
+	 * @param playlistPath Caminho para acessar o arquivo .zmp
+	 */
 	public static void addMusicToPlaylistFile(MusicaTable musicaNova, String playlistPath) {
 		BufferedWriter bw;
 		System.out.println("adcionando musica no file: "+musicaNova.getNome());
 		try {
 			File file = new File(playlistPath);
 			bw = new BufferedWriter(new FileWriter(file.getPath(),true));
-			bw.write(musicaNova.getNome()+";/"+musicaNova.getLocal()+"\n");
+			bw.write(musicaNova.getNome()+";"+musicaNova.getLocal()+"\n");
 			bw.flush();
 			bw.close();
 		} catch (Exception e) {
@@ -298,6 +305,11 @@ public class ManipuladorArquivo {
 		
 	}
 	
+	/**
+	 * Adiciona uma playlist no arquivo de log do usuário.
+	 * @param playlistName Nome da playlist
+	 * @param playlistPath Caminho do arquivo da playlist (.zmp)
+	 */
 	public static void addPlaylistToUserFile(String playlistName, String playlistPath) {
 		BufferedWriter bw;
 		System.out.println("adcionando no file: "+playlistName);
@@ -314,7 +326,12 @@ public class ManipuladorArquivo {
 		
 	}
 	
-	public static void removeLinhaFromFile(String nomeLinha,String pathUserfile) {
+	/**
+	 * Remove uma linha do arquivo .zmf ou .zmp 
+	 * @param nomeLinha Nome da linha, que pode ser o nome da playlist ou nome da musica.
+	 * @param pathUserfile Caminho de acesso ao arquivo .zmf ou .zmp
+	 */
+	public static void removeLinhaFromFile(String nomeLinha,String pathFile) {
 		BufferedReader buffRead;
 		BufferedWriter buffWrite;
 		
@@ -322,17 +339,21 @@ public class ManipuladorArquivo {
 		
 		//Lendo arquivo e salvando as linhas que devem permanecer no arquivo
 		try {
-			buffRead = new BufferedReader(new FileReader(pathUserfile));
+			buffRead = new BufferedReader(new FileReader(pathFile));
 			if (buffRead != null) {
 				String linha;
 				while (true) {
 					linha = buffRead.readLine();
 					if (linha != null) {
 						String nome[] = linha.split(";");
+						
 						//se o nome do arquivo nao for o que deve ser removido, coloca no array
 						if(!nome[0].equals(nomeLinha)){
 							linhasNaoRemovidas.add(linha);
+						}else{
+							
 						}
+						
 					} else {
 						break;
 					}
@@ -342,12 +363,13 @@ public class ManipuladorArquivo {
 		} catch (IOException e) {
 			e.getMessage();
 		}
-		//exclui o arquivo user file
-		excluirArquivoUserVip(OperationalController.getSessao().getUser().getId());
+		
+		//Excluindo o arquivo
+		new File(pathFile).delete();
 		
 		//cria novamente
 		try {
-			buffWrite = new BufferedWriter(new FileWriter(pathUserfile));
+			buffWrite = new BufferedWriter(new FileWriter(pathFile));
 			for(String linha: linhasNaoRemovidas){
 				buffWrite.write(linha + "\n");
 				buffWrite.flush();

@@ -7,9 +7,18 @@ import br.imd.zmplayer.model.RepositorioUsuario;
 import br.imd.zmplayer.model.Usuario;
 import br.imd.zmplayer.model.exceptions.NodeNotFoundedException;
 import br.imd.zmplayer.model.tad.NoBinaria;
-
+/**
+ * Classe responsável por controlar os usuários do player.
+ * @author Clarissa Soares / Paulo Henrique
+ * @version 1.0
+ */
 public class UserController {
-	
+	/**
+	 * Executa a verificação de id e senha do usuário no momento de login no player.
+	 * @param id Identificação do usuário a ser verificada.
+	 * @param senha Senha do usuário a ser verificada.
+	 * @return
+	 */
 	public static Usuario verificarLogin(String id, String senha){
 				
 		Usuario provisorio = new Usuario(id, "", senha, false);		
@@ -25,6 +34,11 @@ public class UserController {
 		return null;
 	}
 	
+	/**
+	 * Cadastra usuário no sistema do player.
+	 * @param novo Novo usuário a ser cadastrado.
+	 * @return true, se for cadastrado com sucesso, false, caso contrário.
+	 */
 	public static boolean cadastrarUsuario(Usuario novo){
 		
 		NoBinaria encontrado = RepositorioUsuario.getArvoreUsuario().buscar(new NoBinaria(novo));
@@ -40,6 +54,11 @@ public class UserController {
 		
 	}
 
+	/**
+	 * Remove usuário do sistema do player.
+	 * @param user Usuário a ser removido.
+	 * @return msg "Usuário removido com sucesso" ou "Usuário não encontrado"
+	 */
 	public static String removerUsuario(Usuario user) {
 		String msg;
 		try {
@@ -63,6 +82,11 @@ public class UserController {
 		return msg;
 	}
 	
+	/**
+	 * Altera informações do usuário, como nome, senha e condição de VIP. Não é permitido alterar id.
+	 * @param novo Novo usuário com as informações atualizadas.
+	 * @return true, se a alteração for executada, false se não for encontrado.
+	 */
 	public static boolean alterarUsuario(Usuario novo){
 		
 		NoBinaria alterado = RepositorioUsuario.getArvoreUsuario().alterar(novo);
