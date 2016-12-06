@@ -3,22 +3,23 @@
  */
 package br.imd.zmplayer.model.tabela;
 
-import br.imd.zmplayer.model.Playlist;
-import br.imd.zmplayer.model.Usuario;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
  * Classe que cria objetos Playlist para ser exibida na tabela
- * 
- * @author clarissa
- *
+ * @author Clarissa Soares / Paulo Henrique
+ * @version 1.0
  */
 public class PlaylistTabela {
 	
 	private final SimpleStringProperty name;
 	private final SimpleStringProperty local;
 	
-
+	/**
+	 * Constroi um objeto PlaylistTabela
+	 * @param name nome da playlist
+	 * @param local caminho do local da playlist
+	 */
 	public PlaylistTabela(String name, String local){
 		super();
 		this.name = new SimpleStringProperty(name);
@@ -26,21 +27,21 @@ public class PlaylistTabela {
 		
 	}
 
-
+	/**
+	 * Retorna o nome da playlist
+	 * @return nome da playlist
+	 */
 	public String getName() {
 		return name.get();
 	}
 
-
+	/**
+	 * Retorna o local do arquivo da palylist.
+	 * @return local do arquivo da playlist
+	 */
 	public String getLocal() {
 		return local.get();
 	}
 
-	public Playlist toPlaylist(){
-		Playlist p = new Playlist(getName(), getLocal());
-		
-		return p;
-		
-	}
 	
 }

@@ -1,13 +1,16 @@
 package br.imd.zmplayer.model;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.imd.zmplayer.model.exceptions.NodeNotFoundedException;
 import br.imd.zmplayer.model.tad.ArvoreBinaria;
 import br.imd.zmplayer.model.tad.NoBinaria;
 
+/**
+ * Manipula arquivos .zmf, .zmu e .zmp. 
+ * @author Clarissa Soares / Paulo Henrique
+ * @version 1.0
+ */
 public class RepositorioUsuario {
 	
 	private static ArvoreBinaria arvoreUsuario;

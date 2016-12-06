@@ -384,8 +384,7 @@ public class ManipuladorArquivo {
 
 	/**
 	 * Metodo que escreve na lista de Musicas compartilhadas
-	 * 
-	 * @param pathFile
+	 * @param pathFile Caminho do arquivo de musicas.zmf
 	 */
 	public static void gravarListaMusica(String pathFile) {
 		BufferedWriter buffWrite;
@@ -400,7 +399,11 @@ public class ManipuladorArquivo {
 			e.getMessage();
 		}
 	}
-
+	
+	/**
+	 * Metodo que escreve no arquivo folders.zmf o diretorio aberto na lista compartilhada
+	 * @param pathFile Caminho do arquivo de folders.zmf
+	 */
 	public static void gravarListaFolder(String pathFile) {
 		BufferedWriter buffWrite;
 		try {
@@ -413,7 +416,11 @@ public class ManipuladorArquivo {
 			e.getMessage();
 		}
 	}
-
+	/**
+	 * Abre o arquivo musicas.zmf e cria uma lista de arquivos de musicas.
+	 * @param caminho caminho do arquivo que contem a relação de musicas
+	 * @return Lista de arquivos de musicas.
+	 */
 	public static List<File> openListaMusica(String caminho) {
 		BufferedReader buffRead;
 		List<File> files = new ArrayList<File>();
@@ -439,7 +446,11 @@ public class ManipuladorArquivo {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Abre o arquivo folders.zmf, le os arquivos de musicas de cada diretorio e cria uma lista de arquivos de musicas.
+	 * @return Lista de arquivos de musicas.
+	 */
 	public static List<File> openListaFolder() {
 		BufferedReader buffRead;
 		List<File> diretorios = new ArrayList<File>();
