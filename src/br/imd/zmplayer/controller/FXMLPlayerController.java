@@ -326,7 +326,9 @@ public class FXMLPlayerController implements Initializable {
 
 	@FXML
 	private void menuLogoutAction(ActionEvent event) throws IOException {
-
+		if(pc.getMediaPlayer() != null){
+			pc.getMediaPlayer().stop();
+		}
 		Stage stage = (Stage) btnPlay.getScene().getWindow();
 		Parent root = FXMLLoader.load(getClass().getResource("../view/FXMLLoginScene.fxml"));
 		Scene scene = new Scene(root);

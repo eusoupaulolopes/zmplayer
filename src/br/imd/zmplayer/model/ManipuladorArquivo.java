@@ -124,7 +124,7 @@ public class ManipuladorArquivo {
 		try {
 			File file = new File(path);	
 			buffWrite = new BufferedWriter(new FileWriter(path, true));
-			buffWrite.write(nome+"\n");
+			/*buffWrite.write(nome+"\n");*/
 			buffWrite.flush();
 			buffWrite.close();
 		} catch (IOException e) {

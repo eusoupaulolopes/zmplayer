@@ -132,14 +132,14 @@ public class FXMLUserSettingsController implements Initializable {
 	@FXML
 	public void handleAlterarBtn(ActionEvent event) throws IOException {
 
-		habilitarModoEdicao();
+		
 
 		// Pega o item selecionado na tabela
 		UsuarioTabela temp = tableUsuario.getSelectionModel().getSelectedItem();
-
-		index = listaUsuarioTabela.indexOf(temp);
+		
 		if (temp != null) {
-
+			index = listaUsuarioTabela.indexOf(temp);
+			habilitarModoEdicao();
 			nomeTextField.setText(temp.getNome());
 			idTextField.setText(temp.getId());
 			senhaTextField.setText(temp.getSenha());

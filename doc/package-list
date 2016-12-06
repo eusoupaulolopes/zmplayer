@@ -1,0 +1,8 @@
+br.imd.zmplayer.controller
+br.imd.zmplayer.controller.musictable
+br.imd.zmplayer.controller.utils
+br.imd.zmplayer.model
+br.imd.zmplayer.model.exceptions
+br.imd.zmplayer.model.interfaces
+br.imd.zmplayer.model.tabela
+br.imd.zmplayer.model.tad
